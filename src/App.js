@@ -21,8 +21,6 @@ class App extends Component {
   }
 
   render() {
-    console.log("ping: ", this.state.users);
-    console.log("users: ", this.state.users);
     return (
       <div>
         <h1>Test Data:</h1>
