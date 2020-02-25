@@ -1,45 +1,57 @@
-import React, { Component } from 'react';
+import React from 'react'
+import Footer from './components/Footer'
+import AddTodo from './containers/AddTodo'
+import VisibleTodoList from './containers/VisibleTodoList'
+const App = () => (
+  <div>
+    <AddTodo />
+    <VisibleTodoList />
+    <Footer />
+  </div>
+)
+export default App
 
-class App extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      testData: [],
-      users: []
-    }
-  }
+// import React, { Component } from 'react';
 
-  componentDidMount() {
-    fetch('/ping')
-      .then(res => res.json())
-      .then(data => this.setState({ testData: data }));
+// class App extends Component {
 
-    fetch('/users')
-      .then(res => res.json())
-      .then(data => this.setState({ users: data }));
-  }
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       testData: [],
+//       users: []
+//     }
+//   }
 
-  render() {
-    console.log("ping: ", this.state.users);
-    console.log("users: ", this.state.users);
-    return (
-      <div>
-        <h1>Test Data:</h1>
-        <ul>
-          {this.state.testData.map(data =>
-            <li key={data.id}>{data.payload}</li>
-          )}
-        </ul>
+//   componentDidMount() {
+//     fetch('/ping')
+//       .then(res => res.json())
+//       .then(data => this.setState({ testData: data }));
 
-        <ul>
-          {this.state.users.map(user =>
-            <li key={user.id}>{user.name}</li>
-          )}
-        </ul>
-      </div>
-    );
-  }
-}
+//     fetch('/users')
+//       .then(res => res.json())
+//       .then(data => this.setState({ users: data }));
+//   }
 
-export default App;
+//   render() {
+//     return (
+//       <div>
+//         <h1>Test Data:</h1>
+//         <ul>
+//           {this.state.testData.map(data =>
+//             <li key={data.id}>{data.payload}</li>
+//           )}
+//         </ul>
+
+//         <ul>
+//           {this.state.users.map(user =>
+//             <li key={user.id}>{user.name}</li>
+//           )}
+//         </ul>
+//       </div>
+//     );
+//   }
+// }
+
+// export default App;

@@ -3,3 +3,6 @@
 \dt | List all tables
 \du | List all roles
 \list | List databases
+
+
+Deploy to heroku: https://daveceddia.com/deploy-react-express-app-heroku/
