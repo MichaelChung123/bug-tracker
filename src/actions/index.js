@@ -22,3 +22,11 @@ export const signOut = () => {
         type: 'SIGN_OUT'
     };
 }
+
+export const toggleCross = (id) => {
+    return {
+        type: 'TOGGLE_CROSS',
+        complete: false,
+        id
+    };
+}

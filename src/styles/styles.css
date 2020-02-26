@@ -1,0 +1,7 @@
+.crossed-out {
+    text-decoration: line-through;
+}
+
+.uncrossed {
+    text-decoration: none;
+}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { increment, decrement, signIn, signOut } from './actions';
+import { increment, decrement, signIn, signOut, toggleCross } from './actions';
 
 const useFetch = (url) => {
   const [data, setData] = useState(null);
@@ -14,14 +14,19 @@ const useFetch = (url) => {
     setLoading(false);
   }, []);
 
-  return {data, loading};
+  return { data, loading };
 }
+
 
 function App() {
   const counter = useSelector(state => state.counter);
   const isLogged = useSelector(state => state.isLogged);
+  const isCrossed = useSelector(state => state.isCrossed);
   const dispatch = useDispatch();
-  const {data, loading} = useFetch("/users");
+
+  const { data, loading } = useFetch("/users");
+  
+  console.log('in app ', isCrossed);
 
   return (
     <div>
@@ -33,14 +38,24 @@ function App() {
       {isLogged ? <h3>You're logged in to see this value</h3> : ''}
 
       <h1>User Data:</h1>
-      {loading ? <div>LOADING...</div> : data && 
-      <div>
-        <ul>
-           {data.map(user =>
-            <li key={user.id}>{user.name}</li>
-          )}
-        </ul>
-      </div>}
+      {loading ?
+        <div>
+          LOADING...
+      </div>
+        :
+        <div>
+          <ul>
+            {data.map(user =>
+              <li onClick={() => {
+                dispatch(toggleCross(user.id))
+              }
+              } className={() => {
+
+              }}
+               key={user.id}>{user.name}</li>
+            )}
+          </ul>
+        </div>}
     </div>
   );
 }
