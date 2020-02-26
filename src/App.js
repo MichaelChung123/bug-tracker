@@ -1,12 +1,27 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { increment } from './actions';
-import { decrement } from './actions';
+import { increment, decrement, signIn, signOut } from './actions';
+
+const useFetch = (url) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(async () => {
+    const response = await fetch(url);
+    const data = await response.json();
+    const item = data;
+    setData(item);
+    setLoading(false);
+  }, []);
+
+  return {data, loading};
+}
 
 function App() {
   const counter = useSelector(state => state.counter);
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
+  const {data, loading} = useFetch("/users");
 
   return (
     <div>
@@ -14,15 +29,26 @@ function App() {
       <button onClick={() => dispatch(increment(5))}>+</button>
       <button onClick={() => dispatch(decrement())}>-</button>
 
+      {isLogged ? <button onClick={() => dispatch(signOut())}>Logout</button> : <button onClick={() => dispatch(signIn())}>Login</button>}
       {isLogged ? <h3>You're logged in to see this value</h3> : ''}
+
+      <h1>User Data:</h1>
+      {loading ? <div>LOADING...</div> : data && 
+      <div>
+        <ul>
+           {data.map(user =>
+            <li key={user.id}>{user.name}</li>
+          )}
+        </ul>
+      </div>}
     </div>
   );
 }
 
 export default App;
 
-// OLD POSTGRESQL EXAMPLE
-// import React, { Component } from 'react';
+    // OLD POSTGRESQL EXAMPLE
+// import React, {Component} from 'react';
 
 // class App extends Component {
 
