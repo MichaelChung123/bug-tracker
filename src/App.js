@@ -45,13 +45,13 @@ function App() {
   ]);
 
   const addTodo = text => {
-    const newTodos = [...todos, { text }];
+    const newTodos = [...todos, { text, isComplete: false }];
     setTodos(newTodos);
   }
 
   const completeTodo = index => {
     const newTodos = [...todos];
-    newTodos[index].isComplete = true;
+    newTodos[index].isComplete = !newTodos[index].isComplete;
     setTodos(newTodos);
   }
 
