@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import 'bootsrap/dist/css/bootstrap.min.css';
+
+import { Container, Row, Col } from 'react-boostrap';
+
 class Login extends Component {
     render() {
         return (
