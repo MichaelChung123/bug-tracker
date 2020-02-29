@@ -1,41 +1,21 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Login from './components/Login';
+import SelectDemoUser from './components/SelectDemoUser';
+import AdminHome from './components/admin/index';
+import UserHome from './components/user/index';
 
 class App extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      testData: [],
-      users: []
-    }
-  }
-
-  componentDidMount() {
-    fetch('/ping')
-      .then(res => res.json())
-      .then(data => this.setState({ testData: data }));
-
-    fetch('/users')
-      .then(res => res.json())
-      .then(data => this.setState({ users: data }));
-  }
-
   render() {
     return (
-      <div>
-        <h1>Test Data:</h1>
-        <ul>
-          {this.state.testData.map(data =>
-            <li key={data.id}>{data.payload}</li>
-          )}
-        </ul>
-
-        <ul>
-          {this.state.users.map(user =>
-            <li key={user.id}>{user.name}</li>
-          )}
-        </ul>
-      </div>
+      <Router>
+        <div>
+          <Route path='/' exact component={Login} />
+          <Route path='/demo-user' component={SelectDemoUser} />
+          <Route path='/demo/admin/home/index' component={AdminHome} />
+          <Route path='/demo/user/home/index' component={UserHome} />
+        </div>
+      </Router>
     );
   }
 }
