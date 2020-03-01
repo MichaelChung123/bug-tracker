@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+
 const GridWrapper = styled.div`
   display: grid;
   grid-gap: 10px;
@@ -9,6 +10,7 @@ const GridWrapper = styled.div`
   grid-template-columns: repeat(12, 1fr);
   grid-auto-rows: minmax(25px, auto);
 `;
+
 export const Home = (props) => (
     <GridWrapper>
         <p>This is a paragraph and I am writing on the home page</p>

@@ -14,25 +14,25 @@ import Sidebar from './Sidebar';
 class App extends Component {
   render() {
     return (
-      // <Router>
-      //   <div>
-      //     <Route path='/' exact component={Login} />
-      //     <Route path='/demo-user' component={SelectDemoUser} />
-      //     <Route path='/demo/admin/home/index' component={AdminHome} />
-      //     <Route path='/demo/user/home/index' component={UserHome} />
-      //   </div>
-      // </Router>
-      <React.Fragment>
-        <Router>
-          <NavigationBar />
-          <Sidebar />
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/about" component={About} />
-            <Route component={NoMatch} />
-          </Switch>
-        </Router>
-      </React.Fragment>
+      <Router>
+        <Switch>
+          <Route path='/' exact component={Login} />
+          <Route path='/demo-user' component={SelectDemoUser} />
+          <Route path='/demo/admin/home/index' component={AdminHome} />
+          <Route path='/demo/user/home/index' component={UserHome} />
+        </Switch>
+      </Router>
+      // <React.Fragment>
+      //   <Router>
+      //     <NavigationBar />
+      //     <Sidebar />
+      //     <Switch>
+      //       <Route exact path="/" component={Home} />
+      //       <Route path="/about" component={About} />
+      //       <Route component={NoMatch} />
+      //     </Switch>
+      //   </Router>
+      // </React.Fragment>
     );
   }
 }

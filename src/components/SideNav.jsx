@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
 import NavItem from './NavItem';
+
 /* This defines the actual bar going down the screen */
 const StyledSideNav = styled.div`
   position: fixed;     /* Fixed Sidebar (stay in place on scroll and position relative to viewport) */
