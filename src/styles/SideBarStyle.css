@@ -1,0 +1,67 @@
+html,body { height:100%; }
+/* Side Bar Logo */
+.side-bar-logo {
+    border-bottom: 1px solid #4b545c;
+    color: rgba(255, 255, 255, .8);
+    padding: 0px 15px 15px 0px;
+}
+
+.side-bar-logo img {
+    height: auto;
+    width: 150px;
+}
+
+/* Side Bar User */
+.side-bar-user {
+    display: flex;
+    align-items: center;
+    margin: 16px 0px;
+    border-bottom: 1px solid #4b545c;
+    padding: 0px 15px 15px 0px;
+    color: rgba(255, 255, 255, .8);
+}
+
+.side-bar-user img {
+    width: 35px;
+    height: 35px;
+}
+
+.side-bar-user a {
+    padding: 5px 5px 5px 10px;
+    color: white;
+}
+
+/* Side Bar Content */
+.side-bar-container {}
+
+.sc-bdVaJa:hover {
+    background-color: rgba(255, 255, 255, .1);
+    color: #fff;
+}
+
+/* Side Bar Seperator */
+.sidebar-seperator {
+    margin-top: 250px;
+}
+
+/* Side Bar Actions */
+.action-container {
+    height: 40px;
+    /* width: 75px;  width must be same size as NavBar to center */
+    /* text-align: center;  Aligns <a> inside of NavIcon div */
+    margin-bottom: 0;   /* Puts space between NavItems */
+    margin-left: 8px;
+    margin-right: 8px;
+    border-radius: 5px;
+    margin: 3px 0px;
+    align-items: center;
+    display: grid;
+    padding: 8px 16px;
+}
+.action-container a {
+    text-decoration: none;
+    color: white;
+}
+.action-container i {
+    color: white;
+}
