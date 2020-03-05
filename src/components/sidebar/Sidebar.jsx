@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { BrowserRouter as Router, Route, Link, withRouter } from "react-router-dom";
-import { Row, Col, Container, Image, Nav, NavDropdown, Button, Collapse } from 'react-bootstrap';
+import { Row, Col, Container, Image, Nav, NavDropdown, Button, Accordion, Card } from 'react-bootstrap';
 import SidebarLogo from './de_bug-logo.png';
 import UserIcon from './default-user.jpg';
 import '../../styles/SideBarStyle.css';
@@ -39,7 +39,6 @@ class SideNav extends React.Component {
                     name: 'Projects',
                     css: 'nav-icon fa fa-edit',
                     expandable: true,
-                    open: false,
                     key: 2
                 },
                 {
@@ -47,7 +46,6 @@ class SideNav extends React.Component {
                     name: 'Tickets',
                     css: 'nav-icon fas fa-ticket-alt',
                     expandable: true,
-                    open: false,
                     key: 3
                 },
             ],
@@ -76,19 +74,6 @@ class SideNav extends React.Component {
     onItemClick = (path) => {
         this.setState({ activePath: path });
     }
-
-    // onOpen = (key) => {
-    //     let items = this.state.items;
-
-    //     for (let i = 0; i < items.length; i++) {
-    //         console.log(items[i].key);
-    //         if(items[i].key === key) {
-    //             this.setState({
-    //                 items[i].open: !items[i].open
-    //             });
-    //         }
-    //     }
-    // }
 
     render() {
         const { items, actions, activePath } = this.state;
@@ -177,13 +162,6 @@ const StyledNavItem = styled.div`
 `;
 
 class NavItem extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            open: false
-        }
-    }
-
     handleClick = () => {
         const { path, onItemClick } = this.props;
         onItemClick(path);
@@ -192,37 +170,51 @@ class NavItem extends React.Component {
     render() {
         const { active } = this.props;
         return (
-            <StyledNavItem active={active} >
-                <Row>
-                    <Col xs={1} sm={1} md={1} lg={1}>
-                        <i className={this.props.css} />
-                    </Col>
-                    <Col xs={10} sm={10} md={10} lg={10}>
-                        {this.props.expandable ? (
-                            <>
-                                <Button
-                                    onClick={() => this.setState({open: !this.state.open})}
-                                    aria-controls="example-collapse-text"
-                                    aria-expanded={this.state.open}
-                                >
-                                    Click
-                                </Button>
-                                <Collapse in={this.state.open}>
-                                    <div className='example-collapse-text'>
-                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
-                                        terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer
-                                        labore wes anderson cred nesciunt sapiente ea proident.
-                                    </div>
-                                </Collapse>
-                            </>
-                        ) : (
-                                <Link to={this.props.path} onClick={this.handleClick}>
-                                    {this.props.name}
-                                </Link>
-                            )}
-                    </Col>
-                </Row>
-            </StyledNavItem >
+            <div>
+                {
+                    this.props.expandable ? (
+                        <StyledNavItem active={active} >
+                            <Accordion>
+                                <Card>
+                                    <Card.Header>
+                                        <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                                            <Row>
+                                                <Col xs={1} sm={1} md={1} lg={1}>
+                                                    <i style={{ color: 'black' }} className={this.props.css} />
+                                                </Col>
+                                                <Col xs={10} sm={10} md={10} lg={10}>
+                                                    <Link style={{ color: 'black' }}>
+                                                        {this.props.name}
+                                                    </Link>
+                                                </Col>
+                                            </Row>
+                                        </Accordion.Toggle>
+                                    </Card.Header>
+                                    <Accordion.Collapse eventKey="0">
+                                        <Card.Body>Hello! I'm the body</Card.Body>
+                                    </Accordion.Collapse>
+                                </Card>
+                            </Accordion>
+                        </StyledNavItem >
+                    ) : (
+                            <StyledNavItem active={active} >
+
+                                <Row>
+                                    <Col xs={1} sm={1} md={1} lg={1}>
+                                        <i className={this.props.css} />
+                                    </Col>
+                                    <Col xs={10} sm={10} md={10} lg={10}>
+
+                                        <Link to={this.props.path} onClick={this.handleClick}>
+                                            {this.props.name}
+                                        </Link>
+                                    </Col>
+                                </Row>
+                            </StyledNavItem >
+                        )
+                }
+            </div>
+
         )
     }
 }
