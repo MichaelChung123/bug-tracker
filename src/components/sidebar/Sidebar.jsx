@@ -1,7 +1,8 @@
 import React from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { BrowserRouter as Router, Route, Link, withRouter } from "react-router-dom";
-import { Row, Col, Container, Image, Nav, NavDropdown } from 'react-bootstrap';
+import { Row, Col, Container, Image, Nav, NavDropdown, Button, Collapse } from 'react-bootstrap';
 import SidebarLogo from './de_bug-logo.png';
 import UserIcon from './default-user.jpg';
 import '../../styles/SideBarStyle.css';
@@ -30,34 +31,42 @@ class SideNav extends React.Component {
                     path: '/demo/admin/dashboard', /* path is used as id to check which NavItem is active basically */
                     name: 'Dashboard',
                     css: 'nav-icon fas fa-th',
+                    expandable: false,
                     key: 1 /* Key is required, else console throws error. Does this please you Mr. Browser?! */
                 },
                 {
                     path: '/demo/admin/projects',
                     name: 'Projects',
                     css: 'nav-icon fa fa-edit',
+                    expandable: true,
+                    open: false,
                     key: 2
                 },
                 {
                     path: '/demo/admin/tickets',
                     name: 'Tickets',
                     css: 'nav-icon fas fa-ticket-alt',
+                    expandable: true,
+                    open: false,
                     key: 3
                 },
             ],
+
             actions: [
                 {
                     path: '/demo/admin/create_project',
                     name: 'Create Project',
                     css: 'nav-icon fa fa-edit',
-                    color: { backgroundColor:'#28a745' },
+                    expandable: false,
+                    color: { backgroundColor: '#28a745' },
                     key: 1
                 },
                 {
                     path: '/demo/admin/log_out',
                     name: 'Log Out',
                     css: 'nav-icon fas fa-door-open',
-                    color: { backgroundColor:'#dc3545' },
+                    expandable: false,
+                    color: { backgroundColor: '#dc3545' },
                     key: 2
                 },
             ]
@@ -68,9 +77,22 @@ class SideNav extends React.Component {
         this.setState({ activePath: path });
     }
 
+    // onOpen = (key) => {
+    //     let items = this.state.items;
+
+    //     for (let i = 0; i < items.length; i++) {
+    //         console.log(items[i].key);
+    //         if(items[i].key === key) {
+    //             this.setState({
+    //                 items[i].open: !items[i].open
+    //             });
+    //         }
+    //     }
+    // }
+
     render() {
         const { items, actions, activePath } = this.state;
-
+        console.log('activePath ', activePath);
         return (
             <Container className='side-bar-container' style={SideNavStyle} fluid='true'>
                 <Row className='side-bar-logo'>
@@ -85,19 +107,6 @@ class SideNav extends React.Component {
                     <Image src={UserIcon} roundedCircle />
                     <a href='/demo/admin/home/index'>Demo Admin</a>
                 </Row>
-
-                {/* <Nav defaultActiveKey='/demo/admin/home/dashboard' className="flex-column">
-                    <Nav.Link href='/demo/admin/home/dashboard'>Dashboard</Nav.Link>
-                    <NavDropdown title='Projects' href='/demo/admin/home/projects'>
-                        <NavDropdown.Item href='/demo/admin/home/viewAll'>
-                            View All
-                        </NavDropdown.Item>
-                        <NavDropdown.Item>
-                            Create New
-                        </NavDropdown.Item>
-                    </NavDropdown>
-                </Nav> */}
-
                 {
                     items.map((item) => {
                         return (
@@ -105,7 +114,10 @@ class SideNav extends React.Component {
                                 path={item.path}
                                 name={item.name}
                                 css={item.css}
+                                expandable={item.expandable}
+                                open={item.open}
                                 onItemClick={this.onItemClick}
+                                onOpen={this.onOpen}
                                 active={item.path === activePath}
                                 key={item.key}
                             />
@@ -165,6 +177,13 @@ const StyledNavItem = styled.div`
 `;
 
 class NavItem extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false
+        }
+    }
+
     handleClick = () => {
         const { path, onItemClick } = this.props;
         onItemClick(path);
@@ -173,24 +192,45 @@ class NavItem extends React.Component {
     render() {
         const { active } = this.props;
         return (
-            <StyledNavItem active={active}>
+            <StyledNavItem active={active} >
                 <Row>
                     <Col xs={1} sm={1} md={1} lg={1}>
                         <i className={this.props.css} />
                     </Col>
                     <Col xs={10} sm={10} md={10} lg={10}>
-                        <Link to={this.props.path} onClick={this.handleClick}>
-                            {this.props.name}
-                        </Link>
+                        {this.props.expandable ? (
+                            <>
+                                <Button
+                                    onClick={() => this.setState({open: !this.state.open})}
+                                    aria-controls="example-collapse-text"
+                                    aria-expanded={this.state.open}
+                                >
+                                    Click
+                                </Button>
+                                <Collapse in={this.state.open}>
+                                    <div className='example-collapse-text'>
+                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
+                                        terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer
+                                        labore wes anderson cred nesciunt sapiente ea proident.
+                                    </div>
+                                </Collapse>
+                            </>
+                        ) : (
+                                <Link to={this.props.path} onClick={this.handleClick}>
+                                    {this.props.name}
+                                </Link>
+                            )}
                     </Col>
                 </Row>
-            </StyledNavItem>
-        );
+            </StyledNavItem >
+        )
     }
 }
 
+
+
 const NavIcon = styled.div`
-`;
+            `;
 
 class NavAction extends React.Component {
     handleClick = () => {
@@ -201,7 +241,7 @@ class NavAction extends React.Component {
     render() {
         const { active } = this.props;
         return (
-            <Container className='action-container' style={this.props.color}>
+            <Container className='action-container' style={this.props.color} >
                 <Row>
                     <Col xs={1} sm={1} md={1} lg={1}>
                         <i className={this.props.css} />
@@ -212,7 +252,7 @@ class NavAction extends React.Component {
                         </Link>
                     </Col>
                 </Row>
-            </Container>
+            </Container >
         );
     }
 }
