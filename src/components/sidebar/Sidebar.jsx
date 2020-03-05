@@ -8,13 +8,16 @@ import '../../styles/SideBarStyle.css';
 
 const SideNavStyle = {
     // position: 'fixed',     /* Fixed Sidebar (stay in place on scroll and position relative to viewport) */
-    height: '100%',
+    // height: '100%',
+    height: '110vh',
     // width: '250px',     /* Set the width of the sidebar */
     zIndex: '1',      /* Stay on top of everything */
     // top: '3.4em',      /* Stay at the top */
     backgroundColor: '#212529', /* Black */
     overflowX: 'hidden',     /* Disable horizontal scroll */
-    padding: '15px 30px 30px 30px'
+    padding: '15px 30px 30px 30px',
+    top: '0',
+    position: 'sticky'
 };
 
 class SideNav extends React.Component {

@@ -1,0 +1,51 @@
+.main-content {
+    height: 500vh;
+    background-color: #f4f6f9;
+    padding-right: 15px;
+}
+
+.main-content-title {
+    padding: 15px 8px 15px 15px;
+}
+
+.main-content-title h1 {
+    font-size: 56px;
+}
+
+
+/* PTU Block */
+.main-content-ptu-block {
+    padding: 15px 0px;
+}
+
+.ptu-box {
+    box-shadow: 0 0 1px rgba(0, 0, 0, .125), 0 1px 3px rgba(0, 0, 0, .2);
+    border-radius: .25rem;
+    background: #fff;
+    min-height: 80px;
+    padding: .5rem;
+    position: relative;
+    margin-left: 15px;
+}
+
+.ptu-icon {
+    border-radius: .25rem;
+    display: block;
+    font-size: 1.875rem;
+    text-align: center;
+    width: 70px;
+    height: 64px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ptu-info .row {
+    max-height: 29px;
+}
+
+.ptu-info label {
+    font-size: large;
+    font-weight: bold;
+}
