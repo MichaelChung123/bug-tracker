@@ -173,21 +173,19 @@ class NavItem extends React.Component {
             <div>
                 {
                     this.props.expandable ? (
-                        <StyledNavItem active={active} >
+                        // <StyledNavItem active={active} >
                             <Accordion>
                                 <Card>
-                                    <Card.Header>
-                                        <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                                            <Row>
+                                    <Card.Header className='side-bar-card-header'>
+                                        <Accordion.Toggle as={Row} variant="link" eventKey="0">
                                                 <Col xs={1} sm={1} md={1} lg={1}>
-                                                    <i style={{ color: 'black' }} className={this.props.css} />
+                                                    <i className={this.props.css} />
                                                 </Col>
                                                 <Col xs={10} sm={10} md={10} lg={10}>
-                                                    <Link style={{ color: 'black' }}>
+                                                    <Link>
                                                         {this.props.name}
                                                     </Link>
                                                 </Col>
-                                            </Row>
                                         </Accordion.Toggle>
                                     </Card.Header>
                                     <Accordion.Collapse eventKey="0">
@@ -195,7 +193,7 @@ class NavItem extends React.Component {
                                     </Accordion.Collapse>
                                 </Card>
                             </Accordion>
-                        </StyledNavItem >
+                        //  </StyledNavItem >
                     ) : (
                             <StyledNavItem active={active} >
 
