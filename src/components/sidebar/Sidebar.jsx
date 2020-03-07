@@ -174,25 +174,52 @@ class NavItem extends React.Component {
                 {
                     this.props.expandable ? (
                         // <StyledNavItem active={active} >
-                            <Accordion>
-                                <Card>
-                                    <Card.Header className='side-bar-card-header'>
-                                        <Accordion.Toggle as={Row} variant="link" eventKey="0">
-                                                <Col xs={1} sm={1} md={1} lg={1}>
-                                                    <i className={this.props.css} />
-                                                </Col>
-                                                <Col xs={10} sm={10} md={10} lg={10}>
-                                                    <Link>
-                                                        {this.props.name}
-                                                    </Link>
-                                                </Col>
-                                        </Accordion.Toggle>
-                                    </Card.Header>
-                                    <Accordion.Collapse eventKey="0">
-                                        <Card.Body>Hello! I'm the body</Card.Body>
-                                    </Accordion.Collapse>
-                                </Card>
-                            </Accordion>
+                        <Accordion>
+                            <Card>
+                                <Card.Header className='side-bar-card-header'>
+                                    <Accordion.Toggle as={Row} variant="link" eventKey="0">
+                                        <Col xs={1} sm={1} md={1} lg={1}>
+                                            <i className={this.props.css} />
+                                        </Col>
+                                        <Col xs={10} sm={10} md={10} lg={10}>
+                                            <Link>
+                                                {this.props.name}
+                                            </Link>
+                                        </Col>
+                                    </Accordion.Toggle>
+                                </Card.Header>
+                                <Accordion.Collapse eventKey="0">
+                                    <Card.Body>
+                                        <Row>
+                                            <Col xs={1} sm={1} md={1} lg={1}>
+                                                <i className='far fa-circle nav-icon' />
+                                            </Col>
+                                            <Col xs={10} sm={10} md={10} lg={10}>
+                                                <Link>
+                                                    View All
+                                                </Link>
+                                            </Col>
+                                        </Row>
+                                    </Card.Body>
+
+                                </Accordion.Collapse>
+                                <Accordion.Collapse eventKey="0">
+                                    <Card.Body>
+                                        <Row>
+                                            {/* <i className='far fa-circle nav-icon' />Hello! I'm the body */}
+                                            <Col xs={1} sm={1} md={1} lg={1}>
+                                                <i className='fa fa-plus-circle nav-icon' />
+                                            </Col>
+                                            <Col xs={10} sm={10} md={10} lg={10}>
+                                                <Link>
+                                                    Create New
+                                                </Link>
+                                            </Col>
+                                        </Row>
+                                    </Card.Body>
+                                </Accordion.Collapse>
+                            </Card>
+                        </Accordion>
                         //  </StyledNavItem >
                     ) : (
                             <StyledNavItem active={active} >
