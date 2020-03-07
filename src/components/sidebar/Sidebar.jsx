@@ -39,6 +39,18 @@ class SideNav extends React.Component {
                     name: 'Projects',
                     css: 'nav-icon fa fa-edit',
                     expandable: true,
+                    subItems: [
+                        {
+                            path: '/demo/admin/projects/all',
+                            name: 'View All',
+                            css: 'far fa-circle nav-icon'
+                        },
+                        {
+                            path: '/demo/admin/projects/create',
+                            name: 'Create New',
+                            css: 'fa fa-plus-circle nav-icon'
+                        }
+                    ],
                     key: 2
                 },
                 {
@@ -46,6 +58,18 @@ class SideNav extends React.Component {
                     name: 'Tickets',
                     css: 'nav-icon fas fa-ticket-alt',
                     expandable: true,
+                    subItems: [
+                        {
+                            path: '/demo/admin/projects/all',
+                            name: 'View All',
+                            css: 'far fa-circle nav-icon'
+                        },
+                        {
+                            path: '/demo/admin/tickets/history',
+                            name: 'History',
+                            css: 'fas fa-history nav-icon'
+                        }
+                    ],
                     key: 3
                 },
             ],
@@ -100,6 +124,7 @@ class SideNav extends React.Component {
                                 name={item.name}
                                 css={item.css}
                                 expandable={item.expandable}
+                                subItems={item.subItems}
                                 open={item.open}
                                 onItemClick={this.onItemClick}
                                 onOpen={this.onOpen}
@@ -173,7 +198,6 @@ class NavItem extends React.Component {
             <div>
                 {
                     this.props.expandable ? (
-                        // <StyledNavItem active={active} >
                         <Accordion>
                             <Card>
                                 <Card.Header className='side-bar-card-header'>
@@ -188,39 +212,28 @@ class NavItem extends React.Component {
                                         </Col>
                                     </Accordion.Toggle>
                                 </Card.Header>
-                                <Accordion.Collapse eventKey="0">
-                                    <Card.Body>
-                                        <Row>
-                                            <Col xs={1} sm={1} md={1} lg={1}>
-                                                <i className='far fa-circle nav-icon' />
-                                            </Col>
-                                            <Col xs={10} sm={10} md={10} lg={10}>
-                                                <Link>
-                                                    View All
-                                                </Link>
-                                            </Col>
-                                        </Row>
-                                    </Card.Body>
-
-                                </Accordion.Collapse>
-                                <Accordion.Collapse eventKey="0">
-                                    <Card.Body>
-                                        <Row>
-                                            {/* <i className='far fa-circle nav-icon' />Hello! I'm the body */}
-                                            <Col xs={1} sm={1} md={1} lg={1}>
-                                                <i className='fa fa-plus-circle nav-icon' />
-                                            </Col>
-                                            <Col xs={10} sm={10} md={10} lg={10}>
-                                                <Link>
-                                                    Create New
-                                                </Link>
-                                            </Col>
-                                        </Row>
-                                    </Card.Body>
-                                </Accordion.Collapse>
+                                {
+                                    this.props.subItems.map((subItem) => {
+                                        return (
+                                            <Accordion.Collapse eventKey="0">
+                                                <Card.Body className='side-bar-card-header' >
+                                                    <Row>
+                                                        <Col xs={1} sm={1} md={1} lg={1}>
+                                                            <i className={subItem.css} />
+                                                        </Col>
+                                                        <Col xs={10} sm={10} md={10} lg={10}>
+                                                            <Link to={subItem.path} onClick={this.handleClick}>
+                                                                {subItem.name}
+                                                            </Link>
+                                                        </Col>
+                                                    </Row>
+                                                </Card.Body>
+                                            </Accordion.Collapse>
+                                        );
+                                    })
+                                }
                             </Card>
                         </Accordion>
-                        //  </StyledNavItem >
                     ) : (
                             <StyledNavItem active={active} >
 
