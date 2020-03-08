@@ -28,15 +28,15 @@ class TopNav extends React.Component {
                 >
 
                     <ListGroup defaultActiveKey="#link1">
-                        <ListGroup.Item action href="#link1">
-                            Link 1
-                            </ListGroup.Item>
-                        <ListGroup.Item action href="#link2" disabled>
+                        <ListGroup.Item disabled>
+                            0 Notifications
+                        </ListGroup.Item>
+                        {/* <ListGroup.Item action href="#link2" disabled>
                             Link 2
                             </ListGroup.Item>
                         <ListGroup.Item action>
                             This one is a button
-                            </ListGroup.Item>
+                            </ListGroup.Item> */}
                     </ListGroup>
                 </NavDropdown>
                 {/* </Navbar.Collapse> */}
