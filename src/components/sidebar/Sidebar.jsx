@@ -64,7 +64,7 @@ class SideNav extends React.Component {
                     open: false,
                     subItems: [
                         {
-                            path: '/demo/admin/projects/all',
+                            path: '/demo/admin/tickets/all',
                             name: 'View All',
                             css: 'far fa-circle nav-icon',
                             key: 1
