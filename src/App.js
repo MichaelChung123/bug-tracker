@@ -7,7 +7,8 @@ import AdminHome from './components/admin/index';
 import UserHome from './components/user/index';
 import Dashboard from './components/admin/Dashboard';
 import Projects from './components/admin/Projects';
-import Tickets from './components/admin/Tickets';
+import Tickets from './components/admin/tickets/Tickets';
+import AllTickets from './components/admin/tickets/AllTickets'
 
 class App extends Component {
   render() {
@@ -20,8 +21,9 @@ class App extends Component {
           <Route path='/demo/user/home/index' component={UserHome} />
 
           <Route path='/demo/admin/dashboard' component={Dashboard} />
-          <Route path='/demo/admin/projects' component={Projects} />
-          <Route path='/demo/admin/tickets' component={Tickets} />
+          <Route path='/demo/admin/projects' exact component={Projects} />
+          <Route path='/demo/admin/tickets' exact component={Tickets} />
+          <Route path='/demo/admin/tickets/all' component={AllTickets} />
         </Switch>
       </Router>
     );
