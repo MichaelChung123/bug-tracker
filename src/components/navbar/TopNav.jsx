@@ -1,7 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-import { BrowserRouter as Router, Route, Link, withRouter } from "react-router-dom";
-import { Row, Col, Container, Image, Nav, NavDropdown, Navbar, Form, FormControl, Button, ListGroup } from 'react-bootstrap';
+import { Nav, NavDropdown, Navbar, ListGroup } from 'react-bootstrap';
 import '../../styles/NavBarStyle.css';
 import img from '../sidebar/default-user.jpg';
 
@@ -41,7 +39,7 @@ class TopNav extends React.Component {
                             </ListGroup.Item>
                     </ListGroup>
                 </NavDropdown>
-                {/* </Navbar.Collapse> */ }
+                {/* </Navbar.Collapse> */}
             </Navbar >
         );
     }

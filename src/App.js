@@ -8,7 +8,6 @@ import UserHome from './components/user/index';
 import Dashboard from './components/admin/Dashboard';
 import Projects from './components/admin/Projects';
 import Tickets from './components/admin/Tickets';
-import SideBar from './components/sidebar/Sidebar';
 
 class App extends Component {
   render() {
