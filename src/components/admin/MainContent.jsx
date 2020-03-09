@@ -62,7 +62,6 @@ class MainContent extends Component {
                             );
                         })
                     }
-                    {/* <PtuBlock /> */}
                 </Row>
             </Container>
         );
@@ -74,7 +73,7 @@ class PtuBlock extends React.Component {
         return (
             <Col xs={4} sm={4} md={4} lg={4}>
                 <Row fluid='true' className='ptu-box'>
-                    <Col xs={3} sm={3} md={3} lg={3} style={{backgroundColor: this.props.color}} className='ptu-icon'>
+                    <Col xs={3} sm={3} md={3} lg={3} style={{ backgroundColor: this.props.color }} className='ptu-icon'>
                         <i className={this.props.iconClass} />
                     </Col>
                     <Col xs={9} sm={9} md={9} lg={9} className='ptu-info'>

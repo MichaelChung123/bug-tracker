@@ -5,10 +5,10 @@ class SelectDemoUser extends Component {
     render() {
         return (
             <div className='select-user-container'>
-                <Link to='/demo/admin/home/index'>
+                <Link to='/admin/dashboard'>
                     <button>Admin</button>
                 </Link>
-                <Link to='/demo/user/home/index'>
+                <Link to='/user/dashboard'>
                     <button>User</button>
                 </Link>
             </div>
