@@ -28,27 +28,27 @@ class SideNav extends React.Component {
             activePath: props.location.pathname,
             items: [
                 {
-                    path: '/demo/admin/dashboard', /* path is used as id to check which NavItem is active basically */
+                    path: '/admin/dashboard', /* path is used as id to check which NavItem is active basically */
                     name: 'Dashboard',
                     css: 'nav-icon fas fa-th',
                     expandable: false,
                     key: 1 /* Key is required, else console throws error. Does this please you Mr. Browser?! */
                 },
                 {
-                    path: '/demo/admin/projects',
+                    path: '/admin/projects',
                     name: 'Projects',
                     css: 'nav-icon fa fa-edit',
                     expandable: true,
                     open: false,
                     subItems: [
                         {
-                            path: '/demo/admin/projects/all',
+                            path: '/admin/projects/all',
                             name: 'View All',
                             css: 'far fa-circle nav-icon',
                             key: 1
                         },
                         {
-                            path: '/demo/admin/projects/create',
+                            path: '/admin/projects/create',
                             name: 'Create New',
                             css: 'fa fa-plus-circle nav-icon',
                             key: 2
@@ -57,20 +57,20 @@ class SideNav extends React.Component {
                     key: 2
                 },
                 {
-                    path: '/demo/admin/tickets',
+                    path: '/admin/tickets',
                     name: 'Tickets',
                     css: 'nav-icon fas fa-ticket-alt',
                     expandable: true,
                     open: false,
                     subItems: [
                         {
-                            path: '/demo/admin/tickets/all',
+                            path: '/admin/tickets/all',
                             name: 'View All',
                             css: 'far fa-circle nav-icon',
                             key: 1
                         },
                         {
-                            path: '/demo/admin/tickets/history',
+                            path: '/admin/tickets/history',
                             name: 'History',
                             css: 'fas fa-history nav-icon',
                             key: 2
@@ -82,7 +82,7 @@ class SideNav extends React.Component {
 
             actions: [
                 {
-                    path: '/demo/admin/create_project',
+                    path: '/admin/create_project',
                     name: 'Create Project',
                     css: 'nav-icon fa fa-edit',
                     expandable: false,
@@ -90,7 +90,7 @@ class SideNav extends React.Component {
                     key: 1
                 },
                 {
-                    path: '/demo/admin/log_out',
+                    path: '/admin/log_out',
                     name: 'Log Out',
                     css: 'nav-icon fas fa-door-open',
                     expandable: false,

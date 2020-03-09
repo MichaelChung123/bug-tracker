@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Container } from 'react-bootstrap';
-import '../../../styles/MainContentStyle.css';
+import '../../../styles/TicketStyle.css';
 
 class Tickets extends Component {
     constructor(props) {

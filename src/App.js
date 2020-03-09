@@ -6,13 +6,10 @@ import Login from './components/Login';
 import SelectDemoUser from './components/SelectDemoUser';
 import AdminHome from './components/admin/index';
 import UserHome from './components/user/index';
-// import Dashboard from './components/admin/Dashboard';
 import Projects from './components/admin/Projects';
 import Tickets from './components/admin/tickets/Tickets';
-import AllTickets from './components/admin/tickets/AllTickets'
 import SideBar from './components/sidebar/Sidebar';
 import TopNav from './components/navbar/TopNav';
-import MainContent from './components/admin/MainContent';
 import Dashboard from './components/admin/Dashboard';
 
 class App extends Component {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import SideBar from '../sidebar/Sidebar';
 import TopNav from '../navbar/TopNav';
 import { Row, Col, Container } from 'react-bootstrap';
-import '../../styles/MainContentStyle.css';
+import '../../styles/DashboardStyle.css';
 
 class Dashboard extends Component {
     constructor(props) {
