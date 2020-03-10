@@ -81,7 +81,7 @@ class SideNav extends React.Component {
 
             actions: [
                 {
-                    path: '/admin/create_project',
+                    path: '/admin/projects/create',
                     name: 'Create Project',
                     css: 'nav-icon fa fa-edit',
                     expandable: false,
@@ -89,7 +89,7 @@ class SideNav extends React.Component {
                     key: 1
                 },
                 {
-                    path: '/admin/log_out',
+                    path: '/admin/logout',
                     name: 'Log Out',
                     css: 'nav-icon fas fa-door-open',
                     expandable: false,
@@ -217,7 +217,7 @@ class NavItem extends React.Component {
                         }
                         }>
                             <Card>
-                                <Card.Header className={this.props.open ? 'side-bar-card-header-open' : 'side-bar-card-header' }>
+                                <Card.Header className={this.props.open ? 'side-bar-card-header-open' : 'side-bar-card-header'}>
                                     <Accordion.Toggle as={Row} variant="link" eventKey="0">
                                         <Col xs={1} sm={1} md={1} lg={1}>
                                             <i className={this.props.css} />
@@ -239,9 +239,12 @@ class NavItem extends React.Component {
                                                             <i className={subItem.css} />
                                                         </Col>
                                                         <Col xs={10} sm={10} md={10} lg={10}>
-                                                            <Link to={subItem.path} onClick={this.handleClick}>
+                                                            {/* <Link to={subItem.path} onClick={this.handleClick}>
                                                                 {subItem.name}
-                                                            </Link>
+                                                            </Link> */}
+                                                            <a href={subItem.path} onClick={this.handleClick}>
+                                                                {subItem.name}
+                                                            </a>
                                                         </Col>
                                                     </Row>
                                                 </Card.Body>
@@ -252,16 +255,18 @@ class NavItem extends React.Component {
                             </Card>
                         </Accordion>
                     ) : (
-                            <StyledNavItem active={active} >
+                            <StyledNavItem active={active}>
                                 <Row>
                                     <Col xs={1} sm={1} md={1} lg={1}>
                                         <i className={this.props.css} />
                                     </Col>
                                     <Col xs={10} sm={10} md={10} lg={10}>
-
-                                        <Link to={this.props.path} onClick={this.handleClick}>
-                                            <a>{this.props.name}</a>
-                                        </Link>
+                                        {/* <Link to={this.props.path} onClick={this.handleClick}>
+                                            {this.props.name}
+                                        </Link> */}
+                                        <a href={this.props.path} onClick={this.handleClick}>
+                                            {this.props.name}
+                                        </a>
                                     </Col>
                                 </Row>
                             </StyledNavItem>
@@ -287,12 +292,15 @@ class NavAction extends React.Component {
                         <i className={this.props.css} />
                     </Col>
                     <Col xs={10} sm={10} md={10} lg={10}>
-                        <Link to={this.props.path} onClick={this.handleClick}>
+                        {/* <Link to={this.props.path} onClick={this.handleClick}>
                             {this.props.name}
-                        </Link>
+                        </Link> */}
+                        <a href={this.props.path} onClick={this.handleClick}>
+                            {this.props.name}
+                        </a>
                     </Col>
                 </Row>
-            </Container >
+            </Container>
         );
     }
 }

@@ -27,6 +27,8 @@ class App extends Component {
                   <Route path='/admin/dashboard' component={Dashboard} />
                   <Route path='/admin/tickets/all' component={Tickets} />
                   <Route path='/admin/projects/all' component={Projects} />
+                  {/* <Route path='/admin/projects/create' component={Projects} />
+                  <Route path='/admin/logout' component={Projects} /> */}
                 </Container>
               </Col>
             </Row>
@@ -37,20 +39,6 @@ class App extends Component {
         <Route path='/demo-user' component={SelectDemoUser} />
 
       </Router>
-
-      // <Router>
-      //   <Switch>
-      //     <Route path='/' exact component={Login} />
-      //     <Route path='/demo-user' component={SelectDemoUser} />
-      //     <Route path='/demo/admin/home/index' component={AdminHome} />
-      //     <Route path='/demo/user/home/index' component={UserHome} />
-
-      //     <Route path='/demo/admin/dashboard' component={Dashboard} />
-      //     <Route path='/demo/admin/projects' exact component={Projects} />
-      //     <Route path='/demo/admin/tickets' exact component={Tickets} />
-      //     <Route path='/demo/admin/tickets/all' component={AllTickets} />
-      //   </Switch>
-      // </Router>
     );
   }
 }

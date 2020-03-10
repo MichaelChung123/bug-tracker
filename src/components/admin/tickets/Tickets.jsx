@@ -68,35 +68,6 @@ class Tickets extends Component {
         }
     }
 
-    // // Still not setting the right page to active onClick
-    // pageClick = (number) => {
-    //     this.setState({
-    //         activePage: number
-    //     })
-    // }
-
-    // createPagination = () => {
-    //     let pageCount = Math.ceil(this.state.tickets.length / 2);
-    //     let newPages = [];
-    //     for (let number = 1; number <= pageCount; number++) {
-    //         let page =
-    //             <Pagination.Item key={number} onClick={() => this.pageClick(number)} active={number === this.state.activePage}>
-    //                 {number}
-    //             </Pagination.Item>
-
-    //         newPages.push(page);
-    //         // console.log('num: ', number, ' & activePage: ', this.state.activePage, ' & active: ', number === this.state.activePage);
-    //     }
-
-    //     this.setState(prevState => ({
-    //         items: [...prevState.items, ...newPages]
-    //     }))
-    // }
-
-    // componentDidMount() {
-    //     this.createPagination();
-    // }
-
     pageClick = (number) => {
         this.setState({
             activePage: number
