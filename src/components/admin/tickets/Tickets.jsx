@@ -1,14 +1,26 @@
 import React, { Component } from 'react';
 import { Row, Col, Container, Table, Form, FormControl, Button, Pagination } from 'react-bootstrap';
 import '../../../styles/TicketStyle.css';
+// import moment from 'moment';
 
 class Tickets extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            activePage: 1,
+            items: [],
+            titles: [
+                'Title',
+                'Created By',
+                'Priority',
+                'Type',
+                'Status',
+                'Last Updated',
+                'Created'
+            ],
             tickets: [
                 {
-                    title:'Demo Ticket 1',
+                    title: 'Demo Ticket 1',
                     creator: 'Michael Chung',
                     priority: 'High',
                     type: 'Feature Request',
@@ -17,7 +29,7 @@ class Tickets extends Component {
                     createdDate: '03/08/2020'
                 },
                 {
-                    title:'Demo Ticket 2',
+                    title: 'Demo Ticket 2',
                     creator: 'Michael Chung',
                     priority: 'Med',
                     type: 'Frontend',
@@ -26,7 +38,7 @@ class Tickets extends Component {
                     createdDate: '03/08/2020'
                 },
                 {
-                    title:'Demo Ticket 3',
+                    title: 'Demo Ticket 3',
                     creator: 'Michael Chung',
                     priority: 'Low',
                     type: 'Backend',
@@ -35,7 +47,7 @@ class Tickets extends Component {
                     createdDate: '03/08/2020'
                 },
                 {
-                    title:'Demo Ticket 4',
+                    title: 'Demo Ticket 4',
                     creator: 'Michael Chung',
                     priority: 'Med',
                     type: 'Feature Request',
@@ -44,7 +56,7 @@ class Tickets extends Component {
                     createdDate: '03/08/2020'
                 },
                 {
-                    title:'Demo Ticket 5',
+                    title: 'Demo Ticket 5',
                     creator: 'Michael Chung',
                     priority: 'Med',
                     type: 'Backend',
@@ -56,7 +68,32 @@ class Tickets extends Component {
         }
     }
 
+    pageClick = (number) => {
+        console.log('page click', number);
+    }
+
+    createPagination = () => {
+        let pageCount = Math.ceil(this.state.tickets.length / 2);
+
+        for (let number = 1; number <= pageCount; number++) {
+            let newPage =
+                <Pagination.Item key={number} onClick={() => this.pageClick(number)} active={number === this.state.activePage}>
+                    {number}
+                </Pagination.Item>
+
+            this.setState(prevState => ({
+                items: [...prevState.items, newPage]
+                // items: [...prevState.items, 'newPage']
+            }))
+        }
+    }
+
+    componentDidMount() {
+        this.createPagination();
+    }
+
     render() {
+        console.log(this.state.items);
         return (
             <Container className='all-tickets-container'>
                 <Row className='tickets-title'>
@@ -78,48 +115,37 @@ class Tickets extends Component {
                     <Table striped bordered hover>
                         <thead>
                             <tr>
-                                <th>Title</th>
-                                <th>Created By</th>
-                                <th>Priority</th>
-                                <th>Type</th>
-                                <th>Status</th>
-                                <th>Last Updated</th>
-                                <th>Created</th>
+                                {
+                                    this.state.titles.map((title) => {
+                                        return (
+                                            <th>{title}</th>
+                                        )
+                                    })
+                                }
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Demo Ticket 1</td>
-                                <td>Michael Chung</td>
-                                <td>High</td>
-                                <td>Feature Request</td>
-                                <td>Open</td>
-                                <td>03/09/2020</td>
-                                <td>03/08/2020</td>
-                            </tr>
-                            <tr>
-                                <td>Demo Ticket 2</td>
-                                <td>Michael Chung</td>
-                                <td>Med</td>
-                                <td>Frontend</td>
-                                <td>Resolved</td>
-                                <td>03/09/2020</td>
-                                <td>03/08/2020</td>
-                            </tr>
-                            <tr>
-                                <td>Demo Ticket 3</td>
-                                <td>Michael Chung</td>
-                                <td>Low</td>
-                                <td>Backend</td>
-                                <td>Assigned</td>
-                                <td>03/09/2020</td>
-                                <td>03/08/2020</td>
-                            </tr>
+                            {
+                                this.state.tickets.map((ticket, key) => {
+                                    return (
+                                        <TicketListRow
+                                            title={ticket.title}
+                                            creator={ticket.creator}
+                                            priority={ticket.priority}
+                                            type={ticket.type}
+                                            status={ticket.status}
+                                            updatedDate={ticket.updatedDate}
+                                            createdDate={ticket.createdDate}
+                                        // key={key}
+                                        />
+                                    );
+                                })
+                            }
                         </tbody>
                     </Table>
 
                     <Pagination>
-                        {items}
+                        {this.state.items}
                     </Pagination>
                 </Row>
             </Container>
@@ -127,26 +153,23 @@ class Tickets extends Component {
     }
 }
 
-let active = 1;
-let items = [];
-
-const pageClick = () => {
-    console.log('page click');
+class TicketListRow extends React.Component {
+    render() {
+        return (
+            <tr>
+                <td>{this.props.title}</td>
+                <td>{this.props.creator}</td>
+                <td>{this.props.priority}</td>
+                <td>{this.props.type}</td>
+                <td>{this.props.status}</td>
+                <td>{this.props.updatedDate}</td>
+                <td>{this.props.createdDate}</td>
+            </tr>
+        );
+    }
 }
 
-for (let number = 1; number <= 5; number++) {
-    items.push(
-        <Pagination.Item key={number} onClick={pageClick} active={number === active}>
-            {number}
-        </Pagination.Item>,
-    );
-}
-
-// class TicketPages extends React.Component {
-//     pageClick = () => {
-
-//     }
-
+// class Pages extends React.Component {
 //     render() {
 //         return (
 

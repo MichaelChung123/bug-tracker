@@ -1,7 +1,6 @@
 import React from 'react';
 import { Nav, NavDropdown, Navbar, ListGroup } from 'react-bootstrap';
 import '../../styles/NavBarStyle.css';
-import img from '../sidebar/default-user.jpg';
 
 class TopNav extends React.Component {
     render() {

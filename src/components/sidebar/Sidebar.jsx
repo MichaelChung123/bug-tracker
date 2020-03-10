@@ -1,8 +1,7 @@
 import React from 'react';
-import { useState } from 'react';
 import styled from 'styled-components';
-import { BrowserRouter as Router, Route, Link, withRouter } from "react-router-dom";
-import { Row, Col, Container, Image, Nav, NavDropdown, Button, Accordion, Card } from 'react-bootstrap';
+import { BrowserRouter as Link, withRouter } from "react-router-dom";
+import { Row, Col, Container, Image, Accordion, Card } from 'react-bootstrap';
 import SidebarLogo from './de_bug-logo.png';
 import UserIcon from './default-user.jpg';
 import '../../styles/SideBarStyle.css';
@@ -120,7 +119,7 @@ class SideNav extends React.Component {
             <Container className='side-bar-container' style={SideNavStyle} fluid='true'>
                 <Row className='side-bar-logo'>
                     <Col xs={4}>
-                        <a href='/demo/admin/home/index'>
+                        <a href='/admin/home/index'>
                             <Image src={SidebarLogo} />
                         </a>
                     </Col>
@@ -128,7 +127,7 @@ class SideNav extends React.Component {
 
                 <Row className='side-bar-user'>
                     <Image src={UserIcon} roundedCircle />
-                    <a href='/demo/admin/home/index'>Demo Admin</a>
+                    <a href='/admin/home/index'>Demo Admin</a>
                 </Row>
                 {
                     items.map((item) => {
@@ -261,7 +260,7 @@ class NavItem extends React.Component {
                                     <Col xs={10} sm={10} md={10} lg={10}>
 
                                         <Link to={this.props.path} onClick={this.handleClick}>
-                                            {this.props.name}
+                                            <a>{this.props.name}</a>
                                         </Link>
                                     </Col>
                                 </Row>
@@ -274,10 +273,6 @@ class NavItem extends React.Component {
 }
 
 
-
-const NavIcon = styled.div`
-            `;
-
 class NavAction extends React.Component {
     handleClick = () => {
         const { path, onItemClick } = this.props;
@@ -285,7 +280,6 @@ class NavAction extends React.Component {
     }
 
     render() {
-        const { active } = this.props;
         return (
             <Container className='action-container' style={this.props.color} >
                 <Row>

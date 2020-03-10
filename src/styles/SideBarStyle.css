@@ -38,14 +38,18 @@ body {
 /* Side Bar Content */
 .side-bar-container {}
 
+/* #root > div > div > div.col-lg-3.col-md-3.col-sm-3.col-3 > div > div:nth-child(3) > div {
+
+} */
+
+.sc-bdVaJa {
+    color: white;
+}
+
 .sc-bdVaJa:hover {
     background-color: rgba(255, 255, 255, .1);
     color: #fff;
 }
-
-/* #root > div > div > div.col-lg-3.col-md-3.col-sm-3.col-3 > div > div:nth-child(4) > div > div > div.card-header {
-    padding: 8px 16px;
-} */
 
 .side-bar-card-header {
     height: 40px;

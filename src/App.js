@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Row, Col, Container } from 'react-bootstrap';
 import Login from './components/Login';
 import SelectDemoUser from './components/SelectDemoUser';
-import AdminHome from './components/admin/index';
-import UserHome from './components/user/index';
 import Projects from './components/admin/Projects';
 import Tickets from './components/admin/tickets/Tickets';
 import SideBar from './components/sidebar/Sidebar';
