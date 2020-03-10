@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Row, Col, Container, Table, Form, FormControl, Button, Pagination } from 'react-bootstrap';
 import '../../../styles/TicketStyle.css';
-// import moment from 'moment';
 
 class Tickets extends Component {
     constructor(props) {
         super(props);
         this.state = {
             activePage: 1,
+            pageCount: 0,
             items: [],
             titles: [
                 'Title',
@@ -68,24 +68,53 @@ class Tickets extends Component {
         }
     }
 
+    // // Still not setting the right page to active onClick
+    // pageClick = (number) => {
+    //     this.setState({
+    //         activePage: number
+    //     })
+    // }
+
+    // createPagination = () => {
+    //     let pageCount = Math.ceil(this.state.tickets.length / 2);
+    //     let newPages = [];
+    //     for (let number = 1; number <= pageCount; number++) {
+    //         let page =
+    //             <Pagination.Item key={number} onClick={() => this.pageClick(number)} active={number === this.state.activePage}>
+    //                 {number}
+    //             </Pagination.Item>
+
+    //         newPages.push(page);
+    //         // console.log('num: ', number, ' & activePage: ', this.state.activePage, ' & active: ', number === this.state.activePage);
+    //     }
+
+    //     this.setState(prevState => ({
+    //         items: [...prevState.items, ...newPages]
+    //     }))
+    // }
+
+    // componentDidMount() {
+    //     this.createPagination();
+    // }
+
     pageClick = (number) => {
-        console.log('page click', number);
+        this.setState({
+            activePage: number
+        })
     }
 
     createPagination = () => {
         let pageCount = Math.ceil(this.state.tickets.length / 2);
 
         for (let number = 1; number <= pageCount; number++) {
-            let newPage =
-                <Pagination.Item key={number} onClick={() => this.pageClick(number)} active={number === this.state.activePage}>
-                    {number}
-                </Pagination.Item>
-
             this.setState(prevState => ({
-                items: [...prevState.items, newPage]
-                // items: [...prevState.items, 'newPage']
+                items: [...prevState.items, number]
             }))
         }
+
+        this.setState({
+            pageCount: pageCount
+        })
     }
 
     componentDidMount() {
@@ -93,7 +122,6 @@ class Tickets extends Component {
     }
 
     render() {
-        console.log(this.state.items);
         return (
             <Container className='all-tickets-container'>
                 <Row className='tickets-title'>
@@ -136,7 +164,6 @@ class Tickets extends Component {
                                             status={ticket.status}
                                             updatedDate={ticket.updatedDate}
                                             createdDate={ticket.createdDate}
-                                        // key={key}
                                         />
                                     );
                                 })
@@ -145,7 +172,18 @@ class Tickets extends Component {
                     </Table>
 
                     <Pagination>
-                        {this.state.items}
+                        {
+                            this.state.items.map((number) => {
+                                return (
+                                    <Page
+                                        pageCount={this.state.pageCount}
+                                        number={number}
+                                        activePage={this.state.activePage}
+                                        pageClick={this.pageClick}
+                                    />
+                                );
+                            })
+                        }
                     </Pagination>
                 </Row>
             </Container>
@@ -169,12 +207,19 @@ class TicketListRow extends React.Component {
     }
 }
 
-// class Pages extends React.Component {
-//     render() {
-//         return (
+class Page extends React.Component {
+    handleClick = () => {
+        const { number, pageClick } = this.props;
+        pageClick(number);
+    }
 
-//         );
-//     }
-// }
+    render() {
+        return (
+            <Pagination.Item key={this.props.number} onClick={this.handleClick} active={this.props.number === this.props.activePage}>
+                {this.props.number}
+            </Pagination.Item>
+        );
+    }
+}
 
 export default Tickets;
