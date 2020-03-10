@@ -24,8 +24,8 @@ class App extends Component {
                 <SideBar />
               </Col>
               <Col style={{ paddingLeft: '0px' }} xs={9} sm={9} md={9} lg={9}>
+                <TopNav />
                 <Container className='main-content' fluid='true'>
-                  <TopNav />
                   <Route path='/admin/dashboard' component={Dashboard} />
                   <Route path='/admin/tickets/all' component={Tickets} />
                   <Route path='/admin/projects/all' component={Projects} />

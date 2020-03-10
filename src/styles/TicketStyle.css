@@ -1,7 +1,15 @@
 .tickets-title {
-    padding: 15px 8px 15px 15px;
+    padding: 15px 8px 15px 0px;
 }
 
 .tickets-title h1 {
     font-size: 56px;
+}
+
+.ticket-list {
+    padding: 15px 0px;
+}
+
+.ticket-search {
+    margin-bottom: 15px;
 }
