@@ -19,6 +19,59 @@ class Tickets extends Component {
                 'Created'
             ],
             tickets: [
+                [
+                    {
+                        title: 'Demo Ticket 1',
+                        creator: 'Michael Chung',
+                        priority: 'High',
+                        type: 'Feature Request',
+                        status: 'Open',
+                        updatedDate: '03/09/2020',
+                        createdDate: '03/08/2020'
+                    },
+                    {
+                        title: 'Demo Ticket 2',
+                        creator: 'Michael Chung',
+                        priority: 'Med',
+                        type: 'Frontend',
+                        status: 'Assigned',
+                        updatedDate: '03/09/2020',
+                        createdDate: '03/08/2020'
+                    }
+                ],
+                [
+                    {
+                        title: 'Demo Ticket 3',
+                        creator: 'Michael Chung',
+                        priority: 'Low',
+                        type: 'Backend',
+                        status: 'Resolved',
+                        updatedDate: '03/09/2020',
+                        createdDate: '03/08/2020'
+                    },
+                    {
+                        title: 'Demo Ticket 4',
+                        creator: 'Michael Chung',
+                        priority: 'Med',
+                        type: 'Feature Request',
+                        status: 'Open',
+                        updatedDate: '03/09/2020',
+                        createdDate: '03/08/2020'
+                    }
+                ],
+                [
+                    {
+                        title: 'Demo Ticket 5',
+                        creator: 'Michael Chung',
+                        priority: 'Med',
+                        type: 'Backend',
+                        status: 'Open',
+                        updatedDate: '03/09/2020',
+                        createdDate: '03/08/2020'
+                    }
+                ]
+            ],
+            currentTickets: [
                 {
                     title: 'Demo Ticket 1',
                     creator: 'Michael Chung',
@@ -36,48 +89,35 @@ class Tickets extends Component {
                     status: 'Assigned',
                     updatedDate: '03/09/2020',
                     createdDate: '03/08/2020'
-                },
-                {
-                    title: 'Demo Ticket 3',
-                    creator: 'Michael Chung',
-                    priority: 'Low',
-                    type: 'Backend',
-                    status: 'Resolved',
-                    updatedDate: '03/09/2020',
-                    createdDate: '03/08/2020'
-                },
-                {
-                    title: 'Demo Ticket 4',
-                    creator: 'Michael Chung',
-                    priority: 'Med',
-                    type: 'Feature Request',
-                    status: 'Open',
-                    updatedDate: '03/09/2020',
-                    createdDate: '03/08/2020'
-                },
-                {
-                    title: 'Demo Ticket 5',
-                    creator: 'Michael Chung',
-                    priority: 'Med',
-                    type: 'Backend',
-                    status: 'Open',
-                    updatedDate: '03/09/2020',
-                    createdDate: '03/08/2020'
                 }
             ]
         }
     }
 
+    // displayTickets = (activePage) => {
+    //     let tickets = this.state.tickets;
+
+    //     for (let i = 1; i < tickets.length + 1; i++) {
+    //         console.log(i);
+    //     }
+
+    // }
+
     pageClick = (number) => {
+        let selectedTickets = this.state.tickets[number - 1];
+        console.log(number);
+        console.log(selectedTickets);
+
         this.setState({
-            activePage: number
+            activePage: number,
+            currentTickets: selectedTickets
         })
     }
 
     createPagination = () => {
         let pageCount = Math.ceil(this.state.tickets.length / 2);
 
-        for (let number = 1; number <= pageCount; number++) {
+        for (let number = 1; number <= pageCount + 1; number++) {
             this.setState(prevState => ({
                 items: [...prevState.items, number]
             }))
@@ -90,6 +130,7 @@ class Tickets extends Component {
 
     componentDidMount() {
         this.createPagination();
+        // this.displayTickets();
     }
 
     render() {
@@ -115,7 +156,7 @@ class Tickets extends Component {
                         <thead>
                             <tr>
                                 {
-                                    this.state.titles.map((title) => {
+                                    this.state.titles.map((title, key) => {
                                         return (
                                             <th>{title}</th>
                                         )
@@ -125,7 +166,7 @@ class Tickets extends Component {
                         </thead>
                         <tbody>
                             {
-                                this.state.tickets.map((ticket, key) => {
+                                this.state.currentTickets.map((ticket, key) => {
                                     return (
                                         <TicketListRow
                                             title={ticket.title}
