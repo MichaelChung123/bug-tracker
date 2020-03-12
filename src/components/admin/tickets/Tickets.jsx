@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 import { Row, Col, Container, Table, Form, FormControl, Button, Pagination } from 'react-bootstrap';
 import '../../../styles/TicketStyle.css';
 
+/* 
+    how to connect to database:
+
+    1. psql -d bugtrackerdb -U me
+    2. 
+
+*/
+
 class Tickets extends Component {
     constructor(props) {
         super(props);
@@ -18,90 +26,10 @@ class Tickets extends Component {
                 'Last Updated',
                 'Created'
             ],
-            tickets: [
-                [
-                    {
-                        title: 'Demo Ticket 1',
-                        creator: 'Michael Chung',
-                        priority: 'High',
-                        type: 'Feature Request',
-                        status: 'Open',
-                        updatedDate: '03/09/2020',
-                        createdDate: '03/08/2020'
-                    },
-                    {
-                        title: 'Demo Ticket 2',
-                        creator: 'Michael Chung',
-                        priority: 'Med',
-                        type: 'Frontend',
-                        status: 'Assigned',
-                        updatedDate: '03/09/2020',
-                        createdDate: '03/08/2020'
-                    }
-                ],
-                [
-                    {
-                        title: 'Demo Ticket 3',
-                        creator: 'Michael Chung',
-                        priority: 'Low',
-                        type: 'Backend',
-                        status: 'Resolved',
-                        updatedDate: '03/09/2020',
-                        createdDate: '03/08/2020'
-                    },
-                    {
-                        title: 'Demo Ticket 4',
-                        creator: 'Michael Chung',
-                        priority: 'Med',
-                        type: 'Feature Request',
-                        status: 'Open',
-                        updatedDate: '03/09/2020',
-                        createdDate: '03/08/2020'
-                    }
-                ],
-                [
-                    {
-                        title: 'Demo Ticket 5',
-                        creator: 'Michael Chung',
-                        priority: 'Med',
-                        type: 'Backend',
-                        status: 'Open',
-                        updatedDate: '03/09/2020',
-                        createdDate: '03/08/2020'
-                    }
-                ]
-            ],
-            currentTickets: [
-                {
-                    title: 'Demo Ticket 1',
-                    creator: 'Michael Chung',
-                    priority: 'High',
-                    type: 'Feature Request',
-                    status: 'Open',
-                    updatedDate: '03/09/2020',
-                    createdDate: '03/08/2020'
-                },
-                {
-                    title: 'Demo Ticket 2',
-                    creator: 'Michael Chung',
-                    priority: 'Med',
-                    type: 'Frontend',
-                    status: 'Assigned',
-                    updatedDate: '03/09/2020',
-                    createdDate: '03/08/2020'
-                }
-            ]
+            tickets: [],
+            currentTickets: []
         }
     }
-
-    // displayTickets = (activePage) => {
-    //     let tickets = this.state.tickets;
-
-    //     for (let i = 1; i < tickets.length + 1; i++) {
-    //         console.log(i);
-    //     }
-
-    // }
 
     pageClick = (number) => {
         let selectedTickets = this.state.tickets[number - 1];
@@ -115,6 +43,7 @@ class Tickets extends Component {
     }
 
     createPagination = () => {
+        console.log('creating pages');
         let pageCount = Math.ceil(this.state.tickets.length / 2);
 
         for (let number = 1; number <= pageCount + 1; number++) {
@@ -129,11 +58,42 @@ class Tickets extends Component {
     }
 
     componentDidMount() {
-        this.createPagination();
-        // this.displayTickets();
+        fetch('/admin/tickets/all')
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                let count = 0;
+                let ticketsPerPage = 2;
+                let group = [];
+
+                for (let i = 0; i < data.length; i++) {
+                    group.push(data[i]);
+                    if (count >= ticketsPerPage-1) {
+                        // loading first page's tickets
+                        if(this.state.tickets.length < 1) {
+                            this.setState({
+                                currentTickets: [...group]
+                            });
+                        }
+                        this.setState({
+                            tickets: [...this.state.tickets, group]
+                        });
+                        group = [];
+                    }
+                    count++;
+                }
+            });
+
+        if(this.state.tickets.length > 0) {
+            this.createPagination();
+        }
     }
 
     render() {
+        console.log('tix: ', this.state.tickets);
+        console.log('current: ', this.state.currenTickets);
+
         return (
             <Container className='all-tickets-container'>
                 <Row className='tickets-title'>
