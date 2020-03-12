@@ -4,10 +4,7 @@ import '../../../styles/TicketStyle.css';
 
 /* 
     how to connect to database:
-
     1. psql -d bugtrackerdb -U me
-    2. 
-
 */
 
 class Tickets extends Component {
@@ -33,8 +30,6 @@ class Tickets extends Component {
 
     pageClick = (number) => {
         let selectedTickets = this.state.tickets[number - 1];
-        console.log(number);
-        console.log(selectedTickets);
 
         this.setState({
             activePage: number,
@@ -43,7 +38,6 @@ class Tickets extends Component {
     }
 
     createPagination = () => {
-        console.log('creating pages');
         let pageCount = Math.ceil(this.state.tickets.length / 2);
 
         for (let number = 1; number <= pageCount + 1; number++) {
@@ -67,11 +61,14 @@ class Tickets extends Component {
                 let ticketsPerPage = 2;
                 let group = [];
 
-                for (let i = 0; i < data.length; i++) {
+                for (let i = 0; i <= data.length - 1; i++) {
                     group.push(data[i]);
-                    if (count >= ticketsPerPage-1) {
+                    count++;
+
+                    if (count >= ticketsPerPage) {
+                        count = 0;
                         // loading first page's tickets
-                        if(this.state.tickets.length < 1) {
+                        if (this.state.tickets.length < 1) {
                             this.setState({
                                 currentTickets: [...group]
                             });
@@ -80,20 +77,25 @@ class Tickets extends Component {
                             tickets: [...this.state.tickets, group]
                         });
                         group = [];
+                    } else if (i === data.length - 1) {
+                        this.setState({
+                            tickets: [...this.state.tickets, group]
+                        });
                     }
-                    count++;
-                }
-            });
 
-        if(this.state.tickets.length > 0) {
-            this.createPagination();
-        }
+                }
+
+                this.createPagination();
+                // if (this.state.tickets.length > 0) {
+
+                //     this.createPagination();
+                //     console.log('tix: ', this.state.tickets);
+                //     console.log('current: ', this.state.currenTickets);
+                // }
+            });
     }
 
     render() {
-        console.log('tix: ', this.state.tickets);
-        console.log('current: ', this.state.currenTickets);
-
         return (
             <Container className='all-tickets-container'>
                 <Row className='tickets-title'>
@@ -134,8 +136,8 @@ class Tickets extends Component {
                                             priority={ticket.priority}
                                             type={ticket.type}
                                             status={ticket.status}
-                                            updatedDate={ticket.updatedDate}
-                                            createdDate={ticket.createdDate}
+                                            updatedDate={ticket.lastupdated}
+                                            createdDate={ticket.createddate}
                                         />
                                     );
                                 })
