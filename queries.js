@@ -18,6 +18,15 @@ const getTickets = (req, res) => {
     })
 }
 
+const getDashboardContent = (req, res) => {
+    pool.query('SELECT * FROM tickets', (error, results) => {
+        if(error) {
+            throw error
+        }
+        res.json(results.rows);
+    })
+}
+
 const getUsers = (request, response) => {
     pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
         if (error) {
@@ -30,6 +39,7 @@ const getUsers = (request, response) => {
 
 module.exports = {
     getTickets,
+    getDashboardContent,
     getUsers
 }
 

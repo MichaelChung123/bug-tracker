@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Row, Col, Container } from 'react-bootstrap';
 import Login from './components/Login';
 import SelectDemoUser from './components/SelectDemoUser';
-import Projects from './components/admin/Projects';
+import Projects from './components/admin/projects/Projects';
 import Tickets from './components/admin/tickets/Tickets';
 import SideBar from './components/sidebar/Sidebar';
 import TopNav from './components/navbar/TopNav';

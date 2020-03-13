@@ -62,6 +62,10 @@ class Tickets extends Component {
                 let group = [];
 
                 for (let i = 0; i <= data.length - 1; i++) {
+                    // Formatting the date values to be more readable
+                    data[i].lastupdated = data[i].lastupdated.slice(0, 10);
+                    data[i].createddate = data[i].createddate.slice(0, 10);
+                    
                     group.push(data[i]);
                     count++;
 
@@ -104,7 +108,7 @@ class Tickets extends Component {
                     </Col>
                 </Row>
                 <Row className='ticket-list'>
-                    <Row>
+                    <Row className='full-row'>
                         <Form inline className='ticket-search'>
                             <Col sm={7} md={7} lg={7}>
                                 <FormControl type="text" placeholder="Search" className="mr-sm-2" />

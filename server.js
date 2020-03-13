@@ -28,6 +28,8 @@ app.get('/', (request, response) => {
 });
 
 app.get('/admin/tickets/all', db.getTickets)
+app.get('/admin/dashboard', db.getDashboardContent)
+
 app.get('/users', db.getUsers)
 
 app.listen(port, () => {

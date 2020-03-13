@@ -8,31 +8,43 @@ class Dashboard extends Component {
         this.state = {
             infoItems: [
                 {
-                    path: '/demo/admin/projects',
+                    path: '/admin/projects/all',
                     color: '#007bff',
                     name: 'Projects',
-                    count: '5',
+                    count: 0,
                     iconClass: 'fas fa-edit',
                     key: 1
                 },
                 {
-                    path: '/demo/admin/tickets',
+                    path: '/admin/tickets/all',
                     color: '#dc3545',
                     name: 'Tickets',
-                    count: '5',
+                    count: 0,
                     iconClass: 'fas fa-ticket-alt',
                     key: 2
                 },
                 {
-                    path: '/demo/admin/users',
+                    path: '/admin/users/all',
                     color: '#28a745',
                     name: 'Users',
-                    count: '5',
+                    count: 0,
                     iconClass: 'fas fa-male',
                     key: 3
                 }
             ]
         }
+    }
+
+    componentDidMount() {
+        fetch('/admin/dashboard')
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                this.setState(prevState => ({
+                    infoItems: prevState.infoItems.map(obj => obj.key === 2 ? Object.assign(obj, { count: data.length }) : obj)
+                }));
+            })
     }
 
     render() {
@@ -76,7 +88,7 @@ class PtuBlock extends React.Component {
                     <Col xs={9} sm={9} md={9} lg={9} className='ptu-info'>
                         <Row>
                             <Col xs={12} sm={12} md={12} lg={12}>
-                                <label>{this.props.name}</label>
+                                <a href={this.props.path}>{this.props.name}</a>
                             </Col>
                         </Row>
                         <Row>

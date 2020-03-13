@@ -119,7 +119,7 @@ class SideNav extends React.Component {
             <Container className='side-bar-container' style={SideNavStyle} fluid='true'>
                 <Row className='side-bar-logo'>
                     <Col xs={4}>
-                        <a href='/admin/home/index'>
+                        <a href='/admin/dashboard'>
                             <Image src={SidebarLogo} />
                         </a>
                     </Col>
@@ -164,10 +164,7 @@ class SideNav extends React.Component {
                         );
                     })
                 }
-
-
             </Container>
-
         );
     }
 }
