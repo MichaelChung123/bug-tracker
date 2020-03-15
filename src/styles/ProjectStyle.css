@@ -1,0 +1,23 @@
+.projects-title {
+    padding: 15px 8px 15px 0px;
+}
+
+.projects-title h1 {
+    font-size: 56px;
+}
+
+.project-row {
+    justify-content: space-between;
+}
+
+.project-block {
+    background-color: #17a2b8;
+    border-radius: .25rem;
+    box-shadow: 0 0 1px rgba(0, 0, 0, .125), 0 1px 3px rgba(0, 0, 0, .2);
+    margin: 8px 0px;
+    min-height: 150px;
+    color: #fff;
+    margin: 8px 8px;
+    padding: 15px 0px;
+    max-width: 223px;
+}
