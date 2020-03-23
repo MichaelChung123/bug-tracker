@@ -30,6 +30,8 @@ app.get('/', (request, response) => {
 app.get('/admin/tickets/all', db.getTickets)
 app.get('/admin/dashboard', db.getDashboardContent)
 
+app.post('/admin/projects/all', db.createProject)
+
 app.get('/users', db.getUsers)
 
 app.listen(port, () => {

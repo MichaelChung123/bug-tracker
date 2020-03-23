@@ -10,7 +10,7 @@ const pool = new Pool({
 
 const getTickets = (req, res) => {
     pool.query('SELECT * FROM tickets', (error, results) => {
-        if(error) {
+        if (error) {
             throw error
         }
         console.log(results.rows);
@@ -20,11 +20,24 @@ const getTickets = (req, res) => {
 
 const getDashboardContent = (req, res) => {
     pool.query('SELECT * FROM tickets', (error, results) => {
-        if(error) {
+        if (error) {
             throw error
         }
         res.json(results.rows);
     })
+}
+
+const createProject = (request, response) => {
+    console.log(request.body);
+    
+    const {title, description} = request.body;
+
+    pool.query(`INSERT INTO projects (title, description) VALUES ('${title}', '${description}')`, (error,results) => {
+        if (error) {
+            throw error
+        }
+        response.status(201).send(`Project Added: ${results}`)
+    });
 }
 
 const getUsers = (request, response) => {
@@ -40,6 +53,7 @@ const getUsers = (request, response) => {
 module.exports = {
     getTickets,
     getDashboardContent,
+    createProject,
     getUsers
 }
 

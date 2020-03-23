@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Container, Table, Form, FormControl, Button, Pagination } from 'react-bootstrap';
+import CreateProjectModal from '../../modal/CreateProjectModal';
 import '../../../styles/ProjectStyle.css';
 
 /* 
@@ -65,7 +66,7 @@ class Projects extends Component {
                         <h1>All Projects</h1>
                     </Col>
                     <Col xs={6} sm={6} md={6} lg={6} className='create-project'>
-                        <button>Create New <i className='fa fa-plus-circle nav-icon' /></button>
+                        <CreateProjectModal />
                     </Col>
                 </Row>
                 <Container fluid='true'>
