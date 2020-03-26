@@ -5,6 +5,7 @@ import { Row, Col, Container } from 'react-bootstrap';
 import Login from './components/Login';
 import SelectDemoUser from './components/SelectDemoUser';
 import Projects from './components/admin/projects/Projects';
+import ProjectDetails from './components/admin/projects/ProjectDetails';
 import Tickets from './components/admin/tickets/Tickets';
 import SideBar from './components/sidebar/Sidebar';
 import TopNav from './components/navbar/TopNav';
@@ -27,6 +28,7 @@ class App extends Component {
                   <Route path='/admin/dashboard' component={Dashboard} />
                   <Route path='/admin/tickets/all' component={Tickets} />
                   <Route path='/admin/projects/all' component={Projects} />
+                  <Route exact path='/admin/projects/details/:id' component={(appProps) => <ProjectDetails appProps={appProps} />} />
                   {/* <Route path='/admin/projects/create' component={Projects} />
                   <Route path='/admin/logout' component={Projects} /> */}
                 </Container>

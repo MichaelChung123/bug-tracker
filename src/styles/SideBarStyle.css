@@ -108,7 +108,7 @@ body {
     color: white;
 }
 
-.accordion .card {
+.side-bar-accordion .accordion .card {
     border: rgb(33, 37, 41);
     background-color: rgb(33, 37, 41);
     color: white;

@@ -90,12 +90,6 @@ class Tickets extends Component {
                 }
 
                 this.createPagination();
-                // if (this.state.tickets.length > 0) {
-
-                //     this.createPagination();
-                //     console.log('tix: ', this.state.tickets);
-                //     console.log('current: ', this.state.currenTickets);
-                // }
             });
     }
 

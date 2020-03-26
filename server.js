@@ -31,6 +31,8 @@ app.get('/admin/tickets/all', db.getTickets)
 app.get('/admin/dashboard', db.getDashboardContent)
 
 app.post('/admin/projects/all', db.createProject)
+app.get('/admin/projects/details/:id', db.getProjectByID)
+app.get('/admin/projects/details/tickets/:id', db.getTicketsByProjectID);
 
 app.get('/users', db.getUsers)
 

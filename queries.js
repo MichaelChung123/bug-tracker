@@ -28,16 +28,40 @@ const getDashboardContent = (req, res) => {
 }
 
 const createProject = (request, response) => {
-    console.log(request.body);
-    
-    const {title, description} = request.body;
+    const {
+        title,
+        description
+    } = request.body;
 
-    pool.query(`INSERT INTO projects (title, description) VALUES ('${title}', '${description}')`, (error,results) => {
+    pool.query(`INSERT INTO projects (title, description) VALUES ('${title}', '${description}')`, (error, results) => {
         if (error) {
             throw error
         }
         response.status(201).send(`Project Added: ${results}`)
     });
+}
+
+const getProjectByID = (request, response) => {
+    const id = parseInt(request.params.id);
+
+    pool.query(`SELECT * FROM projects WHERE project_id=${id}`, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const getTicketsByProjectID = (request, response) => {
+    const id = parseInt(request.params.id);
+    console.log('getting id: ', request.params.id);
+
+    pool.query(`SELECT * from tickets WHERE project_id=${id}`, (error, results) => {
+        if(error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
 }
 
 const getUsers = (request, response) => {
@@ -54,6 +78,8 @@ module.exports = {
     getTickets,
     getDashboardContent,
     createProject,
+    getProjectByID,
+    getTicketsByProjectID,
     getUsers
 }
 

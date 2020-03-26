@@ -129,25 +129,27 @@ class SideNav extends React.Component {
                     <Image src={UserIcon} roundedCircle />
                     <a href='/admin/home/index'>Demo Admin</a>
                 </Row>
-                {
-                    items.map((item) => {
-                        return (
-                            <NavItem
-                                path={item.path}
-                                name={item.name}
-                                css={item.css}
-                                expandable={item.expandable}
-                                open={item.open}
-                                subItems={item.subItems}
-                                onItemClick={this.onItemClick}
-                                onOpen={this.onOpen}
-                                active={item.path === activePath}
-                                key={item.key}
-                                item={item}
-                            />
-                        );
-                    })
-                }
+                <div className='side-bar-accordion'>
+                    {
+                        items.map((item) => {
+                            return (
+                                <NavItem
+                                    path={item.path}
+                                    name={item.name}
+                                    css={item.css}
+                                    expandable={item.expandable}
+                                    open={item.open}
+                                    subItems={item.subItems}
+                                    onItemClick={this.onItemClick}
+                                    onOpen={this.onOpen}
+                                    active={item.path === activePath}
+                                    key={item.key}
+                                    item={item}
+                                />
+                            );
+                        })
+                    }
+                </div>
                 <div className='sidebar-seperator'> </div>
                 {
                     actions.map((action) => {
