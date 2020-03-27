@@ -1,0 +1,172 @@
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Container, Modal, Button, Form, Accordion, Card, FormControl, Table } from 'react-bootstrap';
+import '../../styles/ProjectDetailstyle.css';
+
+function AssignUsersModal() {
+    const [show, setShow] = useState(false);
+    const [userTypes, setUserTypes] = useState([
+        {
+            type: 'Developer',
+            color: 'blue'
+        },
+        {
+            type: 'Manager',
+            color: 'green'
+        },
+        {
+            type: 'Submitter',
+            color: 'yellow'
+        }
+    ])
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+    }
+
+    return (
+        <>
+            <Col xs={3} sm={3} md={3} lg={3}>
+                <Row onClick={handleShow} className='ptu-box'>
+                    <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: '#007bff' }} className='ptu-icon'>
+                        <i className='fas fa-user-plus' />
+                    </Col>
+                    <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                        Manage Users
+                    </Col>
+                </Row>
+            </Col>
+
+            <Modal show={show} onHide={handleClose}>
+                <Form onSubmit={handleSubmit}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Create Project</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {
+                            userTypes.map((userType, key) => {
+                                let output = key < userTypes.length - 1 ?
+                                    <div key={key}>
+                                        <UserAccordions
+                                            type={userType.type}
+                                            color={userType.color}
+                                        />
+                                        <br />
+                                    </div>
+                                    :
+                                    <UserAccordions
+                                        type={userType.type}
+                                        color={userType.color}
+                                        key={key}
+                                    />
+
+                                return output;
+                            })
+                        }
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Cancel
+                    </Button>
+                        <Button type='submit' variant="primary" onClick={handleClose}>
+                            Save
+                    </Button>
+                    </Modal.Footer>
+                </Form>
+            </Modal>
+        </>
+    );
+}
+
+const UserAccordions = (props) => {
+    const [users, setUsers] = useState([]);
+
+
+    const handleUserClicked = (user_id) => {
+        console.log(user_id);
+    }
+
+    useEffect(() => {
+        fetch(`/admin/users`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                setUsers(data);
+            })
+    }, []); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
+
+    return (
+        <Accordion defaultActiveKey={props.type === "Developer" ? "0" : "none"}>
+            <Card className='user-card'>
+                <Card.Header>
+                    <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                        {props.type}s
+                    </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="0">
+                    <Card.Body>
+                        <Table bordered hover>
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Role</th>
+                                    <th>Number of Projects</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    users.map((user, key) => {
+                                        let count = 0;
+                                        let currentID = user.project_id;
+
+                                        for(let user of users) {
+                                            if(user.project_id === currentID) {
+                                                count++;
+                                            }
+                                        }
+
+                                        if (user.role === props.type) {
+                                            return (
+                                                <tr onClick={() => handleUserClicked(user.user_id)} key={key}>
+                                                    <td>{user.firstname}</td>
+                                                    <td>{user.lastname}</td>
+                                                    <td>{user.role}</td>
+                                                    <td>{count}</td>
+                                                </tr>
+                                            );
+                                        }
+                                    })
+                                }
+                            </tbody>
+                        </Table>
+                        {/*
+                        <Pagination>
+                             {
+                                this.state.items.map((number) => {
+                                    return (
+                                        <Page
+                                            pageCount={this.state.pageCount}
+                                            number={number}
+                                            activePage={this.state.activePage}
+                                            pageClick={this.pageClick}
+                                        />
+                                    );
+                                })
+                            }
+                        </Pagination>
+                         */}
+                    </Card.Body>
+                </Accordion.Collapse>
+            </Card>
+            <Card>
+
+            </Card>
+        </Accordion>
+    );
+}
+
+export default AssignUsersModal;

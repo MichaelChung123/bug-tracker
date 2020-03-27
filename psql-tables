@@ -1,0 +1,49 @@
+Restarting sequence for serial values for 'users' table, with 'user_id' serial values.
+ALTER SEQUENCE users_user_id_seq RESTART WITH 1;
+
+Creating tables
+CREATE TABLE users (
+user_id serial PRIMARY KEY,
+firstname VARCHAR(30),
+lastname VARCHAR(30),
+role VARCHAR(30),
+);
+
+Adding values into tables
+INSERT INTO users(firstname, lastname, role)
+VALUES
+('Michael', 'Chung', 'Developer'),
+('Ernie', 'Alcott', 'Developer'),
+('Loris', 'Brunton', 'Developer'),
+('Janet', 'Goldsmith', 'Developer'),
+('Davida', 'Harig', 'Developer'),
+('Leisa', 'Depp', 'Manager'),
+('Riva', 'Jamar', 'Manager'),
+('Tamesha', 'Yochum', 'Manager'),
+('Bradford', 'Ehrhardt', 'Manager'),
+('Alfred', 'Washer', 'Manager'),
+('Winter', 'Derouin', 'Submitter'),
+('Lyn', 'Chiaramonte', 'Submitter'),
+('Ethelene', 'Menzies', 'Submitter'),
+('Minna', 'Manzanares', 'Submitter'),
+('Isreal', 'Nelson', 'Submitter'),
+('Edgar', 'Dickens', 'Submitter')
+
+
+
+
+making junction table
+CREATE TABLE user_projects (
+project_id int REFERENCES projects (project_id) ON UPDATE CASCADE ON DELETE CASCADE,
+user_id int REFERENCES users (user_id) ON UPDATE CASCADE,
+amount numeric NOT NULL DEFAULT 1,
+CONSTRAINT user_projects_pkey PRIMARY KEY(project_id, user_id)
+);
+
+
+
+INSERT INTO user_projects (project_id, user_id)
+SELECT  projects.project_id AS project_id,
+        users.user_id AS user_id
+FROM projects CROSS JOIN users
+WHERE projects.project_id = users.project_id;

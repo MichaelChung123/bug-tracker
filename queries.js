@@ -52,9 +52,19 @@ const getProjectByID = (request, response) => {
     })
 }
 
+const getUsersByProjectID = (request, response) => {
+    const id = parseInt(request.params.id);
+
+    pool.query(`SELECT * from users WHERE project_id=${id}`, (error, results) => {
+        if(error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 const getTicketsByProjectID = (request, response) => {
     const id = parseInt(request.params.id);
-    console.log('getting id: ', request.params.id);
 
     pool.query(`SELECT * from tickets WHERE project_id=${id}`, (error, results) => {
         if(error) {
@@ -65,7 +75,7 @@ const getTicketsByProjectID = (request, response) => {
 }
 
 const getUsers = (request, response) => {
-    pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
+    pool.query('SELECT * FROM users ORDER BY role ASC', (error, results) => {
         if (error) {
             throw error
         }
@@ -79,6 +89,7 @@ module.exports = {
     getDashboardContent,
     createProject,
     getProjectByID,
+    getUsersByProjectID,
     getTicketsByProjectID,
     getUsers
 }

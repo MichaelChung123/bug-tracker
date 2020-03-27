@@ -33,8 +33,8 @@ app.get('/admin/dashboard', db.getDashboardContent)
 app.post('/admin/projects/all', db.createProject)
 app.get('/admin/projects/details/:id', db.getProjectByID)
 app.get('/admin/projects/details/tickets/:id', db.getTicketsByProjectID);
-
-app.get('/users', db.getUsers)
+app.get('/admin/projects/details/users/:id', db.getUsersByProjectID);
+app.get('/admin/users', db.getUsers)
 
 app.listen(port, () => {
     console.log(`App running on port ${port}.`);

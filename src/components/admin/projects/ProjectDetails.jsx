@@ -1,6 +1,7 @@
 import React, { Component, useState, useEffect } from 'react';
 import { Row, Col, Container, Accordion, Card, Button, Table, Form, FormControl, Pagination } from 'react-bootstrap';
 import '../../../styles/ProjectDetailstyle.css';
+import AssignUsersModal from '../../modal/AssignUsersModal';
 
 /* 
     how to connect to database:
@@ -82,7 +83,7 @@ class ProjectDetails extends Component {
                     </Col>
                 </Row>
                 <Row className='block-row'>
-                    <Col xs={3} sm={3} md={3} lg={3}>
+                    {/* <Col xs={3} sm={3} md={3} lg={3}>
                         <Row className='ptu-box'>
                             <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: '#007bff' }} className='ptu-icon'>
                                 <i className='fas fa-user-plus' />
@@ -91,7 +92,8 @@ class ProjectDetails extends Component {
                                 Manage Users
                             </Col>
                         </Row>
-                    </Col>
+                    </Col> */}
+                    <AssignUsersModal />
                     {
                         this.state.projItems.map((projItem, key) => {
                             return (
@@ -106,7 +108,9 @@ class ProjectDetails extends Component {
                     }
                 </Row>
 
-                <UserAccordion />
+                <UserAccordion
+                    parentProps={this.props}
+                />
                 <div className='divider'></div>
                 <TicketAccordion
                     parentProps={this.props}
@@ -135,6 +139,19 @@ const ProjectBlocks = (props) => {
 }
 
 const UserAccordion = (props) => {
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        const id = props.parentProps.appProps.match.params.id;
+
+        fetch(`/admin/projects/details/users/${id}`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                setUsers(data);
+            })
+    }, []); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
 
     return (
         <Accordion defaultActiveKey="0">
@@ -159,16 +176,23 @@ const UserAccordion = (props) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Michael</td>
-                                    <td>Chung</td>
-                                    <td>Developer</td>
-                                </tr>
-                                <tr>
-                                    <td>Jamie</td>
-                                    <td>Dang</td>
-                                    <td>QT</td>
-                                </tr>
+                                {
+                                    users.map((user, key) => {
+                                        return (
+                                            <tr key={key}>
+                                                <td>
+                                                    {user.firstname}
+                                                </td>
+                                                <td>
+                                                    {user.lastname}
+                                                </td>
+                                                <td>
+                                                    {user.role}
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                                }
                             </tbody>
                         </Table>
                         {/*
@@ -205,7 +229,6 @@ const TicketAccordion = (props) => {
 
     useEffect(() => {
         const id = props.parentProps.appProps.match.params.id;
-        console.log('id: ', id);
 
         fetch(`/admin/projects/details/tickets/${id}`)
             .then((response) => {
@@ -215,8 +238,6 @@ const TicketAccordion = (props) => {
                 setTickets(data);
             })
     }, []); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
-
-    console.log('tickets: ', tickets);
 
     // const createPagination = () => {
     //     let pageCount = Math.ceil(this.state.tickets.length / 2);
@@ -259,9 +280,6 @@ const TicketAccordion = (props) => {
                                     tickets.map((ticket, key) => {
                                         let trimedLastUpdated = ticket.lastupdated.slice(0, 10);
                                         let trimedCreatedDate = ticket.createddate.slice(0, 10);
-
-                                        console.log(trimedLastUpdated);
-                                        console.log(trimedCreatedDate);
 
                                         return (
                                             <tr key={key}>
