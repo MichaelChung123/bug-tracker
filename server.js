@@ -34,7 +34,10 @@ app.post('/admin/projects/all', db.createProject)
 app.get('/admin/projects/details/:id', db.getProjectByID)
 app.get('/admin/projects/details/tickets/:id', db.getTicketsByProjectID);
 app.get('/admin/projects/details/users/:id', db.getUsersByProjectID);
-app.get('/admin/users', db.getUsers)
+app.get('/admin/users', db.getUsers);
+
+app.post('/admin/projects/details/select/user/:id', db.assignUserToProject);
+
 
 app.listen(port, () => {
     console.log(`App running on port ${port}.`);

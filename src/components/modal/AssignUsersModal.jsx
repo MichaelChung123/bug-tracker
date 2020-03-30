@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Container, Modal, Button, Form, Accordion, Card, FormControl, Table } from 'react-bootstrap';
 import '../../styles/ProjectDetailstyle.css';
 
-function AssignUsersModal() {
+function AssignUsersModal(props) {
     const [show, setShow] = useState(false);
     const [userTypes, setUserTypes] = useState([
         {
@@ -26,6 +26,8 @@ function AssignUsersModal() {
         event.preventDefault();
     }
 
+    const project_id = props.parentProps.appProps.match.params.id;
+
     return (
         <>
             <Col xs={3} sm={3} md={3} lg={3}>
@@ -42,7 +44,7 @@ function AssignUsersModal() {
             <Modal show={show} onHide={handleClose}>
                 <Form onSubmit={handleSubmit}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Create Project</Modal.Title>
+                        <Modal.Title>Assign Users</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {
@@ -52,6 +54,8 @@ function AssignUsersModal() {
                                         <UserAccordions
                                             type={userType.type}
                                             color={userType.color}
+                                            project_id={project_id}
+                                            parentProps={props.parentProps}
                                         />
                                         <br />
                                     </div>
@@ -59,6 +63,8 @@ function AssignUsersModal() {
                                     <UserAccordions
                                         type={userType.type}
                                         color={userType.color}
+                                        project_id={project_id}
+                                        parentProps={props.parentProps}
                                         key={key}
                                     />
 
@@ -82,12 +88,45 @@ function AssignUsersModal() {
 
 const UserAccordions = (props) => {
     const [users, setUsers] = useState([]);
+    const [assignedUsers, setAssignedUsers] = useState([]);
 
+    const checkAssignedUsers = () => {
+        const id = props.parentProps.appProps.match.params.id;
 
-    const handleUserClicked = (user_id) => {
-        console.log(user_id);
+        fetch(`/admin/projects/details/users/${id}`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                setAssignedUsers(data);
+            })
     }
 
+    const handleUserClicked = (user_id, project_id) => {
+        let data = {
+            user_id: user_id,
+            project_id: parseInt(project_id)
+        }
+
+        fetch(`/admin/projects/details/select/user/${user_id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        checkAssignedUsers();
+    }
+
+    checkAssignedUsers();
+    
     useEffect(() => {
         fetch(`/admin/users`)
             .then((response) => {
@@ -96,7 +135,11 @@ const UserAccordions = (props) => {
             .then((data) => {
                 setUsers(data);
             })
-    }, []); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
+
+        // checkAssignedUsers();
+    }, [assignedUsers]); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
+
+    console.log('Assigned Users In Project: ', assignedUsers);
 
     return (
         <Accordion defaultActiveKey={props.type === "Developer" ? "0" : "none"}>
@@ -123,15 +166,15 @@ const UserAccordions = (props) => {
                                         let count = 0;
                                         let currentID = user.project_id;
 
-                                        for(let user of users) {
-                                            if(user.project_id === currentID) {
+                                        for (let user of users) {
+                                            if (user.project_id === currentID) {
                                                 count++;
                                             }
                                         }
 
                                         if (user.role === props.type) {
                                             return (
-                                                <tr onClick={() => handleUserClicked(user.user_id)} key={key}>
+                                                <tr style={assignedUsers.some(item => item.user_id === user.user_id) ? {backgroundColor: 'red'} : {opacity: '0.5', backgroundColor: 'green'} } onClick={() => handleUserClicked(user.user_id, props.project_id)} key={key}>
                                                     <td>{user.firstname}</td>
                                                     <td>{user.lastname}</td>
                                                     <td>{user.role}</td>

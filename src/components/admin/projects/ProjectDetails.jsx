@@ -93,7 +93,9 @@ class ProjectDetails extends Component {
                             </Col>
                         </Row>
                     </Col> */}
-                    <AssignUsersModal />
+                    <AssignUsersModal
+                        parentProps={this.props}
+                    />
                     {
                         this.state.projItems.map((projItem, key) => {
                             return (

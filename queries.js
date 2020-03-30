@@ -52,22 +52,30 @@ const getProjectByID = (request, response) => {
     })
 }
 
-const getUsersByProjectID = (request, response) => {
-    const id = parseInt(request.params.id);
 
-    pool.query(`SELECT * from users WHERE project_id=${id}`, (error, results) => {
-        if(error) {
-            throw error
-        }
-        response.status(200).json(results.rows)
-    })
+const getUsersByProjectID = (request, response) => {
+    const project_id = parseInt(request.params.id);
+
+    pool.query(
+        `
+            SELECT firstname, lastname, role, users.user_id
+            FROM user_project
+            JOIN users ON users.user_id = user_project.user_id
+            JOIN projects ON projects.project_id = user_project.project_id
+            WHERE user_project.project_id=${project_id};
+        `, (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).json(results.rows)
+        })
 }
 
 const getTicketsByProjectID = (request, response) => {
     const id = parseInt(request.params.id);
 
     pool.query(`SELECT * from tickets WHERE project_id=${id}`, (error, results) => {
-        if(error) {
+        if (error) {
             throw error
         }
         response.status(200).json(results.rows)
@@ -83,6 +91,26 @@ const getUsers = (request, response) => {
     })
 }
 
+const assignUserToProject = (request, response) => {
+    const {
+        user_id,
+        project_id
+    } = request.body;
+
+    pool.query(`
+        INSERT INTO user_project (user_id, project_id)
+        SELECT  users.user_id AS user_id,
+                projects.project_id AS project_id
+        FROM users CROSS JOIN projects 
+        WHERE user_id=${user_id} AND projects.project_id=${project_id};`,
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(201).send(`User ${user_id} Assigned to Project ${project_id}`);
+        })
+}
+
 
 module.exports = {
     getTickets,
@@ -91,7 +119,8 @@ module.exports = {
     getProjectByID,
     getUsersByProjectID,
     getTicketsByProjectID,
-    getUsers
+    getUsers,
+    assignUserToProject
 }
 
 

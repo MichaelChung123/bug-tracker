@@ -30,20 +30,31 @@ VALUES
 ('Edgar', 'Dickens', 'Submitter')
 
 
+Creating junction table
+CREATE TABLE user_project
+(
+    user_id int NOT NULL,
+    project_id int NOT NULL,
+    CONSTRAINT PK_user_project PRIMARY KEY
+    (
+        user_id,
+        project_id
+    ),
+    FOREIGN KEY (user_id) REFERENCES users (user_id),
+    FOREIGN KEY (project_id) REFERENCES projects (project_id)
+)
 
 
-making junction table
-CREATE TABLE user_projects (
-project_id int REFERENCES projects (project_id) ON UPDATE CASCADE ON DELETE CASCADE,
-user_id int REFERENCES users (user_id) ON UPDATE CASCADE,
-amount numeric NOT NULL DEFAULT 1,
-CONSTRAINT user_projects_pkey PRIMARY KEY(project_id, user_id)
-);
+Select values from the joining tables by accessing the junction table
+SELECT firstname, title
+FROM user_project
+JOIN users ON users.user_id = user_project.user_id
+JOIN projects ON projects.project_id = user_project.project_id;
 
 
+INSERT INTO user_project (user_id, project_id)
+SELECT  users.user_id AS user_id,
+        projects.project_id AS project_id
+FROM users CROSS JOIN projects 
+WHERE user_id=4 AND projects.project_id=4;
 
-INSERT INTO user_projects (project_id, user_id)
-SELECT  projects.project_id AS project_id,
-        users.user_id AS user_id
-FROM projects CROSS JOIN users
-WHERE projects.project_id = users.project_id;

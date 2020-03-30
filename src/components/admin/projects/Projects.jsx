@@ -47,17 +47,6 @@ class Projects extends Component {
         }
     }
 
-
-    componentDidMount() {
-        // fetch('/admin/Projects/all')
-        //     .then((response) => {
-        //         return response.json();
-        //     })
-        //     .then((data) => {
-
-        //     }
-    }
-
     render() {
         return (
             <Container className='all-projects-container'>
