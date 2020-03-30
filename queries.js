@@ -107,8 +107,20 @@ const assignUserToProject = (request, response) => {
             if (error) {
                 throw error
             }
-            response.status(201).send(`User ${user_id} Assigned to Project ${project_id}`);
+            console.log('results: ', results)
+            response.status(201).send(results.rows);
         })
+}
+
+const getUserByID = (request, response) => {
+    const { user_id } = request.body;
+
+    pool.query(`SELECT * FROM users WHERE user_id=${user_id}`, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.json(results.rows)
+    })
 }
 
 
@@ -120,7 +132,8 @@ module.exports = {
     getUsersByProjectID,
     getTicketsByProjectID,
     getUsers,
-    assignUserToProject
+    assignUserToProject,
+    getUserByID
 }
 
 

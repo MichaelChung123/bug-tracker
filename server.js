@@ -37,7 +37,7 @@ app.get('/admin/projects/details/users/:id', db.getUsersByProjectID);
 app.get('/admin/users', db.getUsers);
 
 app.post('/admin/projects/details/select/user/:id', db.assignUserToProject);
-
+app.get('/admin/user/:id', db.getUserByID);
 
 app.listen(port, () => {
     console.log(`App running on port ${port}.`);
