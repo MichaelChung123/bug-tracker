@@ -38,6 +38,7 @@ app.get('/admin/users', db.getUsers);
 
 app.post('/admin/projects/details/select/user/:id', db.assignUserToProject);
 app.get('/admin/user/:id', db.getUserByID);
+app.put('/admin/projects/details/deselect/user/:id', db.deleteUserFromProject);
 
 app.listen(port, () => {
     console.log(`App running on port ${port}.`);

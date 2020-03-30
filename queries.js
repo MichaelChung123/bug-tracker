@@ -113,7 +113,9 @@ const assignUserToProject = (request, response) => {
 }
 
 const getUserByID = (request, response) => {
-    const { user_id } = request.body;
+    const {
+        user_id
+    } = request.body;
 
     pool.query(`SELECT * FROM users WHERE user_id=${user_id}`, (error, results) => {
         if (error) {
@@ -121,6 +123,27 @@ const getUserByID = (request, response) => {
         }
         response.json(results.rows)
     })
+}
+
+const deleteUserFromProject = (request, response) => {
+    console.log(request.body);
+    const {
+        user_id,
+        project_id
+    } = request.body;
+
+    pool.query(
+        `
+            DELETE FROM user_project 
+            WHERE user_id=${user_id} AND project_id=${project_id};
+        `, (error, results) => {
+        if(error) {
+            throw error
+        }
+
+        response.status(201).send(results.rows);
+    })
+
 }
 
 
@@ -133,7 +156,8 @@ module.exports = {
     getTicketsByProjectID,
     getUsers,
     assignUserToProject,
-    getUserByID
+    getUserByID,
+    deleteUserFromProject
 }
 
 

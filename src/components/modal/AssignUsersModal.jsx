@@ -93,7 +93,6 @@ const UserAccordions = (props) => {
     // Checks the the user_project table to see which users are assigned to the current project
     // and sets the assigned users in state
     const checkAssignedUsers = () => {
-        console.log('CHECKING FOR ASSIGNED USERS...');
         const id = props.parentProps.appProps.match.params.id;
 
         fetch(`/admin/projects/details/users/${id}`)
@@ -101,7 +100,6 @@ const UserAccordions = (props) => {
                 return response.json();
             })
             .then((data) => {
-                console.log(data);
                 setAssignedUsers(data);
             })
     }
@@ -112,23 +110,47 @@ const UserAccordions = (props) => {
             project_id: parseInt(project_id)
         }
 
-        // Sending what user has been assigned to the current project to the Database
-        fetch(`/admin/projects/details/select/user/${user_id}`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log('Success:', data);
-                checkAssignedUsers();
+        // Check to see if the selected user is not already an assigned user
+        if (!assignedUsers.some(user => user.user_id === user_id)) {
+
+            // Sending what user has been assigned to the current project to the Database
+            fetch(`/admin/projects/details/select/user/${user_id}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
             })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log('Success:', data);
+                    checkAssignedUsers();
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        } else {
+            console.log('remove!');
+            console.log(data);
+            fetch(`/admin/projects/details/deselect/user/${user_id}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log('Remove Success:', data);
+                    checkAssignedUsers();
+                })
+                .catch((error) => {
+                    console.error('Remove Error:', error);
+                });
+        }
+
     }
 
     useEffect(() => {
