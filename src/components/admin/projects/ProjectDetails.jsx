@@ -63,17 +63,6 @@ class ProjectDetails extends Component {
             })
     }
 
-    // componentWillMount() {
-    //     // fetch(`/admin/projects/details/${this.props.params.id}`)
-    //     fetch(`/admin/projects/details/4`)
-    //     .then((response) => {
-    //         return response.json();
-    //     })
-    //     .then((data) => {
-    //         console.log(data);
-    //     })
-    // }
-
     render() {
         return (
             <Container fluid='true'>

@@ -7,15 +7,15 @@ function AssignUsersModal(props) {
     const [userTypes, setUserTypes] = useState([
         {
             type: 'Developer',
-            color: 'blue'
+            color: '#ccf8ff'
         },
         {
             type: 'Manager',
-            color: 'green'
+            color: '#abf5bc'
         },
         {
             type: 'Submitter',
-            color: 'yellow'
+            color: '#fff0c4'
         }
     ])
 
@@ -124,15 +124,12 @@ const UserAccordions = (props) => {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log('Success:', data);
                     checkAssignedUsers();
                 })
                 .catch((error) => {
                     console.error('Error:', error);
                 });
         } else {
-            console.log('remove!');
-            console.log(data);
             fetch(`/admin/projects/details/deselect/user/${user_id}`, {
                 method: 'PUT',
                 headers: {
@@ -143,7 +140,6 @@ const UserAccordions = (props) => {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log('Remove Success:', data);
                     checkAssignedUsers();
                 })
                 .catch((error) => {
@@ -164,12 +160,10 @@ const UserAccordions = (props) => {
     }, [assignedUsers]); // set assignedUsers as a dependency
 
     useEffect(() => {
-        console.log('INITIAL RENDER');
         checkAssignedUsers();
     }, []); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
 
 
-    console.log('Assigned Users: ', assignedUsers);
 
     return (
         <Accordion defaultActiveKey={props.type === "Developer" ? "0" : "none"}>
@@ -204,7 +198,7 @@ const UserAccordions = (props) => {
 
                                         if (user.role === props.type) {
                                             return (
-                                                <tr style={assignedUsers.some(item => item.user_id === user.user_id) ? { backgroundColor: 'red' } : { opacity: '0.5', backgroundColor: 'green' }} onClick={() => handleUserClicked(user.user_id, props.project_id)} key={key}>
+                                                <tr style={assignedUsers.some(item => item.user_id === user.user_id) ? { backgroundColor: props.color } : { backgroundColor: '#ffffff' } } onClick={() => handleUserClicked(user.user_id, props.project_id)} key={key}>
                                                     <td>{user.firstname}</td>
                                                     <td>{user.lastname}</td>
                                                     <td>{user.role}</td>
