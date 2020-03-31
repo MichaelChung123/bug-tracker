@@ -12,14 +12,10 @@ class ProjectDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            assignedUsers: [],
             title: '',
             description: '',
             projItems: [
-                // {
-                //     color: '#007bff',
-                //     name: 'Manage Users',
-                //     icon: 'fas fa-user-plus'
-                // },
                 {
                     color: '#dc3545',
                     name: 'Tickets',
@@ -34,14 +30,25 @@ class ProjectDetails extends Component {
                     color: '#17a2b8',
                     name: 'Developers',
                     icon: 'fas fa-laptop'
-                },
-                // {
-                //     color: '#ffc107',
-                //     name: 'Submitters',
-                //     icon: 'fas fa-check'
-                // }
+                }
             ]
         }
+    }
+
+    // Checks the the user_project table to see which users are assigned to the current project
+    // and sets the assigned users in state
+    checkAssignedUsers = () => {
+        const id = this.props.appProps.match.params.id;
+
+        fetch(`/admin/projects/details/users/${id}`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                this.setState({
+                    assignedUsers: data
+                })
+            })
     }
 
 
@@ -72,19 +79,13 @@ class ProjectDetails extends Component {
                     </Col>
                 </Row>
                 <Row className='block-row'>
-                    {/* <Col xs={3} sm={3} md={3} lg={3}>
-                        <Row className='ptu-box'>
-                            <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: '#007bff' }} className='ptu-icon'>
-                                <i className='fas fa-user-plus' />
-                            </Col>
-                            <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
-                                Manage Users
-                            </Col>
-                        </Row>
-                    </Col> */}
+
                     <AssignUsersModal
                         parentProps={this.props}
+                        assignedUsers={this.state.assignedUsers}
+                        checkAssignedUsers={this.checkAssignedUsers}
                     />
+
                     {
                         this.state.projItems.map((projItem, key) => {
                             return (
@@ -101,10 +102,16 @@ class ProjectDetails extends Component {
 
                 <UserAccordion
                     parentProps={this.props}
+                    assignedUsers={this.state.assignedUsers}
+                    checkAssignedUsers={this.checkAssignedUsers}
                 />
+
                 <div className='divider'></div>
+
                 <TicketAccordion
                     parentProps={this.props}
+                    assignedUsers={this.state.assignedUsers}
+                    checkAssignedUsers={this.checkAssignedUsers}
                 />
 
             </Container>
@@ -130,18 +137,8 @@ const ProjectBlocks = (props) => {
 }
 
 const UserAccordion = (props) => {
-    const [users, setUsers] = useState([]);
-
     useEffect(() => {
-        const id = props.parentProps.appProps.match.params.id;
-
-        fetch(`/admin/projects/details/users/${id}`)
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                setUsers(data);
-            })
+        props.checkAssignedUsers();
     }, []); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
 
     return (
@@ -168,7 +165,7 @@ const UserAccordion = (props) => {
                             </thead>
                             <tbody>
                                 {
-                                    users.map((user, key) => {
+                                    props.assignedUsers.map((user, key) => {
                                         return (
                                             <tr key={key}>
                                                 <td>

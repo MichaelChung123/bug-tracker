@@ -69,10 +69,16 @@ class SideNav extends React.Component {
                             key: 1
                         },
                         {
+                            path: '/admin/tickets/create',
+                            name: 'Create New',
+                            css: 'fa fa-plus-circle nav-icon',
+                            key: 2
+                        },
+                        {
                             path: '/admin/tickets/history',
                             name: 'History',
                             css: 'fas fa-history nav-icon',
-                            key: 2
+                            key: 3
                         }
                     ],
                     key: 3

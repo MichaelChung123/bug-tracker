@@ -56,6 +56,8 @@ function AssignUsersModal(props) {
                                             color={userType.color}
                                             project_id={project_id}
                                             parentProps={props.parentProps}
+                                            assignedUsers={props.assignedUsers}
+                                            checkAssignedUsers={props.checkAssignedUsers}
                                         />
                                         <br />
                                     </div>
@@ -65,6 +67,8 @@ function AssignUsersModal(props) {
                                         color={userType.color}
                                         project_id={project_id}
                                         parentProps={props.parentProps}
+                                        assignedUsers={props.assignedUsers}
+                                        checkAssignedUsers={props.checkAssignedUsers}
                                         key={key}
                                     />
 
@@ -88,21 +92,6 @@ function AssignUsersModal(props) {
 
 const UserAccordions = (props) => {
     const [users, setUsers] = useState([]);
-    const [assignedUsers, setAssignedUsers] = useState([]);
-
-    // Checks the the user_project table to see which users are assigned to the current project
-    // and sets the assigned users in state
-    const checkAssignedUsers = () => {
-        const id = props.parentProps.appProps.match.params.id;
-
-        fetch(`/admin/projects/details/users/${id}`)
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                setAssignedUsers(data);
-            })
-    }
 
     const handleUserClicked = (user_id, project_id) => {
         let data = {
@@ -111,7 +100,7 @@ const UserAccordions = (props) => {
         }
 
         // Check to see if the selected user is not already an assigned user
-        if (!assignedUsers.some(user => user.user_id === user_id)) {
+        if (!props.assignedUsers.some(user => user.user_id === user_id)) {
 
             // Sending what user has been assigned to the current project to the Database
             fetch(`/admin/projects/details/select/user/${user_id}`, {
@@ -124,7 +113,7 @@ const UserAccordions = (props) => {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    checkAssignedUsers();
+                    props.checkAssignedUsers();
                 })
                 .catch((error) => {
                     console.error('Error:', error);
@@ -140,7 +129,7 @@ const UserAccordions = (props) => {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    checkAssignedUsers();
+                    props.checkAssignedUsers();
                 })
                 .catch((error) => {
                     console.error('Remove Error:', error);
@@ -157,10 +146,10 @@ const UserAccordions = (props) => {
             .then((data) => {
                 setUsers(data);
             })
-    }, [assignedUsers]); // set assignedUsers as a dependency
+    }, [props.assignedUsers]); // set assignedUsers as a dependency
 
     useEffect(() => {
-        checkAssignedUsers();
+        props.checkAssignedUsers();
     }, []); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
 
 
@@ -198,7 +187,7 @@ const UserAccordions = (props) => {
 
                                         if (user.role === props.type) {
                                             return (
-                                                <tr style={assignedUsers.some(item => item.user_id === user.user_id) ? { backgroundColor: props.color } : { backgroundColor: '#ffffff' } } onClick={() => handleUserClicked(user.user_id, props.project_id)} key={key}>
+                                                <tr style={props.assignedUsers.some(item => item.user_id === user.user_id) ? { backgroundColor: props.color } : { backgroundColor: '#ffffff' }} onClick={() => handleUserClicked(user.user_id, props.project_id)} key={key}>
                                                     <td>{user.firstname}</td>
                                                     <td>{user.lastname}</td>
                                                     <td>{user.role}</td>
