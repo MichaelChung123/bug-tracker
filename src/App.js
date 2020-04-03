@@ -7,6 +7,8 @@ import SelectDemoUser from './components/SelectDemoUser';
 import Projects from './components/admin/projects/Projects';
 import ProjectDetails from './components/admin/projects/ProjectDetails';
 import Tickets from './components/admin/tickets/Tickets';
+import TicketDetails from './components/admin/tickets/TicketDetails';
+import CreateTickets from './components/admin/tickets/CreateTickets';
 import SideBar from './components/sidebar/Sidebar';
 import TopNav from './components/navbar/TopNav';
 import Dashboard from './components/admin/Dashboard';
@@ -27,8 +29,10 @@ class App extends Component {
                 <Container className='main-content' fluid='true'>
                   <Route path='/admin/dashboard' component={Dashboard} />
                   <Route path='/admin/tickets/all' component={Tickets} />
+                  <Route path='/admin/tickets/create' component={CreateTickets} />
                   <Route path='/admin/projects/all' component={Projects} />
                   <Route exact path='/admin/projects/details/:id' component={(appProps) => <ProjectDetails appProps={appProps} />} />
+                  <Route exact path='/admin/tickets/details/:id' component={(appProps) => <TicketDetails appProps={appProps} />} />
                   {/* <Route path='/admin/projects/create' component={Projects} />
                   <Route path='/admin/logout' component={Projects} /> */}
                 </Container>

@@ -1,0 +1,13 @@
+.select-project-modal-body {
+    display: flex;
+    justify-content: center;
+}
+
+.project-card-modal:hover {
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.side-action-box {
+    margin-bottom: 15px;
+}

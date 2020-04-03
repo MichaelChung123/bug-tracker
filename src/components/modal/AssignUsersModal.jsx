@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Container, Modal, Button, Form, Accordion, Card, FormControl, Table } from 'react-bootstrap';
+import { Row, Col, Modal, Button, Form, Accordion, Card, Table } from 'react-bootstrap';
 import '../../styles/ProjectDetailstyle.css';
 
 function AssignUsersModal(props) {

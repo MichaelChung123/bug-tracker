@@ -126,7 +126,6 @@ const getUserByID = (request, response) => {
 }
 
 const deleteUserFromProject = (request, response) => {
-    console.log(request.body);
     const {
         user_id,
         project_id
@@ -137,15 +136,51 @@ const deleteUserFromProject = (request, response) => {
             DELETE FROM user_project 
             WHERE user_id=${user_id} AND project_id=${project_id};
         `, (error, results) => {
-        if(error) {
-            throw error
-        }
+            if (error) {
+                throw error
+            }
 
-        response.status(201).send(results.rows);
-    })
-
+            response.status(201).send(results.rows);
+        })
 }
 
+const getAllProjects = (request, response) => {
+    pool.query(`SELECT * FROM projects`, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(201).send(results.rows);
+    })
+}
+
+const createTicket = (request, response) => {
+    const {
+        selectedProject,
+        selectedPriority,
+        selectedType,
+        ticketTitle,
+        ticketDescription,
+        creator,
+        lastUpdated,
+        createdDate,
+        createdTime,
+        lastUpdatedTime
+    } = request.body;
+
+    console.log(request.body);
+
+    pool.query(`
+    INSERT INTO tickets (ticket_id, title, creator, priority, type, status, lastupdated, createddate, description, createdtime, lastupdatedtime) 
+    VALUES ( DEFAULT, '${ticketTitle}', '${creator}', '${selectedPriority}', '${selectedType}', 'Open', '${lastUpdated}', '${createdDate}', '${ticketDescription}', '${createdTime}', '${lastUpdatedTime}')`,
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(201).send(`Ticket Added: ${results}`)
+        });
+}
+
+// 2020-04-03T11:51:34-07:00
 
 module.exports = {
     getTickets,
@@ -157,7 +192,9 @@ module.exports = {
     getUsers,
     assignUserToProject,
     getUserByID,
-    deleteUserFromProject
+    deleteUserFromProject,
+    getAllProjects,
+    createTicket
 }
 
 
