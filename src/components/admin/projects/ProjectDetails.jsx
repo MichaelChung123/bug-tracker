@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react';
-import { Row, Col, Container, Accordion, Card, Button, Table, Form, FormControl, Pagination } from 'react-bootstrap';
+import { Row, Col, Container, Accordion, Card, Button, Table, Form, FormControl } from 'react-bootstrap';
 import '../../../styles/ProjectDetailstyle.css';
 import AssignUsersModal from '../../modal/AssignUsersModal';
 
@@ -60,7 +60,7 @@ class ProjectDetails extends Component {
                 return response.json();
             })
             .then((data) => {
-                let { id, title, description } = data[0];
+                let { title, description } = data[0];
 
                 this.setState({
                     title,
@@ -75,7 +75,7 @@ class ProjectDetails extends Component {
             <Container fluid='true'>
                 <Row className='project-title'>
                     <Col xs={6} sm={6} md={6} lg={6}>
-                        <h1><a><i className='fas fa-edit' /></a> {this.state.title}</h1>
+                        <h1><i className='fas fa-edit' />{this.state.title}</h1>
                     </Col>
                 </Row>
                 <Row className='block-row'>
@@ -139,7 +139,7 @@ const ProjectBlocks = (props) => {
 const UserAccordion = (props) => {
     useEffect(() => {
         props.checkAssignedUsers();
-    }, []); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
+    }); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
 
     return (
         <Accordion defaultActiveKey="0">
@@ -211,8 +211,6 @@ const UserAccordion = (props) => {
 }
 
 const TicketAccordion = (props) => {
-    const [activePage, setActivePage] = useState(1);
-    const [pageCount, setPageCount] = useState(0);
     const [tickets, setTickets] = useState([]);
 
     useEffect(() => {
@@ -225,21 +223,7 @@ const TicketAccordion = (props) => {
             .then((data) => {
                 setTickets(data);
             })
-    }, []); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
-
-    // const createPagination = () => {
-    //     let pageCount = Math.ceil(this.state.tickets.length / 2);
-
-    //     for (let number = 1; number <= pageCount + 1; number++) {
-    //         this.setState(prevState => ({
-    //             items: [...prevState.items, number]
-    //         }))
-    //     }
-
-    //     this.setState({
-    //         pageCount: pageCount
-    //     })
-    // }
+    }); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
 
     return (
         <Accordion defaultActiveKey="0">

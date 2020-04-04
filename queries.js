@@ -180,7 +180,16 @@ const createTicket = (request, response) => {
         });
 }
 
-// 2020-04-03T11:51:34-07:00
+const getTicketByID = (request, response) => {
+    const id = parseInt(request.params.id);
+
+    pool.query(`SELECT * FROM tickets WHERE ticket_id=${id}`, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
 
 module.exports = {
     getTickets,
@@ -194,7 +203,8 @@ module.exports = {
     getUserByID,
     deleteUserFromProject,
     getAllProjects,
-    createTicket
+    createTicket,
+    getTicketByID
 }
 
 

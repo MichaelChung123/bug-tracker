@@ -1,22 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Row, Col, Modal, Button, Form, Card, } from 'react-bootstrap';
 import '../../styles/ProjectDetailstyle.css';
 
-function AssignTicketToProjectModal({ projects, setSelectedProject, sideActions, projectSelected, selectedProject, target, show , handleClose}) {
+function AssignTicketToProjectModal({ projects, setSelectedProject, sideActions, projectSelected, selectedProject, target, show, handleClose }) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
     }
 
-    const {
-        title,
-        description,
-        color,
-        backgroundColor,
-        textColor,
-        iconClass,
-        subIconClass,
-        selectOptions } = sideActions;
+    const { description } = sideActions;
 
     return (
         <>

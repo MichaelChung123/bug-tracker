@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Container, Table, Form, FormControl, Button, Pagination } from 'react-bootstrap';
+import { Row, Col, Container } from 'react-bootstrap';
 import CreateProjectModal from '../../modal/CreateProjectModal';
 import '../../../styles/ProjectStyle.css';
 

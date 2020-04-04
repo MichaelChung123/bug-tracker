@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect, useRef } from 'react';
-import { Row, Col, Container, Pagination, Accordion, Card, Button, Form, Overlay } from 'react-bootstrap';
+import { Row, Col, Container, Accordion, Card, Button, Form, Overlay } from 'react-bootstrap';
 import '../../../styles/CreateTicketStyle.css';
 import AssignTicketToProjectModal from '../../modal/AssignTicketToProjectModal';
 import moment from 'moment';
@@ -102,29 +102,6 @@ class CreateTickets extends Component {
                 }
             ]
         }
-    }
-
-    pageClick = (number) => {
-        let selectedTickets = this.state.tickets[number - 1];
-
-        this.setState({
-            activePage: number,
-            currentTickets: selectedTickets
-        })
-    }
-
-    createPagination = () => {
-        let pageCount = Math.ceil(this.state.tickets.length / 2);
-
-        for (let number = 1; number <= pageCount + 1; number++) {
-            this.setState(prevState => ({
-                items: [...prevState.items, number]
-            }))
-        }
-
-        this.setState({
-            pageCount: pageCount
-        })
     }
 
     // Saves the selected project into state, and awaits submit to insert this into the db 
@@ -329,10 +306,7 @@ const SideActions = ({ sideActions, setSelectedProject, setSelectedPriority, set
         title,
         description,
         color,
-        backgroundColor,
-        textColor,
         iconClass,
-        subIconClass,
         selectOptions } = sideActions;
 
     useEffect(() => {
@@ -515,7 +489,6 @@ const SideActions = ({ sideActions, setSelectedProject, setSelectedPriority, set
 
 
 const TicketDetails = ({ showAlert, checkFields, handleTitleChange, handleDescriptionChange, ticketTitle, ticketDescription, handleSubmit }) => {
-    const [show, setShow] = useState(false);
     const target = useRef(null);
 
     return (
@@ -551,22 +524,6 @@ const TicketDetails = ({ showAlert, checkFields, handleTitleChange, handleDescri
             </Card>
         </Accordion>
     )
-}
-
-
-class Page extends React.Component {
-    handleClick = () => {
-        const { number, pageClick } = this.props;
-        pageClick(number);
-    }
-
-    render() {
-        return (
-            <Pagination.Item key={this.props.number} onClick={this.handleClick} active={this.props.number === this.props.activePage}>
-                {this.props.number}
-            </Pagination.Item>
-        );
-    }
 }
 
 export default CreateTickets;

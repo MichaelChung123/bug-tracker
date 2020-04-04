@@ -7,7 +7,7 @@ import SelectDemoUser from './components/SelectDemoUser';
 import Projects from './components/admin/projects/Projects';
 import ProjectDetails from './components/admin/projects/ProjectDetails';
 import Tickets from './components/admin/tickets/Tickets';
-import TicketDetails from './components/admin/tickets/TicketDetails';
+import TicketDetails from './components/admin/tickets/details/TicketDetails';
 import CreateTickets from './components/admin/tickets/CreateTickets';
 import SideBar from './components/sidebar/Sidebar';
 import TopNav from './components/navbar/TopNav';
