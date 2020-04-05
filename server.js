@@ -37,6 +37,7 @@ app.get('/projects/all', db.getAllProjects);
 app.post('/tickets/create', db.createTicket);
 
 app.get('/admin/tickets/details/:id', db.getTicketByID);
+app.post('/upload/attachment', db.addAttachment);
 
 app.listen(port, () => {
     console.log(`App running on port ${port}.`);

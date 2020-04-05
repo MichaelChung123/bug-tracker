@@ -1,46 +1,138 @@
-import React, { Component, useState, useEffect } from 'react';
-import { Row, Col, Container, Accordion, Card, Button, Table, Form, FormControl, Pagination } from 'react-bootstrap';
+import React from 'react';
+import { Row, Col, Accordion, Card } from 'react-bootstrap';
 
-const SideActions = ({ action, priority, type }) => {
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
+const SideActions = ({ action, priority, type, handleActionSelect, selectedPriorityBox, selectedTypeBox, prioritySelected, typeSelected }) => {
     const {
         title,
         subOptions
     } = action;
 
-    console.log('subOptions: ', subOptions);
-
     return (
         subOptions.map((option, key) => {
-            console.log('priority: ', priority);
-            console.log('option: ', option);
+
+            // CHECK PRIORITY
             if (option.title === priority) {
-                console.log("MATCH");
                 return (
-                    < Row onClick={handleShow} className='ptu-box side-action-box' >
-                        <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: 'green' }} className='ptu-icon'>
-                            <i className='fas fa-check' />
-                        </Col>
-                        <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
-                            {option.title}
-                        </Col>
-                    </Row >
+                    <Accordion key={key}>
+                        {
+                            !prioritySelected ?
+                                <Accordion.Toggle as={Row} eventKey="0" className='ptu-box side-action-box'>
+                                    <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: option.color }} className='ptu-icon'>
+                                        <i className={option.iconClass} />
+                                    </Col>
+                                    <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                                        Priority
+                                        <br />
+                                        {option.title}
+                                    </Col>
+                                </Accordion.Toggle>
+                                :
+                                selectedPriorityBox
+                        }
+
+                        <Accordion.Collapse eventKey="0">
+                            <Card.Body>
+                                {
+                                    subOptions.map((subOption, key) => {
+                                        let newPriorityBox = <></>;
+                                        let actionValue = subOption.title;
+
+                                        let selectedSubAction =
+                                            <Accordion.Toggle onClick={() => handleActionSelect(title, actionValue, newPriorityBox)} key={key} as={Row} eventKey="0" className='ptu-box side-action-box'>
+                                                <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: subOption.color }} className='ptu-icon'>
+                                                    <i className={subOption.iconClass} />
+                                                </Col>
+                                                <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                                                    Priority
+                                                    <br />
+                                                    {subOption.title}
+                                                </Col>
+                                            </Accordion.Toggle>
+
+                                        newPriorityBox = selectedSubAction;
+
+                                        return (
+                                            <Accordion.Toggle onClick={() => handleActionSelect(title, actionValue, newPriorityBox)} key={key} as={Row} eventKey="0" className='ptu-box side-action-box'>
+                                                <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: subOption.color }} className='ptu-icon'>
+                                                    <i className={subOption.iconClass} />
+                                                </Col>
+                                                <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                                                    {subOption.title}
+                                                </Col>
+                                            </Accordion.Toggle>
+                                        );
+                                    })
+                                }
+                            </Card.Body>
+                        </Accordion.Collapse>
+                    </Accordion>
+
                 )
+                // CHECK TYPE
             } else if (option.title === type) {
-                console.log("MATCH");
                 return (
-                    < Row onClick={handleShow} className='ptu-box side-action-box' >
-                        <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: 'green' }} className='ptu-icon'>
-                            <i className='fas fa-check' />
-                        </Col>
-                        <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
-                            {option.title}
-                        </Col>
-                    </Row >
+
+                    <Accordion key={key}>
+                        {
+                            !typeSelected ?
+                                <Accordion.Toggle as={Row} eventKey="0" className='ptu-box side-action-box'>
+                                    <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: option.color }} className='ptu-icon'>
+                                        <i className={option.iconClass} />
+                                    </Col>
+                                    <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                                        Type
+                                        <br />
+                                        {option.title}
+                                    </Col>
+                                </Accordion.Toggle>
+                                :
+                                selectedTypeBox
+                        }
+
+                        <Accordion.Collapse eventKey="0">
+                            <Card.Body>
+                                {
+                                    subOptions.map((subOption, key) => {
+                                        let newTypeBox = <></>;
+                                        let actionValue = subOption.title;
+
+                                        let selectedSubAction =
+                                            <Accordion.Toggle onClick={() => handleActionSelect(title, actionValue, newTypeBox)} key={key} as={Row} eventKey="0" className='ptu-box side-action-box'>
+                                                <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: subOption.color }} className='ptu-icon'>
+                                                    <i className={subOption.iconClass} />
+                                                </Col>
+                                                <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                                                    Type
+                                                    <br />
+                                                    {subOption.title}
+                                                </Col>
+                                            </Accordion.Toggle>
+
+                                        newTypeBox = selectedSubAction;
+
+                                        return (
+                                            <Accordion.Toggle onClick={() => handleActionSelect(title, actionValue, newTypeBox)} key={key} as={Row} eventKey="0" className='ptu-box side-action-box'>
+                                                <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: subOption.color }} className='ptu-icon'>
+                                                    <i className={subOption.iconClass} />
+                                                </Col>
+                                                <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                                                    {subOption.title}
+                                                </Col>
+                                            </Accordion.Toggle>
+                                        );
+                                    })
+                                }
+                            </Card.Body>
+                        </Accordion.Collapse>
+                    </Accordion>
+                    // <Row key={key} onClick={handleShow} className='ptu-box side-action-box' >
+                    //     <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: option.color }} className='ptu-icon'>
+                    //         <i className={option.iconClass} />
+                    //     </Col>
+                    //     <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                    //         {option.title}
+                    //     </Col>
+                    // </Row>
                 )
             }
         })

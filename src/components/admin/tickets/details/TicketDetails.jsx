@@ -3,6 +3,8 @@ import { Row, Col, Container, Accordion, Card, Button, Table, Form, FormControl,
 // import '../../../styles/TicketDetailstyle.css';
 import AssignUsersModal from '../../../modal/AssignUsersModal';
 import SideActions from './SideActions';
+import UploadModal from '../../../modal/UploadModal';
+import DownloadModal from '../../../modal/DownloadModal';
 
 /* 
     how to connect to database:
@@ -19,6 +21,13 @@ class TicketDetails extends Component {
             status: '',
             lastUpdated: '',
             description: '',
+            selectedPriorityBox: <></>,
+            selectedTypeBox: <></>,
+            prioritySelected: false,
+            typeSelected: false,
+            selectedPriority: '',
+            selectedType: '',
+            attachment: '',
             sideActions: [
                 {
                     title: 'Priority',
@@ -69,6 +78,57 @@ class TicketDetails extends Component {
         }
     }
 
+    handleActionSelect = (title, actionValue, selectedAction) => {
+        if (title === "Priority") {
+            this.setState({
+                selectedPriorityBox: selectedAction,
+                selectedPriority: actionValue,
+                prioritySelected: true
+            })
+        } else if (title === "Type") {
+            this.setState({
+                selectedTypeBox: selectedAction,
+                selectedType: actionValue,
+                typeSelected: true
+            })
+        }
+    }
+    handleUpload = (e) => {
+        let file = e.target.files[0];
+        console.log('file: ', file);
+
+        this.setState({
+            attachment: file
+        })
+    }
+
+    handleAttachmentSubmit = (e) => {
+        e.preventDefault();
+        console.log('submitting attachment');
+
+        let file = this.state.attachment;
+        const formData = new FormData();
+        formData.append('myFile', file);
+
+
+        fetch('/upload/attachment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': file.type
+            },
+            body: file
+        })
+            .then((response) => {
+                response.json();
+            })
+            .then((data) => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
     componentDidMount() {
         const id = this.props.appProps.match.params.id;
 
@@ -94,10 +154,10 @@ class TicketDetails extends Component {
                     description
                 })
             })
+
     }
 
     render() {
-        console.log('priority: ', this.state.priority);
         return (
             <Container className='all-tickets-container'>
                 <Row className='tickets-title'>
@@ -115,11 +175,35 @@ class TicketDetails extends Component {
                                         action={action}
                                         priority={this.state.priority}
                                         type={this.state.type}
+                                        selectedPriorityBox={this.state.selectedPriorityBox}
+                                        selectedTypeBox={this.state.selectedTypeBox}
+                                        prioritySelected={this.state.prioritySelected}
+                                        typeSelected={this.state.typeSelected}
+
+                                        handleActionSelect={this.handleActionSelect}
                                         key={key}
                                     />
                                 );
                             })
                         }
+
+                        {/* <Form>
+                            <Form.File
+                                id="custom-file"
+                                label="Custom file input"
+                                custom
+                            />
+                        </Form> */}
+
+                        <Form onSubmit={this.handleAttachmentSubmit}>
+                            <Form.Group controlId="formBasicPassword">
+                                <Form.Label>Attachments:</Form.Label>
+                                <Form.Control type="file" placeholder="files" onChange={this.handleUpload} />
+                            </Form.Group>
+                            <Button variant="primary" type="submit">
+                                Submit
+                            </Button>
+                        </Form>
                     </Col>
                     {/* TICKET DETAILS */}
                     <Col style={{ backgroundColor: 'blue' }} xs={9} sm={9} md={9} lg={9}>

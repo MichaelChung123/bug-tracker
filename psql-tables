@@ -57,3 +57,18 @@ SELECT  users.user_id AS user_id,
         projects.project_id AS project_id
 FROM users CROSS JOIN projects 
 WHERE user_id=4 AND projects.project_id=4;
+
+
+- store pdf into db as bytea
+- unescape the value on retrieval
+
+
+
+
+
+
+
+
+
+
+
