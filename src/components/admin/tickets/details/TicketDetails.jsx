@@ -5,6 +5,8 @@ import AssignUsersModal from '../../../modal/AssignUsersModal';
 import SideActions from './SideActions';
 import UploadModal from '../../../modal/UploadModal';
 import DownloadModal from '../../../modal/DownloadModal';
+import EditTicketModal from '../../../modal/EditTicketModal';
+import moment from 'moment';
 
 /* 
     how to connect to database:
@@ -28,6 +30,9 @@ class TicketDetails extends Component {
             selectedPriority: '',
             selectedType: '',
             attachment: '',
+            editTitleVal: '',
+            editDescVal: '',
+            show: false,
             sideActions: [
                 {
                     title: 'Priority',
@@ -93,9 +98,9 @@ class TicketDetails extends Component {
             })
         }
     }
+
     handleUpload = (e) => {
         let file = e.target.files[0];
-        console.log('file: ', file);
 
         this.setState({
             attachment: file
@@ -106,21 +111,86 @@ class TicketDetails extends Component {
         e.preventDefault();
         console.log('submitting attachment');
 
-        let file = this.state.attachment;
-        const formData = new FormData();
-        formData.append('myFile', file);
+        let formData = new FormData();
+        formData.append('myFile', this.state.attachment);
 
+        console.log('attachment: ', this.state.attachment);
+
+        for (var key of formData.entries()) {
+            console.log(key[0] + ', ' + key[1]);
+        }
 
         fetch('/upload/attachment', {
             method: 'POST',
-            headers: {
-                'Content-Type': file.type
-            },
-            body: file
+            body: formData
         })
             .then((response) => {
                 response.json();
             })
+            .then((data) => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    handleClose = () => {
+        this.setState({
+            show: false
+        })
+    }
+
+    handleOpen = () => {
+        this.setState({
+            show: true
+        })
+    }
+
+
+    handleEditTitle = (e) => {
+        this.setState({
+            editTitleVal: e.target.value
+        })
+    }
+
+    handleEditDesc = (e) => {
+        this.setState({
+            editDescVal: e.target.value
+        })
+    }
+
+    handleEditSubmit = (e) => {
+        console.log('Submitting');
+        e.preventDefault();
+
+        let unformattedLastUpdated = moment().format();
+        let lastUpdated = unformattedLastUpdated.substr(0, 10);
+        let lastUpdatedTime = unformattedLastUpdated.substr(11, 8);
+
+        this.setState({
+            ticketTitle: this.state.editTitleVal,
+            description: this.state.editDescVal
+        })
+
+        const id = this.props.appProps.match.params.id;
+
+        let data = {
+            editTitleVal: this.state.editTitleVal,
+            editDescVal: this.state.editDescVal,
+            lastUpdated: lastUpdated,
+            lastUpdatedTime: lastUpdatedTime
+        }
+
+        // Edit title and description values in db
+        fetch(`/edit/ticket/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
             .then((data) => {
                 console.log('Success:', data);
             })
@@ -179,6 +249,8 @@ class TicketDetails extends Component {
                                         selectedTypeBox={this.state.selectedTypeBox}
                                         prioritySelected={this.state.prioritySelected}
                                         typeSelected={this.state.typeSelected}
+                                        editTitleVal={this.state.editTitleVal}
+                                        editDescVal={this.state.editDescVal}
 
                                         handleActionSelect={this.handleActionSelect}
                                         key={key}
@@ -204,6 +276,33 @@ class TicketDetails extends Component {
                                 Submit
                             </Button>
                         </Form>
+
+                        <br />
+
+                        {/* EDIT TICKET BLOCK */}
+                        <Row onClick={this.handleOpen} className='ptu-box side-action-box'>
+                            <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: 'red' }} className='ptu-icon'>
+                                <i className='fas fa-edit' />
+                            </Col>
+                            <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                                Edit Ticket
+                                <br />
+                                Click here to edit
+                            </Col>
+                        </Row>
+                        <EditTicketModal
+                            show={this.state.show}
+                            ticketTitle={this.state.ticketTitle}
+                            description={this.state.description}
+                            editTitleVal={this.state.editTitleVal}
+                            editDescVal={this.state.editDescVal}
+
+                            handleShow={this.handleShow}
+                            handleClose={this.handleClose}
+                            handleEditTitle={this.handleEditTitle}
+                            handleEditDesc={this.handleEditDesc}
+                            handleEditSubmit={this.handleEditSubmit}
+                        />
                     </Col>
                     {/* TICKET DETAILS */}
                     <Col style={{ backgroundColor: 'blue' }} xs={9} sm={9} md={9} lg={9}>

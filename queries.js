@@ -1,5 +1,6 @@
 const Pool = require('pg').Pool
 
+
 const pool = new Pool({
     user: 'me',
     host: 'localhost',
@@ -33,12 +34,14 @@ const createProject = (request, response) => {
         description
     } = request.body;
 
-    pool.query(`INSERT INTO projects (title, description) VALUES ('${title}', '${description}')`, (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(201).send(`Project Added: ${results}`)
-    });
+    pool.query(`INSERT INTO projects (title, description) VALUES ('${title}', '${description}')`,
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+
+            response.status(201).send(`Project Added: ${results}`)
+        });
 }
 
 const getProjectByID = (request, response) => {
@@ -191,20 +194,45 @@ const getTicketByID = (request, response) => {
     })
 }
 
-const addAttachment = (request, response) => {
-    console.log('addAttachment: ', request.body); 
+// const addAttachment = (request, response) => {
+//     pool.query(`
+//         INSERT INTO attachments (name, file, ticket_id)
+//         VALUES('test name', E'\\001', 7)`,
+//         (error, results) => {
+//             if (error) {
+//                 throw error
+//             }
+//             response.status(200).json(results.rows);
+//         }
+//     )
+
+//     console.log('request: ', request.body);
+// }
+
+
+const editTicket = (request, response) => {
+    const {
+        editTitleVal,
+        editDescVal,
+        lastUpdated,
+        lastUpdatedTime
+    } = request.body;
+
+    const id = parseInt(request.params.id);
+
     pool.query(`
-        INSERT INTO attachments (name, file, ticket_id)
-        VALUES('test name', E'\\001', 7)`,
+        UPDATE tickets
+        SET title='${editTitleVal}',
+        description='${editDescVal}',
+        lastupdated='${lastUpdated}',
+        lastupdatedtime='${lastUpdatedTime}'
+        WHERE ticket_id=${id}`,
         (error, results) => {
             if (error) {
                 throw error
             }
-            console.log('RESULTS: ', results);
-
-            response.status(200).json(results.rows);
-        }
-    )
+            response.status(201).json(`Ticket edited with ID: ${id}`)
+        });
 }
 
 
@@ -222,5 +250,87 @@ module.exports = {
     getAllProjects,
     createTicket,
     getTicketByID,
-    addAttachment
+    editTicket
 }
+
+// const Pool = require('pg').Pool
+
+// const pool = new Pool({
+//     user: 'me',
+//     host: 'localhost',
+//     database: 'api',
+//     password: 'password',
+//     port: 5432,
+// })
+
+// const getUsers = (request, response) => {
+//     pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
+//         if (error) {
+//             throw error
+//         }
+//         response.json(results.rows)
+//     })
+// }
+
+// const getUserById = (request, response) => {
+//     const id = parseInt(request.params.id)
+
+//     pool.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
+//         if (error) {
+//             throw error
+//         }
+//         response.status(200).json(results.rows)
+//     })
+// }
+
+// const createUser = (request, response) => {
+//     const {
+//         name,
+//         email
+//     } = request.body
+
+//     pool.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email], (error, results) => {
+//         if (error) {
+//             throw error
+//         }
+//         response.status(201).send(`User added with ID: ${results.insertId}`)
+//     })
+// }
+
+// const updateUser = (request, response) => {
+//     const id = parseInt(request.params.id)
+//     const {
+//         name,
+//         email
+//     } = request.body
+
+//     pool.query(
+//         'UPDATE users SET name = $1, email = $2 WHERE id = $3',
+//         [name, email, id],
+//         (error, results) => {
+//             if (error) {
+//                 throw error
+//             }
+//             response.status(200).send(`User modified with ID: ${id}`)
+//         }
+//     )
+// }
+
+// const deleteUser = (request, response) => {
+//     const id = parseInt(request.params.id)
+
+//     pool.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
+//         if (error) {
+//             throw error
+//         }
+//         response.status(200).send(`User deleted with ID: ${id}`)
+//     })
+// }
+
+// module.exports = {
+//     getUsers,
+//     getUserById,
+//     createUser,
+//     updateUser,
+//     deleteUser,
+// }

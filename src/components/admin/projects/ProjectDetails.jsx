@@ -139,7 +139,7 @@ const ProjectBlocks = (props) => {
 const UserAccordion = (props) => {
     useEffect(() => {
         props.checkAssignedUsers();
-    }); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
+    }, []); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
 
     return (
         <Accordion defaultActiveKey="0">
@@ -223,7 +223,7 @@ const TicketAccordion = (props) => {
             .then((data) => {
                 setTickets(data);
             })
-    }); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
+    }, []); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
 
     return (
         <Accordion defaultActiveKey="0">
