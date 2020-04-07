@@ -1,12 +1,13 @@
 import React, { Component, useState, useEffect } from 'react';
-import { Row, Col, Container, Accordion, Card, Button, Table, Form, FormControl, Pagination } from 'react-bootstrap';
+import moment from 'moment';
+import { ListGroup, Row, Col, Container, Accordion, Card, Button, Table, Form, FormControl, Pagination } from 'react-bootstrap';
 // import '../../../styles/TicketDetailstyle.css';
 import AssignUsersModal from '../../../modal/AssignUsersModal';
 import SideActions from './SideActions';
 import UploadModal from '../../../modal/UploadModal';
 import DownloadModal from '../../../modal/DownloadModal';
 import EditTicketModal from '../../../modal/EditTicketModal';
-import moment from 'moment';
+import TicketComments from './TicketComments';
 
 /* 
     how to connect to database:
@@ -84,13 +85,54 @@ class TicketDetails extends Component {
     }
 
     handleActionSelect = (title, actionValue, selectedAction) => {
+        const id = this.props.appProps.match.params.id;
+
         if (title === "Priority") {
+            const data = {
+                selectedPriority: actionValue
+            }
+
+            fetch(`/ticket/details/priority/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+
+
             this.setState({
                 selectedPriorityBox: selectedAction,
                 selectedPriority: actionValue,
                 prioritySelected: true
             })
         } else if (title === "Type") {
+            const data = {
+                selectedType: actionValue
+            }
+
+            fetch(`/ticket/details/type/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            
             this.setState({
                 selectedTypeBox: selectedAction,
                 selectedType: actionValue,
@@ -146,7 +188,6 @@ class TicketDetails extends Component {
             show: true
         })
     }
-
 
     handleEditTitle = (e) => {
         this.setState({
@@ -224,7 +265,6 @@ class TicketDetails extends Component {
                     description
                 })
             })
-
     }
 
     render() {
@@ -237,7 +277,7 @@ class TicketDetails extends Component {
                 </Row>
                 {/* SIDE ACTIONS */}
                 <Row>
-                    <Col style={{ backgroundColor: 'red' }} xs={3} sm={3} md={3} lg={3}>
+                    <Col xs={3} sm={3} md={3} lg={3}>
                         {
                             this.state.sideActions.map((action, key) => {
                                 return (
@@ -259,15 +299,8 @@ class TicketDetails extends Component {
                             })
                         }
 
-                        {/* <Form>
-                            <Form.File
-                                id="custom-file"
-                                label="Custom file input"
-                                custom
-                            />
-                        </Form> */}
-
-                        <Form onSubmit={this.handleAttachmentSubmit}>
+                        {/* ADD ATTACHMENT FORM */}
+                        {/* <Form onSubmit={this.handleAttachmentSubmit}>
                             <Form.Group controlId="formBasicPassword">
                                 <Form.Label>Attachments:</Form.Label>
                                 <Form.Control type="file" placeholder="files" onChange={this.handleUpload} />
@@ -275,19 +308,17 @@ class TicketDetails extends Component {
                             <Button variant="primary" type="submit">
                                 Submit
                             </Button>
-                        </Form>
+                        </Form> */}
 
                         <br />
 
                         {/* EDIT TICKET BLOCK */}
                         <Row onClick={this.handleOpen} className='ptu-box side-action-box'>
-                            <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: 'red' }} className='ptu-icon'>
+                            <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: '#dc3545' }} className='ptu-icon'>
                                 <i className='fas fa-edit' />
                             </Col>
                             <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
                                 Edit Ticket
-                                <br />
-                                Click here to edit
                             </Col>
                         </Row>
                         <EditTicketModal
@@ -304,9 +335,12 @@ class TicketDetails extends Component {
                             handleEditSubmit={this.handleEditSubmit}
                         />
                     </Col>
-                    {/* TICKET DETAILS */}
-                    <Col style={{ backgroundColor: 'blue' }} xs={9} sm={9} md={9} lg={9}>
-
+                    {/* TICKET MAIN BODY */}
+                    <Col xs={9} sm={9} md={9} lg={9}>
+                        <TicketComments
+                            description={this.state.description}
+                            id={this.props.appProps.match.params.id}
+                        />
                     </Col>
                 </Row>
             </Container>

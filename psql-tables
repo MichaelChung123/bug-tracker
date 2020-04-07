@@ -67,8 +67,27 @@ WHERE user_id=4 AND projects.project_id=4;
 
 
 
+select column_name, data_type from information_schema.columns
+where table_name = 'tickets';
+
+CREATE TABLE COMMENTS (
+    comment_id serial PRIMARY KEY,
+    creator VARCHAR(50),
+    createddate DATE,
+    createdtime TIMESTAMP,
+    ticket_id INTEGER REFERENCES tickets (ticket_id)
+);
+
+INSERT INTO comments (creator, createddate, createdtime, ticket_id, text)
+VALUES 
+('Michael Chung', CURRENT_DATE, CURRENT_TIMESTAMP, 7, 'This text is meant to be inside of comment #1'),
+('Michael Chung', CURRENT_DATE, CURRENT_TIMESTAMP, 7, 'This text is meant to be inside of comment #2'),
+('Michael Chung', CURRENT_DATE, CURRENT_TIMESTAMP, 7, 'This text is meant to be inside of comment #3'),
+('Michael Chung', CURRENT_DATE, CURRENT_TIMESTAMP, 7, 'This text is meant to be inside of comment #4'),
+('Michael Chung', CURRENT_DATE, CURRENT_TIMESTAMP, 7, 'This text is meant to be inside of comment #5'),
+('Michael Chung', CURRENT_DATE, CURRENT_TIMESTAMP, 7, 'This text is meant to be inside of comment #6'),
+('Michael Chung', CURRENT_DATE, CURRENT_TIMESTAMP, 7, 'This text is meant to be inside of comment #7');
 
 
-
-
-
+UPDATE comments
+SET text = 'My glass shall not persuade me I am old So long as youth and thou are of one date But when in thee times furrows I behold Then look I death my days should expiate For all that beauty that doth cover thee Is but the seemly raiment of my heart Which in thy breast doth live as thine in me How can I then be elder than thou art therefore love be of thyself so wary As I not for myself but for thee will';

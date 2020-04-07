@@ -152,8 +152,6 @@ const UserAccordions = (props) => {
         props.checkAssignedUsers();
     }, []); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
 
-
-
     return (
         <Accordion defaultActiveKey={props.type === "Developer" ? "0" : "none"}>
             <Card className='user-card'>

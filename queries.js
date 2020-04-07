@@ -236,6 +236,103 @@ const editTicket = (request, response) => {
 }
 
 
+const updatePriority = (req, res) => {
+    const selectedPriority = req.body.selectedPriority;
+    const id = parseInt(req.params.id);
+
+    pool.query(`
+        UPDATE tickets
+        SET priority='${selectedPriority}'
+        WHERE ticket_id=${id}
+    `,
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            res.status(201).json(`Ticket Priority Updated to: ${selectedPriority}`)
+        })
+}
+
+const updateType = (req, res) => {
+    const selectedType = req.body.selectedType;
+    const id = parseInt(req.params.id);
+
+    pool.query(`
+        UPDATE tickets
+        SET type='${selectedType}'
+        WHERE ticket_id=${id}
+    `,
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            res.status(201).json(`Ticket Type Updated to: ${selectedType}`)
+        })
+}
+
+const getCommentsByID = (request, response) => {
+    const id = parseInt(request.params.id);
+
+    pool.query(`SELECT * FROM comments WHERE ticket_id=${id} ORDER BY createdtime ASC`,
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.json(results.rows)
+        })
+}
+
+const addComment = (request, response) => {
+    const id = parseInt(request.params.id);
+    const {
+        creator,
+        text
+    } = request.body;
+
+    pool.query(`
+        INSERT INTO comments (creator, createddate, createdtime, ticket_id, text, user_id)
+        VALUES ('${creator}', CURRENT_DATE, CURRENT_TIMESTAMP, '${id}', '${text}', 1)`,
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(201).json(`Comment Added to Ticket ID: ${id}`)
+        })
+}
+
+const editComment = (request, response) => {
+    const comment_id = request.params.comment_id;
+    const editedComment = request.body.text;
+
+    pool.query(`
+        UPDATE comments
+        SET text='${editedComment}'
+        WHERE comment_id=${comment_id}
+    `,
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(201).json(`Comment edited with ID: ${comment_id}`)
+        })
+}
+
+const deleteCommentByID = (request, response) => {
+    const id = parseInt(request.params.id);
+
+    pool.query(`
+        DELETE FROM comments
+        WHERE comment_id=${id}
+    `,
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(201).json(`Comment deleted with ID: ${id}`)
+        })
+}
+
+
 module.exports = {
     getTickets,
     getDashboardContent,
@@ -250,7 +347,13 @@ module.exports = {
     getAllProjects,
     createTicket,
     getTicketByID,
-    editTicket
+    editTicket,
+    updatePriority,
+    updateType,
+    getCommentsByID,
+    addComment,
+    editComment,
+    deleteCommentByID
 }
 
 // const Pool = require('pg').Pool

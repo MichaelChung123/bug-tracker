@@ -40,6 +40,14 @@ app.get('/admin/tickets/details/:id', db.getTicketByID);
 // app.post('/upload/attachment', db.addAttachment);
 app.post('/edit/ticket/:id', db.editTicket);
 
+app.post('/ticket/details/priority/:id', db.updatePriority);
+app.post('/ticket/details/type/:id', db.updateType);
+app.get('/ticket/details/comments/:id', db.getCommentsByID);
+app.post('/ticket/details/comment/add/:id', db.addComment);
+app.post('/ticket/details/comment/edit/:comment_id', db.editComment);
+app.post('/ticket/details/comments/delete/:id', db.deleteCommentByID);
+
+
 app.listen(port, () => {
     console.log(`App running on port ${port}.`);
 })

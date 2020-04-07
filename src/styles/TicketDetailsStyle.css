@@ -1,0 +1,58 @@
+.ticket-details-acc1 {
+    padding: 0;
+}
+
+.ticket-details-description {
+    padding: 20px 20px;
+}
+
+.comment-count {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 20px 0px 20px;
+}
+
+.comment-list {
+    background-color: red !important;
+}
+
+.avatar-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 0px;
+}
+
+.comment-row {
+    border-bottom: 1px solid #e9ecef;
+    padding: 8px 0px;
+}
+
+.comment-avatar {
+    width: 30px;
+    max-height: 100%;
+}
+
+.name-posted-date {
+    padding-left: 0px;
+}
+
+.name-posted-date p {
+    margin: 0;
+}
+
+.posted-date-comment {
+    font-size: 14px;
+}
+
+.comment-submission-textbox {
+    /* display: flex;
+    align-items: center; */
+    padding: 20px 0px;
+    margin-bottom: 0px;
+}
+
+.your-comment-header {
+    display: flex;
+    align-items: center;
+}

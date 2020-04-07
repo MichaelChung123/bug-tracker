@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col, Accordion, Card } from 'react-bootstrap';
 
+// Component used displaying the side actions and then allowing their subactions to show as an accordion
 const SideActions = ({ action, priority, type, handleActionSelect, selectedPriorityBox, selectedTypeBox, prioritySelected, typeSelected }) => {
     const {
         title,
@@ -9,7 +10,6 @@ const SideActions = ({ action, priority, type, handleActionSelect, selectedPrior
 
     return (
         subOptions.map((option, key) => {
-
             // CHECK PRIORITY
             if (option.title === priority) {
                 return (
@@ -125,28 +125,10 @@ const SideActions = ({ action, priority, type, handleActionSelect, selectedPrior
                             </Card.Body>
                         </Accordion.Collapse>
                     </Accordion>
-                    // <Row key={key} onClick={handleShow} className='ptu-box side-action-box' >
-                    //     <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: option.color }} className='ptu-icon'>
-                    //         <i className={option.iconClass} />
-                    //     </Col>
-                    //     <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
-                    //         {option.title}
-                    //     </Col>
-                    // </Row>
                 )
             }
         })
     )
-    // < Row onClick = { handleShow } className = 'ptu-box side-action-box' >
-    //     <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: 'green' }} className='ptu-icon'>
-    //         <i className='fas fa-check' />
-    //     </Col>
-    //     <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
-    //         {option.title}
-    //     </Col>
-    //          </Row >
-
-
 }
 
 export default SideActions;
