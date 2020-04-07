@@ -1,5 +1,6 @@
 const Pool = require('pg').Pool
-
+const multer = require('multer');
+const cors = require('cors');
 
 const pool = new Pool({
     user: 'me',
@@ -194,20 +195,20 @@ const getTicketByID = (request, response) => {
     })
 }
 
-// const addAttachment = (request, response) => {
-//     pool.query(`
-//         INSERT INTO attachments (name, file, ticket_id)
-//         VALUES('test name', E'\\001', 7)`,
-//         (error, results) => {
-//             if (error) {
-//                 throw error
-//             }
-//             response.status(200).json(results.rows);
-//         }
-//     )
+const addAttachment = (request, response) => {
+    console.log('request: ', request.body);
+    // pool.query(`
+    //     INSERT INTO attachments (name, file, ticket_id)
+    //     VALUES('test name', E'\\001', 7)`,
+    //     (error, results) => {
+    //         if (error) {
+    //             throw error
+    //         }
+    //         response.status(200).json(results.rows);
+    //     }
+    // )
 
-//     console.log('request: ', request.body);
-// }
+}
 
 
 const editTicket = (request, response) => {
@@ -332,6 +333,34 @@ const deleteCommentByID = (request, response) => {
         })
 }
 
+const uploadFile = (req, res) => {
+    let id = req.params.id;
+
+    let storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, 'public')
+        },
+        filename: function (req, file, cb) {
+            console.log(file)
+            cb(null, Date.now() + '-' + file.originalname)
+        }
+    })
+
+    let upload = multer({
+        storage: storage
+    }).array('file')
+
+    upload(req, res, function (err) {
+        if (err instanceof multer.MulterError) {
+            return res.status(500).json(err)
+        } else if (err) {
+            return res.status(500).json(err)
+        }
+        return res.status(200).send(req.file)
+
+    })
+}
+
 
 module.exports = {
     getTickets,
@@ -348,12 +377,14 @@ module.exports = {
     createTicket,
     getTicketByID,
     editTicket,
+    addAttachment,
     updatePriority,
     updateType,
     getCommentsByID,
     addComment,
     editComment,
-    deleteCommentByID
+    deleteCommentByID,
+    uploadFile
 }
 
 // const Pool = require('pg').Pool

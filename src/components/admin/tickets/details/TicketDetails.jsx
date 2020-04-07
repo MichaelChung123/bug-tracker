@@ -30,7 +30,7 @@ class TicketDetails extends Component {
             typeSelected: false,
             selectedPriority: '',
             selectedType: '',
-            attachment: '',
+            selectedFile: null,
             editTitleVal: '',
             editDescVal: '',
             show: false,
@@ -132,7 +132,7 @@ class TicketDetails extends Component {
                 .catch((error) => {
                     console.error('Error:', error);
                 });
-            
+
             this.setState({
                 selectedTypeBox: selectedAction,
                 selectedType: actionValue,
@@ -142,33 +142,34 @@ class TicketDetails extends Component {
     }
 
     handleUpload = (e) => {
-        let file = e.target.files[0];
+        let file = e.target.files;
+        console.log('file: ', e.target.files);
 
         this.setState({
-            attachment: file
+            selectedFile: file
         })
     }
 
     handleAttachmentSubmit = (e) => {
         e.preventDefault();
         console.log('submitting attachment');
+        console.log('selectedFile: ', this.state.selectedFile);
 
-        let formData = new FormData();
-        formData.append('myFile', this.state.attachment);
-
-        console.log('attachment: ', this.state.attachment);
-
-        for (var key of formData.entries()) {
-            console.log(key[0] + ', ' + key[1]);
+        let data = new FormData();
+        for (let i = 0; i < this.state.selectedFile.length; i++) {
+            data.append('file', this.state.selectedFile[i]);
         }
 
-        fetch('/upload/attachment', {
+        for (var key of data.entries()) {
+            console.log(key[0] + ', ' + key[1]);
+        }
+        
+        const id = this.props.appProps.match.params.id;
+
+        fetch(`/ticket/details/upload/attachment/${id}`, {
             method: 'POST',
-            body: formData
+            body: data
         })
-            .then((response) => {
-                response.json();
-            })
             .then((data) => {
                 console.log('Success:', data);
             })
@@ -300,15 +301,15 @@ class TicketDetails extends Component {
                         }
 
                         {/* ADD ATTACHMENT FORM */}
-                        {/* <Form onSubmit={this.handleAttachmentSubmit}>
-                            <Form.Group controlId="formBasicPassword">
+                        <Form onSubmit={this.handleAttachmentSubmit}>
+                            <Form.Group>
                                 <Form.Label>Attachments:</Form.Label>
-                                <Form.Control type="file" placeholder="files" onChange={this.handleUpload} />
+                                <Form.Control type="file" placeholder="files" multiple onChange={this.handleUpload} />
                             </Form.Group>
                             <Button variant="primary" type="submit">
                                 Submit
                             </Button>
-                        </Form> */}
+                        </Form>
 
                         <br />
 

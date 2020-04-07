@@ -5,6 +5,34 @@ const port = 8080
 const db = require('./queries')
 const path = require('path');
 
+// var multer = require('multer');
+// var cors = require('cors');
+
+// var storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, 'public')
+//     },
+//     filename: function (req, file, cb) {
+//         cb(null, Date.now() + '-' + file.originalname)
+//     }
+// })
+
+// var upload = multer({ storage: storage }).array('file')
+
+// app.post('/upload',function(req, res) {
+     
+//     upload(req, res, function (err) {
+//            if (err instanceof multer.MulterError) {
+//                return res.status(500).json(err)
+//            } else if (err) {
+//                return res.status(500).json(err)
+//            }
+//       return res.status(200).send(req.file)
+
+//     })
+
+// });
+
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.use(bodyParser.json())
@@ -37,7 +65,6 @@ app.get('/projects/all', db.getAllProjects);
 app.post('/tickets/create', db.createTicket);
 
 app.get('/admin/tickets/details/:id', db.getTicketByID);
-// app.post('/upload/attachment', db.addAttachment);
 app.post('/edit/ticket/:id', db.editTicket);
 
 app.post('/ticket/details/priority/:id', db.updatePriority);
@@ -46,6 +73,7 @@ app.get('/ticket/details/comments/:id', db.getCommentsByID);
 app.post('/ticket/details/comment/add/:id', db.addComment);
 app.post('/ticket/details/comment/edit/:comment_id', db.editComment);
 app.post('/ticket/details/comments/delete/:id', db.deleteCommentByID);
+app.post('/ticket/details/upload/attachment/:id', db.uploadFile);
 
 
 app.listen(port, () => {
