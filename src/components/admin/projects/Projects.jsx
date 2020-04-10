@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Container } from 'react-bootstrap';
+import { Row, Col, Container, Card } from 'react-bootstrap';
 import CreateProjectModal from '../../modal/CreateProjectModal';
 import '../../../styles/ProjectStyle.css';
 
@@ -12,39 +12,35 @@ class Projects extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            projects: [
-                {
-                    title: 'first project',
-                    activeTickets: 10,
-                    desc: 'this is the project 1s description',
-                    count: 1
-                },
-                {
-                    title: 'second project',
-                    activeTickets: 10,
-                    desc: 'this is the project 2s description',
-                    count: 2
-                },
-                {
-                    title: 'third project',
-                    activeTickets: 10,
-                    desc: 'this is the project 3s description',
-                    count: 3
-                },
-                {
-                    title: 'fourth project',
-                    activeTickets: 10,
-                    desc: 'this is the project 4s description',
-                    count: 4
-                },
-                {
-                    title: 'fifth project',
-                    activeTickets: 10,
-                    desc: 'this is the project 5s description',
-                    count: 5
-                }
-            ]
+            show: false,
+            activeProjects: [],
         }
+    }
+
+    handleShow = () => {
+        this.setState({
+            show: true
+        })
+    }
+
+    handleClose = () => {
+        this.setState({
+            show: false
+        })
+    }
+
+    componentDidMount() {
+
+        fetch('/projects/active/tickets')
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data);
+                this.setState({
+                    activeProjects: data
+                })
+            })
     }
 
     render() {
@@ -55,26 +51,29 @@ class Projects extends Component {
                         <h1>All Projects</h1>
                     </Col>
                     <Col xs={6} sm={6} md={6} lg={6} className='create-project'>
-                        <CreateProjectModal />
+                        <button onClick={this.handleShow}>Create New <i className='fa fa-plus-circle nav-icon' /></button>
+                        <CreateProjectModal
+                            show={this.state.show}
+                            handleClose={this.handleClose}
+                        />
                     </Col>
                 </Row>
-                <Container fluid='true'>
-                    <Row className='project-row'>
-                        {
-                            this.state.projects.map((project, key) => {
-                                return (
-                                    <ProjectList
-                                        projects={this.state.projects}
-                                        title={project.title}
-                                        activeTickets={project.activeTickets}
-                                        desc={project.desc}
-                                        count={project.count}
-                                    />
-                                );
-                            })
-                        }
-                    </Row>
-                </Container>
+                <Row className='project-row'>
+                    {
+                        this.state.activeProjects.map((project, key) => {
+                            return (
+                                <ProjectList
+                                    projects={this.state.projects}
+                                    project_id={project.project_id}
+                                    title={project.title}
+                                    activeTickets={project.activetickets}
+                                    description={project.description}
+                                    key={key}
+                                />
+                            );
+                        })
+                    }
+                </Row>
             </Container>
         );
     }
@@ -83,19 +82,19 @@ class Projects extends Component {
 class ProjectList extends React.Component {
     render() {
         return (
-            <Col xs={12} sm={6} md={6} lg={3} className='project-block'>
-                <Col xs={12} sm={12} md={12} lg={12}>
-                    <h3>{this.props.title}</h3>
-                </Col>
-                <Col xs={12} sm={12} md={12} lg={12}>
-                    <p><b>{this.props.activeTickets}</b> Active Tickets</p>
-                </Col>
-                <Col xs={12} sm={12} md={12} lg={12}>
-                    <p>{this.props.desc}</p>
-                </Col>
-                <Col xs={12} sm={12} md={12} lg={12} className='more-info'>
-                    <a href="/Projects/Details/1" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </Col>
+            <Col md='auto' className='project-col'>
+                <Card style={{ width: '18rem' }}>
+                    <Card.Header>{this.props.title}</Card.Header>
+                    <Card.Body>
+                        <Card.Subtitle className="mb-2 text-muted">{this.props.activeTickets} Active Tickets</Card.Subtitle>
+                        <Card.Text>
+                            <p>
+                                {this.props.description.length > 200 ? this.props.description.slice(0, 200) : this.props.description}
+                            </p>
+                        </Card.Text>
+                        <Card.Link href={`/admin/projects/details/${this.props.project_id}`}>More Info <i className="fas fa-arrow-circle-right"></i></Card.Link>
+                    </Card.Body>
+                </Card>
             </Col>
         );
     }

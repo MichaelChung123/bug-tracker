@@ -51,11 +51,12 @@ app.get('/', (request, response) => {
 app.get('/admin/tickets/all', db.getTickets)
 app.get('/admin/dashboard', db.getDashboardContent)
 
-app.post('/admin/projects/all', db.createProject)
+app.post('/admin/projects/create', db.createProject)
 app.get('/admin/projects/details/:id', db.getProjectByID)
 app.get('/admin/projects/details/tickets/:id', db.getTicketsByProjectID);
 app.get('/admin/projects/details/users/:id', db.getUsersByProjectID);
-app.get('/admin/users', db.getUsers);
+app.get('/admin/users/all', db.getUsers);
+app.get('/projects/active/tickets', db.getActiveTickets);
 
 app.post('/admin/projects/details/select/user/:id', db.assignUserToProject);
 app.get('/admin/user/:id', db.getUserByID);
@@ -75,6 +76,7 @@ app.post('/ticket/details/comment/edit/:comment_id', db.editComment);
 app.post('/ticket/details/comments/delete/:id', db.deleteCommentByID);
 app.post('/ticket/details/upload/attachment/:id', db.uploadFile);
 
+app.post('/admin/projects/edit/:id', db.editProject);
 
 app.listen(port, () => {
     console.log(`App running on port ${port}.`);

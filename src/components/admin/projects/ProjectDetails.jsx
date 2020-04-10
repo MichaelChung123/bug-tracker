@@ -2,7 +2,7 @@ import React, { Component, useState, useEffect } from 'react';
 import { Row, Col, Container, Accordion, Card, Button, Table, Form, FormControl } from 'react-bootstrap';
 import '../../../styles/ProjectDetailstyle.css';
 import AssignUsersModal from '../../modal/AssignUsersModal';
-
+import EditProjectModal from '../../modal/EditProjectModal';
 /* 
     how to connect to database:
     1. psql -d bugtrackerdb -U me
@@ -15,6 +15,9 @@ class ProjectDetails extends Component {
             assignedUsers: [],
             title: '',
             description: '',
+            showEditProject: false,
+            editTitle: '',
+            editDesc: '',
             projItems: [
                 {
                     color: '#dc3545',
@@ -31,7 +34,10 @@ class ProjectDetails extends Component {
                     name: 'Developers',
                     icon: 'fas fa-laptop'
                 }
-            ]
+            ],
+            ticketDesc: 0,
+            managerDesc: '',
+            developersDesc: ''
         }
     }
 
@@ -45,12 +51,93 @@ class ProjectDetails extends Component {
                 return response.json();
             })
             .then((data) => {
+                let devCount = 0;
+
+                for (let user of data) {
+                    if (user.role === 'Manager') {
+                        this.setState({
+                            managerDesc: user.firstname + ' ' + user.lastname
+                        })
+                    } else if (user.role === 'Developer') {
+                        devCount++;
+                    }
+                }
+
                 this.setState({
-                    assignedUsers: data
+                    assignedUsers: data,
+                    developersDesc: devCount
                 })
             })
     }
 
+    setTicketDesc = (count) => {
+        this.setState({
+            ticketDesc: count
+        })
+    }
+
+    handleEditProject = () => {
+        this.setState({
+            showEditProject: true
+        })
+    }
+
+    handleClose = () => {
+        this.setState({
+            showEditProject: false
+        })
+    }
+
+    handleChange = (e) => {
+        let value = e.target.value;
+        let name = e.target.name;
+
+        if (name === 'title') {
+            this.setState({
+                editTitle: value
+            })
+        } else if (name === 'description') {
+            this.setState({
+                editDesc: value
+            })
+        }
+    }
+
+
+    handleEditProjectSubmit = (e) => {
+        e.preventDefault();
+
+        const id = this.props.appProps.match.params.id;
+
+        let editDesc = this.state.editDesc.replace("'", "''");
+        let editTitle = this.state.editTitle.replace("'", "''");
+
+        this.setState({
+            title: this.state.editTitle,
+            description: this.state.editDesc,
+        })
+
+        let data = {
+            title: editTitle,
+            description: editDesc
+        }
+
+        // Edit title and description values in db
+        fetch(`/admin/projects/edit/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            })
+    }
 
     componentDidMount() {
         const id = this.props.appProps.match.params.id;
@@ -64,9 +151,10 @@ class ProjectDetails extends Component {
 
                 this.setState({
                     title,
-                    description
+                    description,
+                    editTitle: title,
+                    editDesc: description
                 })
-
             })
     }
 
@@ -74,10 +162,34 @@ class ProjectDetails extends Component {
         return (
             <Container fluid='true'>
                 <Row className='project-title'>
-                    <Col xs={6} sm={6} md={6} lg={6}>
-                        <h1><i className='fas fa-edit' />{this.state.title}</h1>
+                    <Col xs='auto' sm='auto' md='auto' lg='auto'>
+                        <h1><a><i className='fas fa-edit' onClick={this.handleEditProject} /></a>{this.state.title}</h1>
+                        <EditProjectModal
+                            showEditProject={this.state.showEditProject}
+                            title={this.state.title}
+                            description={this.state.description}
+                            editTitle={this.state.editTitle}
+                            editDesc={this.state.editDesc}
+
+                            handleEditProject={this.handleEditProject}
+                            handleClose={this.handleClose}
+                            handleChange={this.handleChange}
+                            handleEditProjectSubmit={this.handleEditProjectSubmit}
+                        />
                     </Col>
                 </Row>
+
+                <Card>
+                    <Card.Body>
+                        <Card.Title>Description</Card.Title>
+                        <Card.Text>
+                            {this.state.description}
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+
+                <br />
+
                 <Row className='block-row'>
 
                     <AssignUsersModal
@@ -93,6 +205,9 @@ class ProjectDetails extends Component {
                                     color={projItem.color}
                                     name={projItem.name}
                                     icon={projItem.icon}
+                                    ticketDesc={this.state.ticketDesc}
+                                    managerDesc={this.state.managerDesc}
+                                    developersDesc={this.state.developersDesc}
                                     key={key}
                                 />
                             );
@@ -112,6 +227,7 @@ class ProjectDetails extends Component {
                     parentProps={this.props}
                     assignedUsers={this.state.assignedUsers}
                     checkAssignedUsers={this.checkAssignedUsers}
+                    setTicketDesc={this.setTicketDesc}
                 />
 
             </Container>
@@ -125,11 +241,15 @@ const ProjectBlocks = (props) => {
     return (
         <Col xs={3} sm={3} md={3} lg={3}>
             <Row className='ptu-box'>
-                <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: color }} className='ptu-icon'>
+                <Col xs='3' sm='3' md='3' lg='3' style={{ backgroundColor: color }} className='ptu-icon'>
                     <i className={icon} />
                 </Col>
-                <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                <Col xs='9' sm='9' md='9' lg='9' className='ptu-info'>
                     {name}
+                    <br />
+                    {name === 'Tickets' ? props.ticketDesc : ''}
+                    {name === 'Manager' ? props.managerDesc : ''}
+                    {name === 'Developers' ? props.developersDesc : ''}
                 </Col>
             </Row>
         </Col>
@@ -142,10 +262,11 @@ const UserAccordion = (props) => {
     }, []); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
 
     return (
+
         <Accordion defaultActiveKey="0">
             <Card className='user-card'>
                 <Card.Header>
-                    <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                    <Accordion.Toggle as={Card.Title} variant="link" eventKey="0">
                         Users
                     </Accordion.Toggle>
                 </Card.Header>
@@ -222,6 +343,7 @@ const TicketAccordion = (props) => {
             })
             .then((data) => {
                 setTickets(data);
+                props.setTicketDesc(data.length);
             })
     }, []); // passing an empty array as second argument triggers the callback in useEffect only after the initial render thus replicating `componentDidMount` lifecycle behaviour
 
@@ -229,7 +351,7 @@ const TicketAccordion = (props) => {
         <Accordion defaultActiveKey="0">
             <Card className='ticket-card'>
                 <Card.Header>
-                    <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                    <Accordion.Toggle as={Card.Title} variant="link" eventKey="0">
                         Tickets
                     </Accordion.Toggle>
                 </Card.Header>

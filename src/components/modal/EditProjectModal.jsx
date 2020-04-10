@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-class EditTicketModal extends Component {
+class EditProjectModal extends Component {
     constructor(props) {
         super(props);
     }
@@ -9,24 +9,22 @@ class EditTicketModal extends Component {
     render() {
         return (
             <>
-                <Modal show={this.props.showEdit} onHide={this.props.handleClose}>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Edit Ticket</Modal.Title>
-                        </Modal.Header>
-                    <Form onSubmit={this.props.handleEditSubmit}>
+                <Modal show={this.props.showEditProject} onHide={this.props.handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Edit Project</Modal.Title>
+                    </Modal.Header>
+                    <Form onSubmit={this.props.handleEditProjectSubmit}>
                         <Modal.Body>
                             <Form.Group>
                                 <Form.Label>
                                     Title
                                 </Form.Label>
-                                <Form.Control type="text" name='title' defaultValue={this.props.ticketTitle} onChange={this.props.handleEditTitle} />
-
+                                <Form.Control type="text" name='title' defaultValue={this.props.editTitle} onChange={this.props.handleChange} />
                                 <br />
-
                                 <Form.Label>
                                     Description
-                                    </Form.Label>
-                                <Form.Control as="textarea" rows="3" defaultValue={this.props.description} onChange={this.props.handleEditDesc} />
+                                </Form.Label>
+                                <Form.Control as="textarea" rows="3" name='description' defaultValue={this.props.editDesc} onChange={this.props.handleChange} />
                             </Form.Group>
                         </Modal.Body>
                         <Modal.Footer>
@@ -42,4 +40,4 @@ class EditTicketModal extends Component {
 }
 
 
-export default EditTicketModal;
+export default EditProjectModal;

@@ -32,10 +32,10 @@ function AssignUsersModal(props) {
         <>
             <Col xs={3} sm={3} md={3} lg={3}>
                 <Row onClick={handleShow} className='ptu-box'>
-                    <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: '#007bff' }} className='ptu-icon'>
+                    <Col xs='3' sm='3' md='3' lg='3' style={{ backgroundColor: '#007bff' }} className='ptu-icon'>
                         <i className='fas fa-user-plus' />
                     </Col>
-                    <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                    <Col xs='9' sm='9' md='9' lg='9' className='ptu-info'>
                         Manage Users
                     </Col>
                 </Row>
@@ -139,7 +139,7 @@ const UserAccordions = (props) => {
     }
 
     useEffect(() => {
-        fetch(`/admin/users`)
+        fetch(`/admin/users/all`)
             .then((response) => {
                 return response.json();
             })

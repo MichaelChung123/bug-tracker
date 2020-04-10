@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Container, Table, Form, FormControl, Button, Pagination } from 'react-bootstrap';
 import '../../../styles/TicketStyle.css';
-
+import Page from '../../Page';
 /* 
     how to connect to database:
     1. psql -d bugtrackerdb -U me
@@ -94,6 +94,7 @@ class Tickets extends Component {
     }
 
     render() {
+        console.log('items: ', this.state.items);
         return (
             <Container className='all-tickets-container'>
                 <Row className='tickets-title'>
@@ -175,21 +176,6 @@ class TicketListRow extends React.Component {
                 <td>{this.props.updatedDate}</td>
                 <td>{this.props.createdDate}</td>
             </tr>
-        );
-    }
-}
-
-class Page extends React.Component {
-    handleClick = () => {
-        const { number, pageClick } = this.props;
-        pageClick(number);
-    }
-
-    render() {
-        return (
-            <Pagination.Item key={this.props.number} onClick={this.handleClick} active={this.props.number === this.props.activePage}>
-                {this.props.number}
-            </Pagination.Item>
         );
     }
 }

@@ -5,10 +5,8 @@ import { ListGroup, Row, Col, Container, Accordion, Card, Button, Table, Form, F
 import AssignUsersModal from '../../../modal/AssignUsersModal';
 import SideActions from './SideActions';
 import UploadModal from '../../../modal/UploadModal';
-import DownloadModal from '../../../modal/DownloadModal';
 import EditTicketModal from '../../../modal/EditTicketModal';
 import TicketComments from './TicketComments';
-
 /* 
     how to connect to database:
     1. psql -d bugtrackerdb -U me
@@ -34,6 +32,8 @@ class TicketDetails extends Component {
             editTitleVal: '',
             editDescVal: '',
             show: false,
+            showUpload: false,
+            showEdit: false,
             sideActions: [
                 {
                     title: 'Priority',
@@ -150,6 +150,8 @@ class TicketDetails extends Component {
         })
     }
 
+
+
     handleAttachmentSubmit = (e) => {
         e.preventDefault();
         console.log('submitting attachment');
@@ -163,7 +165,7 @@ class TicketDetails extends Component {
         for (var key of data.entries()) {
             console.log(key[0] + ', ' + key[1]);
         }
-        
+
         const id = this.props.appProps.match.params.id;
 
         fetch(`/ticket/details/upload/attachment/${id}`, {
@@ -180,14 +182,21 @@ class TicketDetails extends Component {
 
     handleClose = () => {
         this.setState({
-            show: false
+            showUpload: false,
+            showEdit: false
         })
     }
 
-    handleOpen = () => {
-        this.setState({
-            show: true
-        })
+    handleOpen = (title) => {
+        if (title === 'upload') {
+            this.setState({
+                showUpload: true
+            })
+        } else if (title === 'edit') {
+            this.setState({
+                showEdit: true
+            })
+        }
     }
 
     handleEditTitle = (e) => {
@@ -301,20 +310,27 @@ class TicketDetails extends Component {
                         }
 
                         {/* ADD ATTACHMENT FORM */}
-                        <Form onSubmit={this.handleAttachmentSubmit}>
-                            <Form.Group>
-                                <Form.Label>Attachments:</Form.Label>
-                                <Form.Control type="file" placeholder="files" multiple onChange={this.handleUpload} />
-                            </Form.Group>
-                            <Button variant="primary" type="submit">
-                                Submit
-                            </Button>
-                        </Form>
+                        <Row onClick={() => this.handleOpen('upload')} className='ptu-box side-action-box'>
+                            <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: '#ffc107' }} className='ptu-icon'>
+                                <i className="fas fa-upload" />
+                            </Col>
+                            <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                                Upload
+                                <br />
+                                Attachments
+                            </Col>
+                        </Row>
+                        <UploadModal
+                            showUpload={this.state.showUpload}
+                            handleClose={this.handleClose}
+                            handleAttachmentSubmit={this.handleAttachmentSubmit}
+                            handleUpload={this.handleUpload}
+                        />
 
                         <br />
 
                         {/* EDIT TICKET BLOCK */}
-                        <Row onClick={this.handleOpen} className='ptu-box side-action-box'>
+                        <Row onClick={() => this.handleOpen('edit')} className='ptu-box side-action-box'>
                             <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: '#dc3545' }} className='ptu-icon'>
                                 <i className='fas fa-edit' />
                             </Col>
@@ -323,13 +339,12 @@ class TicketDetails extends Component {
                             </Col>
                         </Row>
                         <EditTicketModal
-                            show={this.state.show}
+                            showEdit={this.state.showEdit}
                             ticketTitle={this.state.ticketTitle}
                             description={this.state.description}
                             editTitleVal={this.state.editTitleVal}
                             editDescVal={this.state.editDescVal}
 
-                            handleShow={this.handleShow}
                             handleClose={this.handleClose}
                             handleEditTitle={this.handleEditTitle}
                             handleEditDesc={this.handleEditDesc}

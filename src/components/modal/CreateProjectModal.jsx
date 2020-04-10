@@ -2,13 +2,9 @@ import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../../styles/ProjectStyle.css';
 
-function CreateProjectModal() {
-    const [show, setShow] = useState(false);
+function CreateProjectModal({show, handleClose}) {
     const [title, setTitle] = useState('');
     const [desc, setDesc] = useState('');
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
 
     const handleTitle = (e) => {
         setTitle(e.target.value);
@@ -21,12 +17,15 @@ function CreateProjectModal() {
     const handleSubmit = (event) => {
         event.preventDefault();
 
+        let formatedTitle = title.replace("'", "''");
+        let formatedDescription = desc.replace("'", "''");
+
         const data = {
-            title: title,
-            description: desc
+            title: formatedTitle,
+            description: formatedDescription
         }
 
-        fetch('/admin/projects/all', {
+        fetch('/admin/projects/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -44,8 +43,6 @@ function CreateProjectModal() {
 
     return (
         <>
-            <button onClick={handleShow}>Create New <i className='fa fa-plus-circle nav-icon' /></button>
-
             <Modal show={show} onHide={handleClose}>
                 <Form onSubmit={handleSubmit}>
                     <Modal.Header closeButton>

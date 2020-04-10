@@ -21,12 +21,18 @@ const getTickets = (req, res) => {
 }
 
 const getDashboardContent = (req, res) => {
-    pool.query('SELECT * FROM tickets', (error, results) => {
-        if (error) {
-            throw error
-        }
-        res.json(results.rows);
-    })
+    pool.query(`
+    (SELECT COUNT(*) AS count_ptu FROM projects)
+    UNION ALL
+    (SELECT COUNT(*) AS count_tickets FROM tickets)
+    UNION ALL
+    (SELECT COUNT(*) AS count_users FROM users)`,
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            res.json(results.rows);
+        })
 }
 
 const createProject = (request, response) => {
@@ -157,6 +163,21 @@ const getAllProjects = (request, response) => {
     })
 }
 
+const getActiveTickets = (request, response) => {
+    pool.query(`
+    SELECT projects.*, 
+        (SELECT COUNT(*) 
+        FROM tickets 
+        WHERE tickets.project_id = projects.project_id) AS activeTickets 
+        FROM projects
+    `, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(201).send(results.rows);
+    })
+}
+
 const createTicket = (request, response) => {
     const {
         selectedProject,
@@ -193,21 +214,6 @@ const getTicketByID = (request, response) => {
         }
         response.status(200).json(results.rows)
     })
-}
-
-const addAttachment = (request, response) => {
-    console.log('request: ', request.body);
-    // pool.query(`
-    //     INSERT INTO attachments (name, file, ticket_id)
-    //     VALUES('test name', E'\\001', 7)`,
-    //     (error, results) => {
-    //         if (error) {
-    //             throw error
-    //         }
-    //         response.status(200).json(results.rows);
-    //     }
-    // )
-
 }
 
 
@@ -341,7 +347,7 @@ const uploadFile = (req, res) => {
             cb(null, 'public')
         },
         filename: function (req, file, cb) {
-            console.log(file)
+            // console.log(file)
             cb(null, Date.now() + '-' + file.originalname)
         }
     })
@@ -356,11 +362,29 @@ const uploadFile = (req, res) => {
         } else if (err) {
             return res.status(500).json(err)
         }
-        return res.status(200).send(req.file)
 
+        return res.status(200).send(req.file)
     })
 }
 
+const editProject = (req, res) => {
+    let id = parseInt(req.params.id);
+    const {title, description} = req.body;
+
+    pool.query(`
+        UPDATE projects
+        SET title='${title}',
+        description='${description}'
+        WHERE project_id=${id}
+    `,
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            res.status(201).json(`Project edited`)
+        })
+
+}
 
 module.exports = {
     getTickets,
@@ -374,17 +398,18 @@ module.exports = {
     getUserByID,
     deleteUserFromProject,
     getAllProjects,
+    getActiveTickets,
     createTicket,
     getTicketByID,
     editTicket,
-    addAttachment,
     updatePriority,
     updateType,
     getCommentsByID,
     addComment,
     editComment,
     deleteCommentByID,
-    uploadFile
+    uploadFile,
+    editProject
 }
 
 // const Pool = require('pg').Pool

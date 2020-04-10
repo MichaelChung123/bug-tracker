@@ -4,6 +4,7 @@ import { BrowserRouter as Link, withRouter } from "react-router-dom";
 import { Row, Col, Container, Image, Accordion, Card } from 'react-bootstrap';
 import SidebarLogo from './de_bug-logo.png';
 import UserIcon from './default-user.jpg';
+import CreateProjectModal from '../../components/modal/CreateProjectModal';
 import '../../styles/SideBarStyle.css';
 
 const SideNavStyle = {
@@ -244,9 +245,6 @@ class NavItem extends React.Component {
                                                             <i className={subItem.css} />
                                                         </Col>
                                                         <Col xs={10} sm={10} md={10} lg={10}>
-                                                            {/* <Link to={subItem.path} onClick={this.handleClick}>
-                                                                {subItem.name}
-                                                            </Link> */}
                                                             <a href={subItem.path} onClick={this.handleClick}>
                                                                 {subItem.name}
                                                             </a>
@@ -266,9 +264,6 @@ class NavItem extends React.Component {
                                         <i className={this.props.css} />
                                     </Col>
                                     <Col xs={10} sm={10} md={10} lg={10}>
-                                        {/* <Link to={this.props.path} onClick={this.handleClick}>
-                                            {this.props.name}
-                                        </Link> */}
                                         <a href={this.props.path} onClick={this.handleClick}>
                                             {this.props.name}
                                         </a>
@@ -284,28 +279,46 @@ class NavItem extends React.Component {
 
 
 class NavAction extends React.Component {
-    handleClick = () => {
-        const { path, onItemClick } = this.props;
-        onItemClick(path);
+    constructor(props) {
+        super(props);
+        this.state = {
+            show: false
+        }
+    }
+
+    handleOpen = () => {
+        this.setState({
+            show: true
+        })
+    }
+
+    handleClose = () => {
+        this.setState({
+            show: false
+        })
     }
 
     render() {
         return (
-            <Container className='action-container' style={this.props.color} >
-                <Row>
-                    <Col xs={1} sm={1} md={1} lg={1}>
-                        <i className={this.props.css} />
-                    </Col>
-                    <Col xs={10} sm={10} md={10} lg={10}>
-                        {/* <Link to={this.props.path} onClick={this.handleClick}>
-                            {this.props.name}
-                        </Link> */}
-                        <a href={this.props.path} onClick={this.handleClick}>
-                            {this.props.name}
-                        </a>
-                    </Col>
-                </Row>
-            </Container>
+            <>
+                <Container className='action-container' onClick={this.handleOpen} style={this.props.color} >
+                    <Row>
+                        <Col xs={1} sm={1} md={1} lg={1}>
+                            <i className={this.props.css} />
+                        </Col>
+                        <Col xs={10} sm={10} md={10} lg={10}>
+                            <p>
+                                {this.props.name}
+                            </p>
+                        </Col>
+                    </Row>
+                </Container>
+
+                <CreateProjectModal
+                    show={this.state.show}
+                    handleClose={this.handleClose}
+                />
+            </>
         );
     }
 }

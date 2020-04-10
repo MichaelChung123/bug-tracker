@@ -136,8 +136,7 @@ body {
     border: white;
 }
 
-.action-container a {
-    text-decoration: none;
+.action-container p {
     color: white;
 }
 

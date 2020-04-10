@@ -119,7 +119,7 @@ const TicketComments = (props) => {
             <Card>
                 <Card.Header>
                     <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                        Username
+                        Demo Admin
                     </Accordion.Toggle>
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
@@ -139,6 +139,7 @@ const TicketComments = (props) => {
                     </Card.Body>
                 </Accordion.Collapse>
             </Card>
+            <Card />
         </Accordion>
     )
 }
@@ -154,7 +155,7 @@ const Description = ({ description }) => {
                             {' '}{description}{' '}
                         </p>
                         <footer className="blockquote-footer">
-                            Username
+                            Demo Admin
                     </footer>
                     </blockquote>
                 </Card.Body>
