@@ -29,6 +29,11 @@ class Projects extends Component {
         })
     }
 
+    // Handles the redirect onClick
+    handleRedirect = (path) => {
+        this.props.history.push(path);
+    }
+
     componentDidMount() {
 
         fetch('/projects/active/tickets')
@@ -47,14 +52,15 @@ class Projects extends Component {
         return (
             <Container className='all-projects-container'>
                 <Row className='projects-title'>
-                    <Col xs={6} sm={6} md={6} lg={6}>
+                    <Col xs={12} sm={12} md={7} lg={6}>
                         <h1>All Projects</h1>
                     </Col>
-                    <Col xs={6} sm={6} md={6} lg={6} className='create-project'>
+                    <Col xs={7} sm={12} md={5} lg={6} className='create-project'>
                         <button onClick={this.handleShow}>Create New <i className='fa fa-plus-circle nav-icon' /></button>
                         <CreateProjectModal
                             show={this.state.show}
                             handleClose={this.handleClose}
+                            handleRedirect={this.handleRedirect}
                         />
                     </Col>
                 </Row>
@@ -82,17 +88,19 @@ class Projects extends Component {
 class ProjectList extends React.Component {
     render() {
         return (
-            <Col md='auto' className='project-col'>
+            <Col xs={12} sm={6} md={6} lg={4} className='project-col'>
                 <Card style={{ width: '18rem' }}>
                     <Card.Header>{this.props.title}</Card.Header>
-                    <Card.Body>
-                        <Card.Subtitle className="mb-2 text-muted">{this.props.activeTickets} Active Tickets</Card.Subtitle>
+                    <Card.Body className='projects-cards-content'>
+                        <Card.Subtitle className="mb-2 text-muted item">{this.props.activeTickets} Active Tickets</Card.Subtitle>
                         <Card.Text>
                             <p>
-                                {this.props.description.length > 200 ? this.props.description.slice(0, 200) : this.props.description}
+                                {this.props.description.length > 200 ? this.props.description.slice(0, 200) + ' ...' : this.props.description}
                             </p>
                         </Card.Text>
-                        <Card.Link href={`/admin/projects/details/${this.props.project_id}`}>More Info <i className="fas fa-arrow-circle-right"></i></Card.Link>
+                        <div className='more-info-container'>
+                            <Card.Link href={`/admin/projects/details/${this.props.project_id}`} className='item'>More Info <i className="fas fa-arrow-circle-right"></i></Card.Link>
+                        </div>
                     </Card.Body>
                 </Card>
             </Col>

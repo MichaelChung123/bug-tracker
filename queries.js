@@ -192,8 +192,6 @@ const createTicket = (request, response) => {
         lastUpdatedTime
     } = request.body;
 
-    console.log(request.body);
-
     pool.query(`
     INSERT INTO tickets (ticket_id, title, creator, priority, type, status, lastupdated, createddate, description, createdtime, lastupdatedtime) 
     VALUES ( DEFAULT, '${ticketTitle}', '${creator}', '${selectedPriority}', '${selectedType}', 'Open', '${lastUpdated}', '${createdDate}', '${ticketDescription}', '${createdTime}', '${lastUpdatedTime}')`,
@@ -369,7 +367,10 @@ const uploadFile = (req, res) => {
 
 const editProject = (req, res) => {
     let id = parseInt(req.params.id);
-    const {title, description} = req.body;
+    const {
+        title,
+        description
+    } = req.body;
 
     pool.query(`
         UPDATE projects
@@ -383,8 +384,24 @@ const editProject = (req, res) => {
             }
             res.status(201).json(`Project edited`)
         })
-
 }
+
+const getNewestProjectID = (request, response) => {
+    // const id = parseInt(request.params.id);
+
+    pool.query(`
+        SELECT project_id 
+        FROM projects 
+        WHERE project_id = (SELECT MAX(project_id) FROM projects)`,
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.json(results.rows)
+        })
+}
+
+
 
 module.exports = {
     getTickets,
@@ -409,7 +426,8 @@ module.exports = {
     editComment,
     deleteCommentByID,
     uploadFile,
-    editProject
+    editProject,
+    getNewestProjectID
 }
 
 // const Pool = require('pg').Pool

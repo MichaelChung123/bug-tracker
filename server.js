@@ -48,11 +48,11 @@ app.get('/', (request, response) => {
     });
 });
 
-app.get('/admin/tickets/all', db.getTickets)
-app.get('/admin/dashboard', db.getDashboardContent)
+app.get('/admin/tickets/all', db.getTickets);
+app.get('/admin/dashboard', db.getDashboardContent);
 
-app.post('/admin/projects/create', db.createProject)
-app.get('/admin/projects/details/:id', db.getProjectByID)
+app.post('/admin/projects/create', db.createProject);
+app.get('/admin/projects/details/:id', db.getProjectByID);
 app.get('/admin/projects/details/tickets/:id', db.getTicketsByProjectID);
 app.get('/admin/projects/details/users/:id', db.getUsersByProjectID);
 app.get('/admin/users/all', db.getUsers);
@@ -77,7 +77,7 @@ app.post('/ticket/details/comments/delete/:id', db.deleteCommentByID);
 app.post('/ticket/details/upload/attachment/:id', db.uploadFile);
 
 app.post('/admin/projects/edit/:id', db.editProject);
-
+app.get('/admin/projects/newest', db.getNewestProjectID);
 app.listen(port, () => {
     console.log(`App running on port ${port}.`);
 })

@@ -160,14 +160,19 @@ class CreateTickets extends Component {
         })
     }
 
+    // Handles the redirect onClick
+    handleRedirect = (path) => {
+        this.props.history.push(path);
+    }
+
     handleSubmit = (event) => {
         event.preventDefault();
 
         let unformattedCreatedDate = moment().format();
         let unformattedLastUpdated = moment().format();
 
-        let createdDate = unformattedCreatedDate.substr(0, 10); 
-        let lastUpdated = unformattedLastUpdated.substr(0, 10); 
+        let createdDate = unformattedCreatedDate.substr(0, 10);
+        let lastUpdated = unformattedLastUpdated.substr(0, 10);
         let createdTime = unformattedCreatedDate.substr(11, 8);
         let lastUpdatedTime = unformattedLastUpdated.substr(11, 8);
 
@@ -202,7 +207,6 @@ class CreateTickets extends Component {
                 },
                 body: JSON.stringify(data),
             })
-                .then((response) => response.json())
                 .then((data) => {
                     console.log('Success: ', data);
                 })
@@ -257,6 +261,8 @@ class CreateTickets extends Component {
                             ticketTitle={this.state.ticketTitle}
                             ticketDescription={this.state.ticketDescription}
                             handleSubmit={this.handleSubmit}
+
+                            handleRedirect={this.handleRedirect}
                         />
                     </Col>
                 </Row>
@@ -327,10 +333,10 @@ const SideActions = ({ sideActions, setSelectedProject, setSelectedPriority, set
                     !projectSelected ?
                         <>
                             <Row ref={target} onClick={handleShow} className='ptu-box side-action-box'>
-                                <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: color }} className='ptu-icon'>
+                                <Col xs={3} sm={3} md={3} lg={3} style={{ backgroundColor: color }} className='ptu-icon'>
                                     <i className={iconClass} />
                                 </Col>
-                                <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                                <Col xs={9} sm={9} md={9} lg={9} className='ptu-info'>
                                     {title}
                                     <br />
                                     {description}
@@ -344,10 +350,10 @@ const SideActions = ({ sideActions, setSelectedProject, setSelectedPriority, set
                         </>
                         :
                         <Row style={{ backgroundColor: '#007bff', color: '#ffffff' }} onClick={handleShow} className='ptu-box side-action-box'>
-                            <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: color }} className='ptu-icon'>
+                            <Col xs={3} sm={3} md={3} lg={3} style={{ backgroundColor: color }} className='ptu-icon'>
                                 <i className='fas fa-check' />
                             </Col>
-                            <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                            <Col xs={9} sm={9} md={9} lg={9} className='ptu-info'>
                                 {title}
                                 <br />
                                 {selectedProject.title}
@@ -376,10 +382,10 @@ const SideActions = ({ sideActions, setSelectedProject, setSelectedPriority, set
                             :
                             <>
                                 <Accordion.Toggle ref={target} as={Row} eventKey="0" className='ptu-box side-action-box'>
-                                    <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: color }} className='ptu-icon'>
+                                    <Col xs={3} sm={3} md={3} lg={3} style={{ backgroundColor: color }} className='ptu-icon'>
                                         <i className={iconClass} />
                                     </Col>
-                                    <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                                    <Col xs={9} sm={9} md={9} lg={9} className='ptu-info'>
                                         {sideActions.title}
                                         <br />
                                         {description}
@@ -403,10 +409,10 @@ const SideActions = ({ sideActions, setSelectedProject, setSelectedPriority, set
 
                                     let selectedSubAction =
                                         <Accordion.Toggle onClick={sideActions.title === 'Priority' ? () => setSelectedPriority(title, newPriorityBox) : () => setSelectedType(title, newTypeBox)} key={key} as={Row} eventKey="0" className='ptu-box side-action-box'>
-                                            <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: color }} className='ptu-icon'>
+                                            <Col xs={3} sm={3} md={3} lg={3} style={{ backgroundColor: color }} className='ptu-icon'>
                                                 <i className={iconClass} />
                                             </Col>
-                                            <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                                            <Col xs={9} sm={9} md={9} lg={9} className='ptu-info'>
                                                 {title}
                                             </Col>
                                         </Accordion.Toggle>
@@ -435,10 +441,10 @@ const SideActions = ({ sideActions, setSelectedProject, setSelectedPriority, set
                             :
                             <>
                                 <Accordion.Toggle ref={target} as={Row} eventKey="0" className='ptu-box side-action-box'>
-                                    <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: color }} className='ptu-icon'>
+                                    <Col xs={3} sm={3} md={3} lg={3} style={{ backgroundColor: color }} className='ptu-icon'>
                                         <i className={iconClass} />
                                     </Col>
-                                    <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                                    <Col xs={9} sm={9} md={9} lg={9} className='ptu-info'>
                                         {sideActions.title}
                                         <br />
                                         {description}
@@ -462,10 +468,10 @@ const SideActions = ({ sideActions, setSelectedProject, setSelectedPriority, set
 
                                     let selectedSubAction =
                                         <Accordion.Toggle onClick={sideActions.title === 'Priority' ? () => setSelectedPriority(title, newPriorityBox) : () => setSelectedType(title, newTypeBox)} key={key} as={Row} eventKey="0" className='ptu-box side-action-box'>
-                                            <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: color }} className='ptu-icon'>
+                                            <Col xs={3} sm={3} md={3} lg={3} style={{ backgroundColor: color }} className='ptu-icon'>
                                                 <i className={iconClass} />
                                             </Col>
-                                            <Col xs='auto' sm='auto' md='auto' lg='auto' className='ptu-info'>
+                                            <Col xs={9} sm={9} md={9} lg={9} className='ptu-info'>
                                                 {title}
                                             </Col>
                                         </Accordion.Toggle>
@@ -488,15 +494,15 @@ const SideActions = ({ sideActions, setSelectedProject, setSelectedPriority, set
 }
 
 
-const TicketDetails = ({ showAlert, checkFields, handleTitleChange, handleDescriptionChange, ticketTitle, ticketDescription, handleSubmit }) => {
+const TicketDetails = ({ showAlert, checkFields, handleTitleChange, handleDescriptionChange, ticketTitle, ticketDescription, handleSubmit, handleRedirect }) => {
     const target = useRef(null);
 
     return (
         <Accordion defaultActiveKey="0">
             <Card>
                 <Card.Header>
-                    <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                        Username
+                    <Accordion.Toggle as={Card.Title} variant="link" eventKey="0">
+                        Demo Admin
                     </Accordion.Toggle>
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">

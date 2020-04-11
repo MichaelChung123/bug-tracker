@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { useHistory } from "react-router-dom";
 import '../../styles/ProjectStyle.css';
 
-function CreateProjectModal({show, handleClose}) {
+function CreateProjectModal({ show, handleClose, handleRedirect }) {
+
     const [title, setTitle] = useState('');
     const [desc, setDesc] = useState('');
 
@@ -32,13 +34,25 @@ function CreateProjectModal({show, handleClose}) {
             },
             body: JSON.stringify(data),
         })
-            .then((response) => response.json())
             .then((data) => {
                 console.log('Success:', data);
             })
+            .then(redirectNewProject())
             .catch((error) => {
-                console.error('Error:', error);
+                console.error('Error POST:', error);
             });
+    }
+
+    const redirectNewProject = () => {
+        fetch('/admin/projects/newest')
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                let id = data[0].project_id;
+                console.log('id: ', id);
+                handleRedirect(`/admin/projects/details/${id}`);
+            })
     }
 
     return (
@@ -65,10 +79,10 @@ function CreateProjectModal({show, handleClose}) {
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>
                             Cancel
-                    </Button>
+                        </Button>
                         <Button type='submit' variant="primary" onClick={handleClose}>
                             Save
-                    </Button>
+                        </Button>
                     </Modal.Footer>
                 </Form>
             </Modal>

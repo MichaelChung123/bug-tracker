@@ -58,14 +58,13 @@ function ProjectBlock({ project, setSelectedProject, handleClose }) {
                 onClick={() => {
                     setSelectedProject(project)
                     handleClose()
-                }
-                }
+                }}
             >
                 <Card.Header></Card.Header>
                 <Card.Body>
                     <Card.Title> {project.title} </Card.Title>
                     <Card.Text>
-                        {project.description}
+                        {project.description.length > 200 ? project.description.slice(0, 200) + ' ...' : project.description}
                     </Card.Text>
                 </Card.Body>
             </Card>

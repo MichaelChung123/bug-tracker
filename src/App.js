@@ -12,38 +12,37 @@ import CreateTickets from './components/admin/tickets/CreateTickets';
 import SideBar from './components/sidebar/Sidebar';
 import TopNav from './components/navbar/TopNav';
 import Dashboard from './components/admin/Dashboard';
+import ScrollToTop from './components/ScrollToTop';
 
 class App extends Component {
   render() {
     return (
       <Router>
+        <ScrollToTop>
+          <Route path='/admin'>
+            <Container fluid='true'>
+              <Row>
+                <Col style={{ paddingLeft: '0px', paddingRight: '0px' }} xs={3} sm={3} md={3} lg={3}>
+                  <SideBar />
+                </Col>
+                <Col style={{ paddingLeft: '0px' }} xs={9} sm={9} md={9} lg={9}>
+                  <TopNav />
+                  <Container className='main-content' fluid='true'>
+                    <Route path='/admin/dashboard' component={Dashboard} />
+                    <Route path='/admin/tickets/all' component={Tickets} />
+                    <Route path='/admin/tickets/create' component={CreateTickets} />
+                    <Route path='/admin/projects/all' component={Projects} />
+                    <Route exact path='/admin/projects/details/:id' component={(appProps) => <ProjectDetails appProps={appProps} />} />
+                    <Route exact path='/admin/tickets/details/:id' component={(appProps) => <TicketDetails appProps={appProps} />} />
+                  </Container>
+                </Col>
+              </Row>
+            </Container>
+          </Route>
 
-        <Route path='/admin'>
-          <Container fluid='true'>
-            <Row>
-              <Col style={{ paddingLeft: '0px', paddingRight: '0px' }} xs={3} sm={3} md={3} lg={3}>
-                <SideBar />
-              </Col>
-              <Col style={{ paddingLeft: '0px' }} xs={9} sm={9} md={9} lg={9}>
-                <TopNav />
-                <Container className='main-content' fluid='true'>
-                  <Route path='/admin/dashboard' component={Dashboard} />
-                  <Route path='/admin/tickets/all' component={Tickets} />
-                  <Route path='/admin/tickets/create' component={CreateTickets} />
-                  <Route path='/admin/projects/all' component={Projects} />
-                  <Route exact path='/admin/projects/details/:id' component={(appProps) => <ProjectDetails appProps={appProps} />} />
-                  <Route exact path='/admin/tickets/details/:id' component={(appProps) => <TicketDetails appProps={appProps} />} />
-                  {/* <Route path='/admin/projects/create' component={Projects} />
-                  <Route path='/admin/logout' component={Projects} /> */}
-                </Container>
-              </Col>
-            </Row>
-          </Container>
-        </Route>
-
-        <Route path='/' exact component={Login} />
-        <Route path='/demo-user' component={SelectDemoUser} />
-
+          <Route path='/' exact component={Login} />
+          <Route path='/demo-user' component={SelectDemoUser} />
+        </ScrollToTop>
       </Router>
     );
   }

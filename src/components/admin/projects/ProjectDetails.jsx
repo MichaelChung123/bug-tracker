@@ -241,10 +241,10 @@ const ProjectBlocks = (props) => {
     return (
         <Col xs={3} sm={3} md={3} lg={3}>
             <Row className='ptu-box'>
-                <Col xs='3' sm='3' md='3' lg='3' style={{ backgroundColor: color }} className='ptu-icon'>
+                <Col xs={3} sm={3} md={3} lg={3} style={{ backgroundColor: color }} className='ptu-icon'>
                     <i className={icon} />
                 </Col>
-                <Col xs='9' sm='9' md='9' lg='9' className='ptu-info'>
+                <Col xs={9} sm={9} md={9} lg={9} className='ptu-info'>
                     {name}
                     <br />
                     {name === 'Tickets' ? props.ticketDesc : ''}

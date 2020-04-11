@@ -58,35 +58,42 @@ class Tickets extends Component {
             })
             .then((data) => {
                 let count = 0;
-                let ticketsPerPage = 2;
+                let ticketsPerPage = 7;
                 let group = [];
 
-                for (let i = 0; i <= data.length - 1; i++) {
-                    // Formatting the date values to be more readable
-                    data[i].lastupdated = data[i].lastupdated.slice(0, 10);
-                    data[i].createddate = data[i].createddate.slice(0, 10);
-                    
-                    group.push(data[i]);
-                    count++;
 
-                    if (count >= ticketsPerPage) {
-                        count = 0;
-                        // loading first page's tickets
-                        if (this.state.tickets.length < 1) {
+                if (data.length < ticketsPerPage) {
+                    this.setState({
+                        currentTickets: data
+                    })
+                } else {
+                    for (let i = 0; i <= data.length - 1; i++) {
+                        // Formatting the date values to be more readable
+                        data[i].lastupdated = data[i].lastupdated.slice(0, 10);
+                        data[i].createddate = data[i].createddate.slice(0, 10);
+
+                        group.push(data[i]);
+                        count++;
+
+                        if (count >= ticketsPerPage) {
+                            count = 0;
+                            // loading first page's tickets
+                            if (this.state.tickets.length < 1) {
+                                this.setState({
+                                    currentTickets: [...group]
+                                });
+                            }
                             this.setState({
-                                currentTickets: [...group]
+                                tickets: [...this.state.tickets, group]
+                            });
+                            group = [];
+                        } else if (i === data.length - 1) {
+                            this.setState({
+                                tickets: [...this.state.tickets, group]
                             });
                         }
-                        this.setState({
-                            tickets: [...this.state.tickets, group]
-                        });
-                        group = [];
-                    } else if (i === data.length - 1) {
-                        this.setState({
-                            tickets: [...this.state.tickets, group]
-                        });
-                    }
 
+                    }
                 }
 
                 this.createPagination();

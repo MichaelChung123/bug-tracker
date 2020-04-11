@@ -1,7 +1,6 @@
 import React, { Component, useState, useEffect } from 'react';
 import moment from 'moment';
 import { ListGroup, Row, Col, Container, Accordion, Card, Button, Table, Form, FormControl, Pagination } from 'react-bootstrap';
-// import '../../../styles/TicketDetailstyle.css';
 import AssignUsersModal from '../../../modal/AssignUsersModal';
 import SideActions from './SideActions';
 import UploadModal from '../../../modal/UploadModal';

@@ -112,12 +112,8 @@ class Dashboard extends Component {
 
                 // Check if the amount of tickets reaches the amount per page
                 if (data.length < usersPerPage) {
-                    for (let user of data) {
-                        group.push(user);
-                    }
-
                     this.setState({
-                        currentUsers: group
+                        currentUsers: data
                     })
                 } else {
                     // Grouping entries from the database based off of how many entries 
@@ -160,13 +156,8 @@ class Dashboard extends Component {
 
                 // Check if the amount of tickets reaches the amount per page
                 if (data.length < ticketsPerPage) {
-                    for (let ticket of data) {
-                        console.log('loop: ', ticket);
-                        group.push(ticket);
-                    }
-
                     this.setState({
-                        currentTickets: group
+                        currentTickets: data
                     })
                 } else {
                     // // Grouping entries from the database based off of how many entries 
@@ -240,7 +231,7 @@ class Dashboard extends Component {
                     userItems={this.state.userItems}
                     currentUsers={this.state.currentUsers}
                     activeUserPage={this.state.activeUserPage}
-
+                    
                     pageClick={this.pageClick}
                 />
 
@@ -252,6 +243,7 @@ class Dashboard extends Component {
                     currentTickets={this.state.currentTickets}
                     activeTicketPage={this.state.activeTicketPage}
 
+                    handleRedirect={this.handleRedirect}
                     pageClick={this.pageClick}
                 />
             </Container>
@@ -262,7 +254,7 @@ class Dashboard extends Component {
 class PtuBlock extends React.Component {
     render() {
         return (
-            <Col xs={3} sm={3} md={3} lg={3} onClick={() => this.props.handleRedirect(this.props.path)}>
+            <Col xs={3} sm={3} md={3} lg={3} onClick={this.props.name === 'Users' ? null : () => this.props.handleRedirect(this.props.path)} className={this.props.name === 'Users' ? '' : 'cursor-pointer'}>
                 <Row className='ptu-box'>
                     <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: this.props.color }} className='ptu-icon'>
                         <i className={this.props.iconClass} />
@@ -277,101 +269,13 @@ class PtuBlock extends React.Component {
         );
     }
 }
-const TicketAccordion = (props) => {
-
-
-    return (
-        <Accordion defaultActiveKey="0">
-            <Card className='user-card'>
-                <Card.Header>
-                    <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                        All Tickets
-                    </Accordion.Toggle>
-                </Card.Header>
-                <Accordion.Collapse eventKey="0">
-                    <Card.Body>
-                        <Form inline className='user-search'>
-                            <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                            <Button variant="outline-success">Search</Button>
-                        </Form>
-                        <Table striped bordered hover>
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Creator</th>
-                                    <th>Priority</th>
-                                    <th>Type</th>
-                                    <th>Status</th>
-                                    <th>Last Updated</th>
-                                    <th>Created Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    props.currentTickets.map((ticket, key) => {
-
-                                        return (
-                                            <tr key={key}>
-                                                <td>
-                                                    {ticket.title}
-                                                </td>
-                                                <td>
-                                                    {ticket.creator}
-                                                </td>
-                                                <td>
-                                                    {ticket.priority}
-                                                </td>
-                                                <td>
-                                                    {ticket.type}
-                                                </td>
-                                                <td>
-                                                    {ticket.status}
-                                                </td>
-                                                <td>
-                                                    {ticket.lastupdated}
-                                                </td>
-                                                <td>
-                                                    {ticket.createddate}
-                                                </td>
-                                            </tr>
-                                        );
-                                    })
-                                }
-                            </tbody>
-                        </Table>
-
-                        <Pagination>
-                            {
-                                props.ticketItems.map((number, key) => {
-                                    return (
-                                        <Page
-                                            number={number}
-                                            active={props.activeTicketPage}
-                                            pageClick={props.pageClick}
-                                            type={'tickets'}
-                                            key={key}
-                                        />
-                                    );
-                                })
-                            }
-                        </Pagination>
-
-                    </Card.Body>
-                </Accordion.Collapse>
-            </Card>
-            <Card>
-
-            </Card>
-        </Accordion>
-    );
-}
 
 const UserAccordion = (props) => {
     return (
         <Accordion defaultActiveKey="0">
             <Card className='user-card'>
                 <Card.Header>
-                    <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                    <Accordion.Toggle as={Card.Title} variant="link" eventKey="0">
                         All Users
                     </Accordion.Toggle>
                 </Card.Header>
@@ -437,4 +341,90 @@ const UserAccordion = (props) => {
     );
 }
 
+const TicketAccordion = (props) => {
+
+    return (
+        <Accordion defaultActiveKey="0">
+            <Card className='user-card'>
+                <Card.Header>
+                    <Accordion.Toggle as={Card.Title} variant="link" eventKey="0">
+                        All Tickets
+                    </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="0">
+                    <Card.Body>
+                        <Form inline className='user-search'>
+                            <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+                            <Button variant="outline-success">Search</Button>
+                        </Form>
+                        <Table striped bordered hover>
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Creator</th>
+                                    <th>Priority</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Last Updated</th>
+                                    <th>Created Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    props.currentTickets.map((ticket, key) => {
+                                        return (
+                                            <tr key={key} onClick={() => props.handleRedirect(`/admin/tickets/details/${ticket.ticket_id}`)} className='cursor-pointer'>
+                                                <td>
+                                                    {ticket.title}
+                                                </td>
+                                                <td>
+                                                    {ticket.creator}
+                                                </td>
+                                                <td>
+                                                    {ticket.priority}
+                                                </td>
+                                                <td>
+                                                    {ticket.type}
+                                                </td>
+                                                <td>
+                                                    {ticket.status}
+                                                </td>
+                                                <td>
+                                                    {ticket.lastupdated}
+                                                </td>
+                                                <td>
+                                                    {ticket.createddate}
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                                }
+                            </tbody>
+                        </Table>
+
+                        <Pagination>
+                            {
+                                props.ticketItems.map((number, key) => {
+                                    return (
+                                        <Page
+                                            number={number}
+                                            active={props.activeTicketPage}
+                                            pageClick={props.pageClick}
+                                            type={'tickets'}
+                                            key={key}
+                                        />
+                                    );
+                                })
+                            }
+                        </Pagination>
+
+                    </Card.Body>
+                </Accordion.Collapse>
+            </Card>
+            <Card>
+
+            </Card>
+        </Accordion>
+    );
+}
 export default Dashboard;
