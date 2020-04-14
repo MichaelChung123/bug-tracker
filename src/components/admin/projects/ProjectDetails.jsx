@@ -3,6 +3,8 @@ import { Row, Col, Container, Accordion, Card, Button, Table, Form, FormControl 
 import '../../../styles/ProjectDetailstyle.css';
 import AssignUsersModal from '../../modal/AssignUsersModal';
 import EditProjectModal from '../../modal/EditProjectModal';
+import {withRouter} from 'react-router-dom';
+
 /* 
     how to connect to database:
     1. psql -d bugtrackerdb -U me
@@ -139,6 +141,11 @@ class ProjectDetails extends Component {
             })
     }
 
+    // Handles the redirect onClick for the PTU Blocks
+    handleRedirect = (path) => {
+        this.props.history.push(path);
+    }
+
     componentDidMount() {
         const id = this.props.appProps.match.params.id;
 
@@ -228,6 +235,7 @@ class ProjectDetails extends Component {
                     assignedUsers={this.state.assignedUsers}
                     checkAssignedUsers={this.checkAssignedUsers}
                     setTicketDesc={this.setTicketDesc}
+                    handleRedirect={this.handleRedirect}
                 />
 
             </Container>
@@ -304,23 +312,6 @@ const UserAccordion = (props) => {
                                 }
                             </tbody>
                         </Table>
-                        {/*
-                        <Pagination>
-                             {
-                                this.state.items.map((number) => {
-                                    return (
-                                        <Page
-                                            pageCount={this.state.pageCount}
-                                            number={number}
-                                            activePage={this.state.activePage}
-                                            pageClick={this.pageClick}
-                                        />
-                                    );
-                                })
-                            }
-                        </Pagination>
-                         */}
-
                     </Card.Body>
                 </Accordion.Collapse>
             </Card>
@@ -376,7 +367,7 @@ const TicketAccordion = (props) => {
                                         let trimedCreatedDate = ticket.createddate.slice(0, 10);
 
                                         return (
-                                            <tr key={key}>
+                                            <tr key={key} onClick={() => props.handleRedirect(`/admin/tickets/details/${ticket.ticket_id}`)} className='cursor-pointer'>
                                                 <td>{ticket.title}</td>
                                                 <td>{ticket.creator}</td>
                                                 <td>{ticket.priority}</td>
@@ -402,4 +393,4 @@ const TicketAccordion = (props) => {
 }
 
 
-export default ProjectDetails;
+export default withRouter(ProjectDetails);

@@ -46,12 +46,6 @@ class SideNav extends React.Component {
                             name: 'View All',
                             css: 'far fa-circle nav-icon',
                             key: 1
-                        },
-                        {
-                            path: '/admin/projects/create',
-                            name: 'Create New',
-                            css: 'fa fa-plus-circle nav-icon',
-                            key: 2
                         }
                     ],
                     key: 2
@@ -74,12 +68,6 @@ class SideNav extends React.Component {
                             name: 'Create New',
                             css: 'fa fa-plus-circle nav-icon',
                             key: 2
-                        },
-                        {
-                            path: '/admin/tickets/history',
-                            name: 'History',
-                            css: 'fas fa-history nav-icon',
-                            key: 3
                         }
                     ],
                     key: 3
@@ -116,8 +104,6 @@ class SideNav extends React.Component {
             items: prevState.items.map(obj => (key === obj.key ? Object.assign(obj, { open: !obj.open }) : obj)
             )
         }));
-
-        console.log('onOpen', this.state.items);
     }
 
     render() {
@@ -213,6 +199,7 @@ class NavItem extends React.Component {
 
     render() {
         const { active } = this.props;
+
         return (
             <div>
                 {
@@ -248,6 +235,7 @@ class NavItem extends React.Component {
                                                             <a href={subItem.path} onClick={this.handleClick}>
                                                                 {subItem.name}
                                                             </a>
+
                                                         </Col>
                                                     </Row>
                                                 </Card.Body>
@@ -301,7 +289,7 @@ class NavAction extends React.Component {
     render() {
         return (
             <>
-                <Container className='action-container' onClick={this.handleOpen} style={this.props.color} >
+                <Container className='action-container' onClick={this.handleOpen} style={this.props.color}>
                     <Row>
                         <Col xs={1} sm={1} md={1} lg={1}>
                             <i className={this.props.css} />

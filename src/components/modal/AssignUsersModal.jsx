@@ -30,7 +30,7 @@ function AssignUsersModal(props) {
 
     return (
         <>
-            <Col xs={3} sm={3} md={3} lg={3}>
+            <Col xs={3} sm={3} md={3} lg={3} className='cursor-pointer'>
                 <Row onClick={handleShow} className='ptu-box'>
                     <Col xs='3' sm='3' md='3' lg='3' style={{ backgroundColor: '#007bff' }} className='ptu-icon'>
                         <i className='fas fa-user-plus' />

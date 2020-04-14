@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { useHistory } from "react-router-dom";
 import '../../styles/ProjectStyle.css';
 
 function CreateProjectModal({ show, handleClose, handleRedirect }) {
-
     const [title, setTitle] = useState('');
     const [desc, setDesc] = useState('');
 
@@ -50,11 +48,11 @@ function CreateProjectModal({ show, handleClose, handleRedirect }) {
             })
             .then((data) => {
                 let id = data[0].project_id;
-                console.log('id: ', id);
                 handleRedirect(`/admin/projects/details/${id}`);
             })
     }
 
+    // console.log('show: ', show);
     return (
         <>
             <Modal show={show} onHide={handleClose}>

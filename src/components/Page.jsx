@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Row, Col, Container, Table, Form, FormControl, Button, Pagination } from 'react-bootstrap';
+import React from 'react';
+import { Pagination } from 'react-bootstrap';
 
 class Page extends React.Component {
     handleClick = () => {

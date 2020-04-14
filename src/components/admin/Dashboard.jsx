@@ -1,5 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
-import { useHistory } from "react-router-dom";
+import React, { Component } from 'react';
 import { Row, Col, Pagination, Container, Accordion, Card, Button, Table, Form, FormControl } from 'react-bootstrap';
 import Page from '../Page';
 
@@ -195,7 +194,7 @@ class Dashboard extends Component {
             })
     }
 
-    // Handles the redirect onClick for the PTU Blocks
+    // Handles the redirect onClick for tickets
     handleRedirect = (path) => {
         this.props.history.push(path);
     }

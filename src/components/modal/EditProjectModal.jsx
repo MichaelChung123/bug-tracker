@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 class EditProjectModal extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <>

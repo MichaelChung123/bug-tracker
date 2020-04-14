@@ -1,5 +1,5 @@
-import React, { Component, useState, useEffect } from 'react';
-import { Row, Col, Container, Modal, Image, Accordion, Card, Button, Table, Form, FormControl, ListGroup } from 'react-bootstrap';
+import React from 'react';
+import { Modal, Button, Form } from 'react-bootstrap';
 
 
 const EditCommentModal = ({ show, handleClose, text, handleEditComment, comment_id, handleEditCommentSubmit }) => {

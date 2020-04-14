@@ -67,6 +67,7 @@ app.post('/tickets/create', db.createTicket);
 
 app.get('/admin/tickets/details/:id', db.getTicketByID);
 app.post('/edit/ticket/:id', db.editTicket);
+app.get('/tickets/newest', db.getNewestTicketID);
 
 app.post('/ticket/details/priority/:id', db.updatePriority);
 app.post('/ticket/details/type/:id', db.updateType);

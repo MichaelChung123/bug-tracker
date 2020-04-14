@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Row, Col, Container, Table, Form, FormControl, Button, Pagination } from 'react-bootstrap';
 import '../../../styles/TicketStyle.css';
 import Page from '../../Page';
+import moment from 'moment';
+
 /* 
     how to connect to database:
     1. psql -d bugtrackerdb -U me
@@ -49,6 +51,11 @@ class Tickets extends Component {
         this.setState({
             pageCount: pageCount
         })
+    }
+
+    // Handles the redirect onClick for tickets
+    handleRedirect = (path) => {
+        this.props.history.push(path);
     }
 
     componentDidMount() {
@@ -101,7 +108,6 @@ class Tickets extends Component {
     }
 
     render() {
-        console.log('items: ', this.state.items);
         return (
             <Container className='all-tickets-container'>
                 <Row className='tickets-title'>
@@ -143,7 +149,11 @@ class Tickets extends Component {
                                             type={ticket.type}
                                             status={ticket.status}
                                             updatedDate={ticket.lastupdated}
+                                            updatedTime={ticket.lastupdatedtime}
                                             createdDate={ticket.createddate}
+                                            createdTime={ticket.createdtime}
+                                            ticket_id={ticket.ticket_id}
+                                            handleRedirect={this.handleRedirect}
                                         />
                                     );
                                 })
@@ -158,7 +168,7 @@ class Tickets extends Component {
                                     <Page
                                         pageCount={this.state.pageCount}
                                         number={number}
-                                        activePage={this.state.activePage}
+                                        active={this.state.activePage}
                                         pageClick={this.pageClick}
                                     />
                                 );
@@ -172,16 +182,22 @@ class Tickets extends Component {
 }
 
 class TicketListRow extends React.Component {
+    filterDate = (date, time) => {
+        let dbDate = date.slice(0, 10) + ' ' + time;
+        let swappedDate = moment(dbDate).format('LLL').replace('AM', 'PM');
+        return swappedDate;
+    }
+
     render() {
         return (
-            <tr>
+            <tr onClick={() => this.props.handleRedirect(`/admin/tickets/details/${this.props.ticket_id}`)} className='cursor-pointer'>
                 <td>{this.props.title}</td>
                 <td>{this.props.creator}</td>
                 <td>{this.props.priority}</td>
                 <td>{this.props.type}</td>
                 <td>{this.props.status}</td>
-                <td>{this.props.updatedDate}</td>
-                <td>{this.props.createdDate}</td>
+                <td>{this.filterDate(this.props.updatedDate, this.props.updatedTime)}</td>
+                <td>{this.filterDate(this.props.createdDate, this.props.createdTime)}</td>
             </tr>
         );
     }

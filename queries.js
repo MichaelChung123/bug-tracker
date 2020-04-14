@@ -189,12 +189,13 @@ const createTicket = (request, response) => {
         lastUpdated,
         createdDate,
         createdTime,
-        lastUpdatedTime
+        lastUpdatedTime,
+        project_id
     } = request.body;
 
     pool.query(`
-    INSERT INTO tickets (ticket_id, title, creator, priority, type, status, lastupdated, createddate, description, createdtime, lastupdatedtime) 
-    VALUES ( DEFAULT, '${ticketTitle}', '${creator}', '${selectedPriority}', '${selectedType}', 'Open', '${lastUpdated}', '${createdDate}', '${ticketDescription}', '${createdTime}', '${lastUpdatedTime}')`,
+    INSERT INTO tickets (ticket_id, title, creator, priority, type, status, lastupdated, createddate, project_id, description, createdtime, lastupdatedtime) 
+    VALUES ( DEFAULT, '${ticketTitle}', '${creator}', '${selectedPriority}', '${selectedType}', 'Open', '${lastUpdated}', '${createdDate}', ${project_id}, '${ticketDescription}', '${createdTime}', '${lastUpdatedTime}')`,
         (error, results) => {
             if (error) {
                 throw error
@@ -212,6 +213,19 @@ const getTicketByID = (request, response) => {
         }
         response.status(200).json(results.rows)
     })
+}
+
+const getNewestTicketID = (request, response) => {
+    pool.query(`
+    SELECT ticket_id
+    FROM tickets 
+    WHERE ticket_id = (SELECT MAX(ticket_id) FROM tickets)`,
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).json(results.rows)
+        })
 }
 
 
@@ -242,12 +256,19 @@ const editTicket = (request, response) => {
 
 
 const updatePriority = (req, res) => {
-    const selectedPriority = req.body.selectedPriority;
+    const {
+        selectedPriority,
+        lastUpdated,
+        lastUpdatedTime
+    } = req.body;
+
     const id = parseInt(req.params.id);
 
     pool.query(`
         UPDATE tickets
-        SET priority='${selectedPriority}'
+        SET priority='${selectedPriority}',
+        lastupdated='${lastUpdated}',
+        lastupdatedtime='${lastUpdatedTime}'
         WHERE ticket_id=${id}
     `,
         (error, results) => {
@@ -259,12 +280,19 @@ const updatePriority = (req, res) => {
 }
 
 const updateType = (req, res) => {
-    const selectedType = req.body.selectedType;
+    const {
+        selectedType,
+        lastUpdated,
+        lastUpdatedTime
+    } = req.body;
+
     const id = parseInt(req.params.id);
 
     pool.query(`
         UPDATE tickets
-        SET type='${selectedType}'
+        SET type='${selectedType}',
+        lastupdated='${lastUpdated}',
+        lastupdatedtime='${lastUpdatedTime}'
         WHERE ticket_id=${id}
     `,
         (error, results) => {
@@ -289,14 +317,17 @@ const getCommentsByID = (request, response) => {
 
 const addComment = (request, response) => {
     const id = parseInt(request.params.id);
+
     const {
         creator,
-        text
+        text,
+        newDate,
+        newTime
     } = request.body;
 
     pool.query(`
-        INSERT INTO comments (creator, createddate, createdtime, ticket_id, text, user_id)
-        VALUES ('${creator}', CURRENT_DATE, CURRENT_TIMESTAMP, '${id}', '${text}', 1)`,
+        INSERT INTO comments (creator, createddate, createdtime, ticket_id, text, user_id, lastupdatedtime, lastupdated)
+        VALUES ('${creator}', '${newDate}', '${newTime}', '${id}', '${text}', 1, '${newTime}', '${newDate}')`,
         (error, results) => {
             if (error) {
                 throw error
@@ -345,7 +376,6 @@ const uploadFile = (req, res) => {
             cb(null, 'public')
         },
         filename: function (req, file, cb) {
-            // console.log(file)
             cb(null, Date.now() + '-' + file.originalname)
         }
     })
@@ -410,6 +440,7 @@ module.exports = {
     getProjectByID,
     getUsersByProjectID,
     getTicketsByProjectID,
+    getNewestTicketID,
     getUsers,
     assignUserToProject,
     getUserByID,

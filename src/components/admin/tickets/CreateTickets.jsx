@@ -24,7 +24,10 @@ class CreateTickets extends Component {
             projectSelected: false,
             prioritySelected: false,
             typeSelected: false,
+            titleEntered: false,
+            descEntered: false,
             showAlert: false,
+            project_id: 0,
             sideActions: [
                 {
                     title: 'Project',
@@ -108,6 +111,7 @@ class CreateTickets extends Component {
     setSelectedProject = (project) => {
         this.setState({
             selectedProject: project,
+            project_id: project.project_id,
             projectSelected: true
         })
     }
@@ -128,14 +132,40 @@ class CreateTickets extends Component {
         })
     }
 
+    setEnteredTitle = (isValid) => {
+        if (isValid) {
+            this.setState({
+                titleEntered: true
+            })
+        } else {
+            this.setState({
+                titleEntered: false
+            })
+        }
+    }
+
+    setEnteredDesc = (isValid) => {
+        if (isValid) {
+            this.setState({
+                descEntered: true
+            })
+        } else {
+            this.setState({
+                descEntered: false
+            })
+        }
+    }
+
     checkFields = () => {
         const {
             projectSelected,
             prioritySelected,
-            typeSelected
+            typeSelected,
+            titleEntered,
+            descEntered
         } = this.state;
 
-        if (!projectSelected || !prioritySelected || !typeSelected) {
+        if (!projectSelected || !prioritySelected || !typeSelected || !titleEntered || !descEntered) {
             this.setState({
                 showAlert: true
             })
@@ -152,12 +182,24 @@ class CreateTickets extends Component {
         this.setState({
             ticketTitle: event.target.value
         })
+
+        if (!event.target.value) {
+            this.setEnteredTitle(false);
+        } else {
+            this.setEnteredTitle(true);
+        }
     }
 
     handleDescriptionChange = (event) => {
         this.setState({
             ticketDescription: event.target.value
         })
+
+        if (!event.target.value) {
+            this.setEnteredDesc(false);
+        } else {
+            this.setEnteredDesc(true);
+        }
     }
 
     // Handles the redirect onClick
@@ -181,7 +223,8 @@ class CreateTickets extends Component {
             selectedType,
             ticketTitle,
             ticketDescription,
-            creator
+            creator,
+            project_id
         } = this.state;
 
         let data = {
@@ -194,7 +237,8 @@ class CreateTickets extends Component {
             lastUpdated,
             createdDate,
             createdTime,
-            lastUpdatedTime
+            lastUpdatedTime,
+            project_id
         }
 
         if (this.checkFields()) {
@@ -210,6 +254,16 @@ class CreateTickets extends Component {
                 .then((data) => {
                     console.log('Success: ', data);
                 })
+                .then(() => {
+                    // Get new ticket's ID and then redirect to it after submitting
+                    fetch('/tickets/newest')
+                        .then((response) => {
+                            return response.json();
+                        })
+                        .then((data) => {
+                            this.handleRedirect(`/admin/tickets/details/${data[0].ticket_id}`);
+                        })
+                })
                 .catch((error) => {
                     console.error('Error:', error);
                 });
@@ -219,6 +273,7 @@ class CreateTickets extends Component {
     }
 
     render() {
+
         return (
             <Container className='all-tickets-container'>
                 <Row className='tickets-title'>
@@ -260,9 +315,13 @@ class CreateTickets extends Component {
                             handleDescriptionChange={this.handleDescriptionChange}
                             ticketTitle={this.state.ticketTitle}
                             ticketDescription={this.state.ticketDescription}
-                            handleSubmit={this.handleSubmit}
+                            titleEntered={this.state.titleEntered}
+                            descEntered={this.state.descEntered}
 
+                            handleSubmit={this.handleSubmit}
                             handleRedirect={this.handleRedirect}
+                            setEnteredTitle={this.setEnteredTitle}
+                            setEnteredDesc={this.setEnteredDesc}
                         />
                     </Col>
                 </Row>
@@ -273,7 +332,7 @@ class CreateTickets extends Component {
 
 const AlertOverlay = ({ showAlert, target, title }) => {
     return (
-        <Overlay target={target.current} show={showAlert} placement="right">
+        <Overlay target={target.current} show={showAlert} placement="top-end">
             {({
                 placement,
                 scheduleUpdate,
@@ -494,8 +553,9 @@ const SideActions = ({ sideActions, setSelectedProject, setSelectedPriority, set
 }
 
 
-const TicketDetails = ({ showAlert, checkFields, handleTitleChange, handleDescriptionChange, ticketTitle, ticketDescription, handleSubmit, handleRedirect }) => {
+const TicketDetails = ({ showAlert, checkFields, handleTitleChange, handleDescriptionChange, ticketTitle, ticketDescription, handleSubmit, handleRedirect, titleEntered, descEntered, setEnteredTitle, setEnteredDesc }) => {
     const target = useRef(null);
+    const target2 = useRef(null);
 
     return (
         <Accordion defaultActiveKey="0">
@@ -510,14 +570,40 @@ const TicketDetails = ({ showAlert, checkFields, handleTitleChange, handleDescri
                         <Form onSubmit={handleSubmit}>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>Title</Form.Label>
-                                <Form.Control value={ticketTitle} onChange={handleTitleChange} placeholder="Enter Title" />
+                                <Form.Control ref={target} value={ticketTitle} onChange={handleTitleChange} placeholder="Enter Title" />
+                                {
+                                    !titleEntered ?
+                                        <>
+                                            <AlertOverlay
+                                                showAlert={showAlert}
+                                                target={target}
+                                                title={'Title'}
+                                            />
+                                        </>
+                                        :
+                                        <>
+                                        </>
+                                }
                             </Form.Group>
 
                             <Form.Group controlId="exampleForm.ControlTextarea1">
                                 <Form.Label>Description</Form.Label>
-                                <Form.Control value={ticketDescription} onChange={handleDescriptionChange} as="textarea" placeholder="Enter Description" />
+                                <Form.Control ref={target2} value={ticketDescription} onChange={handleDescriptionChange} as="textarea" placeholder="Enter Description" />
+                                {
+                                    !descEntered ?
+                                        <>
+                                            <AlertOverlay
+                                                showAlert={showAlert}
+                                                target={target2}
+                                                title={'Description'}
+                                            />
+                                        </>
+                                        :
+                                        <>
+                                        </>
+                                }
                             </Form.Group>
-                            <Button type='submit' ref={target}>
+                            <Button type='submit'>
                                 Submit
                             </Button>
                         </Form>

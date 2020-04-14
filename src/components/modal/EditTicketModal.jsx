@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 class EditTicketModal extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (

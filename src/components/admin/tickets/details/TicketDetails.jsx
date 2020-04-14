@@ -1,7 +1,6 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import moment from 'moment';
-import { ListGroup, Row, Col, Container, Accordion, Card, Button, Table, Form, FormControl, Pagination } from 'react-bootstrap';
-import AssignUsersModal from '../../../modal/AssignUsersModal';
+import { Row, Col, Container } from 'react-bootstrap';
 import SideActions from './SideActions';
 import UploadModal from '../../../modal/UploadModal';
 import EditTicketModal from '../../../modal/EditTicketModal';
@@ -86,9 +85,15 @@ class TicketDetails extends Component {
     handleActionSelect = (title, actionValue, selectedAction) => {
         const id = this.props.appProps.match.params.id;
 
+        let unformattedLastUpdated = moment().format();
+        let lastUpdated = unformattedLastUpdated.substr(0, 10);
+        let lastUpdatedTime = unformattedLastUpdated.substr(11, 8);
+
         if (title === "Priority") {
             const data = {
-                selectedPriority: actionValue
+                selectedPriority: actionValue,
+                lastUpdated: lastUpdated,
+                lastUpdatedTime: lastUpdatedTime
             }
 
             fetch(`/ticket/details/priority/${id}`, {
@@ -114,7 +119,9 @@ class TicketDetails extends Component {
             })
         } else if (title === "Type") {
             const data = {
-                selectedType: actionValue
+                selectedType: actionValue,
+                lastUpdated: lastUpdated,
+                lastUpdatedTime: lastUpdatedTime
             }
 
             fetch(`/ticket/details/type/${id}`, {
@@ -142,7 +149,6 @@ class TicketDetails extends Component {
 
     handleUpload = (e) => {
         let file = e.target.files;
-        console.log('file: ', e.target.files);
 
         this.setState({
             selectedFile: file
@@ -153,8 +159,6 @@ class TicketDetails extends Component {
 
     handleAttachmentSubmit = (e) => {
         e.preventDefault();
-        console.log('submitting attachment');
-        console.log('selectedFile: ', this.state.selectedFile);
 
         let data = new FormData();
         for (let i = 0; i < this.state.selectedFile.length; i++) {
@@ -211,7 +215,6 @@ class TicketDetails extends Component {
     }
 
     handleEditSubmit = (e) => {
-        console.log('Submitting');
         e.preventDefault();
 
         let unformattedLastUpdated = moment().format();

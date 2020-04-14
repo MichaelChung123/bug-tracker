@@ -18,12 +18,17 @@
     color: black;
 }
 
-/* .list-group {
-    position: absolute;
-    right: 80px;
-    left: -180px;
-} */
-
 .fa-2x {
     font-size: 25px;
+}
+
+
+.notification-nav {
+    display:flex;
+    justify-content: flex-end;
+}
+
+#root > div > div > div.col-lg-9.col-md-9.col-sm-9.col-9 > nav > div.show.dropdown.nav-item > div {
+    position: absolute;
+    right: 100;
 }

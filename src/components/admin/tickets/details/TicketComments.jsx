@@ -1,8 +1,9 @@
-import React, { Component, useState, useEffect } from 'react';
-import { Row, Col, Container, Modal, Image, Accordion, Card, Button, Table, Form, FormControl, ListGroup } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Container, Image, Accordion, Card, Button, Form, ListGroup } from 'react-bootstrap';
 import '../../../../styles/TicketDetailsStyle.css';
 import avatar from '../../../../styles/assets/imgs/default-user.jpg'
 import EditCommentModal from '../../../modal/EditCommentModal'
+import moment from 'moment';
 
 // const TicketComments = ({ showAlert, checkFields, handleTitleChange, handleDescriptionChange, ticketTitle, ticketDescription, handleSubmit }) => {
 const TicketComments = (props) => {
@@ -37,15 +38,22 @@ const TicketComments = (props) => {
     }
 
     const handleCommentSubmit = (e) => {
-        console.log('Submitting!');
         e.preventDefault();
 
         let comment = newComment;
 
+        let unformattedDateTime = moment().format("YYYY-MM-DD hh:mm");
+
+        let newDate = unformattedDateTime.slice(0, 10);
+        let newTime = unformattedDateTime.slice(10, 16);
+        
         let data = {
             creator: 'Michael Chung',
-            text: comment
+            text: comment,
+            newDate,
+            newTime
         }
+
 
         setNewComment('');
 
@@ -96,8 +104,6 @@ const TicketComments = (props) => {
     }
 
     const handleDeleteComment = (e, id) => {
-        console.log('id', id);
-
         fetch(`/ticket/details/comments/delete/${id}`, {
             method: 'POST',
             headers: {
@@ -166,100 +172,101 @@ const Description = ({ description }) => {
 }
 
 const Comments = ({ comments, newComment, handleCommentSubmit, handleNewComment, handleEditComment, handleEditCommentSubmit, handleDeleteComment }) => {
-
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
     return (
         <>
             <div className='comment-count'>
                 <p>{comments.length} Comment{comments.length > 1 ? 's' : ''}</p>
             </div>
             <ListGroup className='comments-list' variant="flush">
-                {/* <ListGroup.Item action variant="secondary"> */}
-                    <Container>
-                        {
-                            comments.map((comment, key) => {
-                                if (comment.user_id === 1) {
-                                    return (
-                                        <Row key={key} className='comment-row'>
-                                            <Col xs={6} md='auto' className='avatar-container'>
-                                                <Image className='comment-avatar' src={avatar} roundedCircle />
-                                            </Col>
+                <Container>
+                    {
+                        comments.map((comment, key) => {
+                            let dbDate = comment.createddate.slice(0, 10) + ' ' + comment.createdtime;
+                            let swappedDate = moment(dbDate).format('LLL').replace('AM', 'PM');
 
-                                            <Col xs={6} md='auto' className='name-posted-date'>
-                                                <Col xs={6} md='auto' className='your-comment-header'>
+                            if (comment.user_id === 1) {
+                                return (
+                                    <Row key={key} className='comment-row'>
+                                        <Col xs={6} md='auto' className='avatar-container'>
+                                            <Image className='comment-avatar' src={avatar} roundedCircle />
+                                        </Col>
 
-                                                    <strong><p>{comment.creator}</p></strong>
+                                        <Col xs={6} md='auto' className='name-posted-date'>
+                                            <Col xs={6} md='auto' className='your-comment-header'>
 
-                                                    <Col md='auto'>
-                                                        <i className='fas fa-edit' onClick={handleShow} />
-                                                        <EditCommentModal show={show}
-                                                            show={show}
-                                                            text={comment.text}
-                                                            comment_id={comment.comment_id}
-                                                            handleClose={handleClose}
-                                                            handleEditComment={handleEditComment}
-                                                            handleEditCommentSubmit={handleEditCommentSubmit}
-                                                        />
-                                                    </Col>
-                                                    <Col md='auto'>
-                                                        <i className="fas fa-trash-alt" onClick={(e) => {
-                                                            handleDeleteComment(e, comment.comment_id);
-                                                        }} />
-                                                    </Col>
+                                                <strong><p>{comment.creator}</p></strong>
+
+                                                <Col md='auto'>
+                                                    <i className='fas fa-edit' onClick={handleShow} />
+                                                    <EditCommentModal show={show}
+                                                        show={show}
+                                                        text={comment.text}
+                                                        comment_id={comment.comment_id}
+                                                        handleClose={handleClose}
+                                                        handleEditComment={handleEditComment}
+                                                        handleEditCommentSubmit={handleEditCommentSubmit}
+                                                    />
                                                 </Col>
-                                                <Col xs={6} md='auto'>
-                                                    <p className='posted-date-comment'>{comment.createddate + ' ' + comment.createdtime}</p>
+                                                <Col md='auto'>
+                                                    <i className="fas fa-trash-alt" onClick={(e) => {
+                                                        handleDeleteComment(e, comment.comment_id);
+                                                    }} />
                                                 </Col>
                                             </Col>
-
-                                            <Col xs={6} md={12}>
-                                                <p>{comment.text}</p>
+                                            <Col xs={6} md='auto'>
+                                                <p className='posted-date-comment'>{swappedDate}</p>
                                             </Col>
-                                        </Row>
-                                    );
-                                } else {
-                                    return (
-                                        <Row key={key} className='comment-row'>
-                                            <Col xs={6} md='auto' className='avatar-container'>
-                                                <Image className='comment-avatar' src={avatar} roundedCircle />
+                                        </Col>
+
+                                        <Col xs={6} md={12}>
+                                            <p>{comment.text}</p>
+                                        </Col>
+                                    </Row>
+                                );
+                            } else {
+                                return (
+                                    <Row key={key} className='comment-row'>
+                                        <Col xs={6} md='auto' className='avatar-container'>
+                                            <Image className='comment-avatar' src={avatar} roundedCircle />
+                                        </Col>
+
+                                        <Col xs={6} md='auto' className='name-posted-date'>
+                                            <Col xs={6} md='auto'>
+                                                <strong><p>{comment.creator}</p></strong>
                                             </Col>
-
-                                            <Col xs={6} md='auto' className='name-posted-date'>
-                                                <Col xs={6} md='auto'>
-                                                    <strong><p>{comment.creator}</p></strong>
-                                                </Col>
-                                                <Col xs={6} md='auto'>
-                                                    <p className='posted-date-comment'>{comment.createddate + ' ' + comment.createdtime}</p>
-                                                </Col>
+                                            <Col xs={6} md='auto'>
+                                                <p className='posted-date-comment'>{swappedDate}</p>
                                             </Col>
+                                        </Col>
 
-                                            <Col xs={6} md={12}>
-                                                <p>{comment.text}</p>
-                                            </Col>
-                                        </Row>
-                                    );
-                                }
+                                        <Col xs={6} md={12}>
+                                            <p>{comment.text}</p>
+                                        </Col>
+                                    </Row>
+                                );
+                            }
 
-                            })
-                        }
-                        <Row className='comment-submission-row'>
-                            <Col xs={6} md={1} className='avatar-container'>
-                                <Image className='comment-avatar' src={avatar} roundedCircle />
-                            </Col>
-                            <Col xs={6} md={11}>
-                                <Form onSubmit={handleCommentSubmit}>
-                                    <Form.Group className='comment-submission-textbox'>
-                                        <Form.Control type="text" placeholder="Press Enter to post comment" value={newComment} onChange={handleNewComment} />
-                                    </Form.Group>
-                                </Form>
-                            </Col>
-                        </Row>
+                        })
+                    }
+                    <Row className='comment-submission-row'>
+                        <Col xs={6} md={1} className='avatar-container'>
+                            <Image className='comment-avatar' src={avatar} roundedCircle />
+                        </Col>
+                        <Col xs={6} md={11}>
+                            <Form onSubmit={handleCommentSubmit}>
+                                <Form.Group className='comment-submission-textbox'>
+                                    <Form.Control type="text" placeholder="Press Enter to post comment" value={newComment} onChange={handleNewComment} />
+                                </Form.Group>
+                            </Form>
+                        </Col>
+                    </Row>
 
-                    </Container>
-                {/* </ListGroup.Item> */}
+                </Container>
             </ListGroup>
         </>
     )
