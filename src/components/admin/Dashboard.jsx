@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Pagination, Container, Accordion, Card, Button, Table, Form, FormControl } from 'react-bootstrap';
 import Page from '../Page';
+import Search from '../Search';
 
 import '../../styles/DashboardStyle.css';
 
@@ -17,6 +18,8 @@ class Dashboard extends Component {
             tickets: [],
             currentTickets: [],
             ticketItems: [],
+            userSearch: '',
+            ticketSearch: '',
             infoItems: [
                 {
                     path: '/admin/projects/all',
@@ -83,6 +86,93 @@ class Dashboard extends Component {
                 }))
             }
         }
+    }
+
+    removePagination = () => {
+
+    }
+
+    // Handles the redirect onClick for tickets
+    handleRedirect = (path) => {
+        this.props.history.push(path);
+    }
+
+    searchOnChange = (e) => {
+        this.setState({
+            userSearch: e.target.value
+        }, () => {
+            let searchedEntries = this.filterGroupArrays(this.state.users, this.state.userSearch);
+
+            let count = 0;
+            let usersPerPage = 10;
+            let group = [];
+
+            // Check if the amount of tickets reaches the amount per page
+            if (searchedEntries.length < usersPerPage) {
+                this.setState({
+                    currentUsers: searchedEntries
+                })
+            } else {
+                // Grouping entries from the search function based off of how many entries 
+                // per page you want. You then put those arrays into a state array
+                for (let i = 0; i <= searchedEntries.length - 1; i++) {
+                    group.push(searchedEntries[i]);
+                    count++;
+
+                    if (count >= usersPerPage) {
+                        count = 0;
+                        // loading first page's users
+                        if (this.state.users.length < 1) {
+                            this.setState({
+                                currentUsers: [...group]
+                            });
+                        }
+                        this.setState({
+                            users: [...this.state.users, group]
+                        });
+                        group = [];
+                    } else if (i === searchedEntries.length - 1) {
+                        this.setState({
+                            users: [...this.state.users, group]
+                        });
+                    }
+                }
+            }
+
+            this.createPagination(this.state.users, 'userItems');
+        })
+
+    }
+
+    // Function that filters all the data that it's given as groupped arrays that hold the data and 
+    // parses it based off of what the value is from the search bar.
+    // Takes 2 arguments:
+    // 1. Array of Arrays that hold objects. (Groupped arrays for tables).
+    // 2. Value of the search bar text.
+    filterGroupArrays = (groupArrays, searchValue) => {
+        let matchedEntries = [];
+        let tempArray = [];
+
+        // Loop through the first array layer of groupArrays
+        for (let groups of groupArrays) {
+
+            // Loop through the second layer of array groups
+            for (let jsonObj of groups) {
+
+                // Loop through all the objects in each array
+                for (let tableRow in jsonObj) {
+                    let objValue = jsonObj[tableRow].toString().toLowerCase();
+                    if (objValue.includes(searchValue.toLowerCase())) {
+                        tempArray.push(jsonObj);
+                    }
+                }
+            }
+
+            // Assign the temp array of objs to the matchedEntries var
+            matchedEntries = tempArray;
+        }
+        console.log('matchedEntries: ', matchedEntries);
+        return matchedEntries;
     }
 
     componentDidMount() {
@@ -194,10 +284,6 @@ class Dashboard extends Component {
             })
     }
 
-    // Handles the redirect onClick for tickets
-    handleRedirect = (path) => {
-        this.props.history.push(path);
-    }
 
     render() {
         const { infoItems } = this.state;
@@ -230,8 +316,11 @@ class Dashboard extends Component {
                     userItems={this.state.userItems}
                     currentUsers={this.state.currentUsers}
                     activeUserPage={this.state.activeUserPage}
-                    
+                    userSearch={this.state.userSearch}
+
                     pageClick={this.pageClick}
+                    searchOnChange={this.searchOnChange}
+                    filterGroupArrays={this.filterGroupArrays}
                 />
 
                 <br />
@@ -280,10 +369,13 @@ const UserAccordion = (props) => {
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
                     <Card.Body>
-                        <Form inline className='user-search'>
-                            <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                            <Button variant="outline-success">Search</Button>
-                        </Form>
+                        <Search
+                            users={props.users}
+                            groupArrays={props.users}
+                            searchOnChange={props.searchOnChange}
+                            value={props.userSearch}
+                            filterGroupArrays={props.filterGroupArrays}
+                        />
                         <Table striped bordered hover>
                             <thead>
                                 <tr>
