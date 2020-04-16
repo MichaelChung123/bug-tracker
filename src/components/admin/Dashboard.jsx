@@ -13,6 +13,8 @@ class Dashboard extends Component {
             userItems: [],
             users: [],
             currentUsers: [],
+            allGroupedUsers: [],
+            newPages: false,
 
             activeTicketPage: 1,
             tickets: [],
@@ -86,9 +88,7 @@ class Dashboard extends Component {
                 }))
             }
         }
-    }
 
-    removePagination = () => {
 
     }
 
@@ -98,48 +98,78 @@ class Dashboard extends Component {
     }
 
     searchOnChange = (e) => {
+        console.log('====================================================');
+        let searchedEntries = [];
+
         this.setState({
             userSearch: e.target.value
         }, () => {
-            let searchedEntries = this.filterGroupArrays(this.state.users, this.state.userSearch);
+            console.log('arg1: ', this.state.allGroupedUsers);
+            console.log('arg2: ', this.state.userSearch);
+
+            searchedEntries = this.filterGroupArrays(this.state.allGroupedUsers, this.state.userSearch);
+            console.log('searchedEntries: ', searchedEntries);
 
             let count = 0;
             let usersPerPage = 10;
             let group = [];
 
-            // Check if the amount of tickets reaches the amount per page
-            if (searchedEntries.length < usersPerPage) {
-                this.setState({
-                    currentUsers: searchedEntries
-                })
-            } else {
-                // Grouping entries from the search function based off of how many entries 
-                // per page you want. You then put those arrays into a state array
-                for (let i = 0; i <= searchedEntries.length - 1; i++) {
-                    group.push(searchedEntries[i]);
-                    count++;
 
-                    if (count >= usersPerPage) {
-                        count = 0;
-                        // loading first page's users
-                        if (this.state.users.length < 1) {
-                            this.setState({
-                                currentUsers: [...group]
-                            });
+            // if search value is empty just load all users as default
+            if (!this.state.userSearch) {
+                this.getAllUsers();
+            } else {
+                // empty the old users array and then load the users again with the new search entries
+                this.setState({
+                    users: [],
+                    currentUsers: []
+                }, () => {
+                    // Check if the amount of tickets reaches the amount per page
+                    if (searchedEntries.length < usersPerPage) {
+                        this.setState({
+                            currentUsers: searchedEntries
+                        })
+                    } else {
+                        // Grouping entries from the search function based off of how many entries 
+                        // per page you want. You then put those arrays into a state array
+                        for (let i = 0; i <= searchedEntries.length - 1; i++) {
+                            group.push(searchedEntries[i]);
+                            count++;
+
+                            if (count >= usersPerPage) {
+                                count = 0;
+                                // loading first page's users
+                                if (this.state.users.length < 1) {
+                                    this.setState({
+                                        currentUsers: [...group]
+                                    });
+                                }
+
+                                console.log('group: ', group);
+                                this.setState(prevState => ({
+                                    users: [...prevState.users, group]
+                                }), () => {
+                                    console.log('1: ', group);
+                                })
+
+
+                                group = [];
+                            } else if (i === searchedEntries.length - 1) {
+                                console.log('else group: ', group);
+
+                                this.setState(prevState => ({
+                                    users: [...prevState.users, group]
+                                }), () => {
+                                    console.log('2: ', this.state.users);
+                                })
+                            }
                         }
-                        this.setState({
-                            users: [...this.state.users, group]
-                        });
-                        group = [];
-                    } else if (i === searchedEntries.length - 1) {
-                        this.setState({
-                            users: [...this.state.users, group]
-                        });
                     }
-                }
+                    console.log('users: ', this.state.users);
+                    this.createPagination(this.state.users, 'userItems');
+                })
             }
 
-            this.createPagination(this.state.users, 'userItems');
         })
 
     }
@@ -171,25 +201,10 @@ class Dashboard extends Component {
             // Assign the temp array of objs to the matchedEntries var
             matchedEntries = tempArray;
         }
-        console.log('matchedEntries: ', matchedEntries);
         return matchedEntries;
     }
 
-    componentDidMount() {
-        fetch('/admin/dashboard')
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                let position = 1;
-                for (let count of data) {
-                    this.setState(prevState => ({
-                        infoItems: prevState.infoItems.map(obj => obj.key === position ? Object.assign(obj, { count: count.count_ptu }) : obj)
-                    }));
-                    position++;
-                }
-            })
-
+    getAllUsers = () => {
         fetch('/admin/users/all')
             .then((response) => {
                 return response.json();
@@ -233,6 +248,75 @@ class Dashboard extends Component {
 
                 this.createPagination(this.state.users, 'userItems');
             })
+    }
+
+    componentDidMount() {
+        fetch('/admin/dashboard')
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                let position = 1;
+                for (let count of data) {
+                    this.setState(prevState => ({
+                        infoItems: prevState.infoItems.map(obj => obj.key === position ? Object.assign(obj, { count: count.count_ptu }) : obj)
+                    }));
+                    position++;
+                }
+            })
+
+        // Fetches all users if the users value has already been assigned. Useful check for when you 
+        // search and users has a value already
+        if (this.state.users) {
+            fetch('/admin/users/all')
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    let count = 0;
+                    let usersPerPage = 10;
+                    let group = [];
+
+                    // Check if the amount of tickets reaches the amount per page
+                    if (data.length < usersPerPage) {
+                        this.setState({
+                            currentUsers: data
+                        })
+                    } else {
+                        // Grouping entries from the database based off of how many entries 
+                        // per page you want. You then put those arrays into a state array
+                        for (let i = 0; i <= data.length - 1; i++) {
+                            group.push(data[i]);
+                            count++;
+
+                            if (count >= usersPerPage) {
+                                count = 0;
+                                // loading first page's users
+                                if (this.state.users.length < 1) {
+                                    this.setState({
+                                        currentUsers: [...group]
+                                    });
+                                }
+                                this.setState({
+                                    users: [...this.state.users, group]
+                                });
+                                group = [];
+                            } else if (i === data.length - 1) {
+                                this.setState({
+                                    users: [...this.state.users, group]
+                                });
+                            }
+                        }
+                    }
+                    this.createPagination(this.state.users, 'userItems');
+                })
+                .then(() => {
+                    this.setState({
+                        allGroupedUsers: this.state.users
+                    })
+                })
+
+        }
 
         fetch('/admin/tickets/all')
             .then((response) => {
@@ -277,7 +361,6 @@ class Dashboard extends Component {
                             });
                         }
                     }
-
                 }
 
                 this.createPagination(this.state.tickets, 'ticketItems');
@@ -369,13 +452,13 @@ const UserAccordion = (props) => {
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
                     <Card.Body>
-                        <Search
+                        {/* <Search
                             users={props.users}
                             groupArrays={props.users}
                             searchOnChange={props.searchOnChange}
                             value={props.userSearch}
                             filterGroupArrays={props.filterGroupArrays}
-                        />
+                        /> */}
                         <Table striped bordered hover>
                             <thead>
                                 <tr>
@@ -421,7 +504,6 @@ const UserAccordion = (props) => {
                             }
                         </Pagination>
 
-
                     </Card.Body>
                 </Accordion.Collapse>
             </Card>
@@ -433,7 +515,6 @@ const UserAccordion = (props) => {
 }
 
 const TicketAccordion = (props) => {
-
     return (
         <Accordion defaultActiveKey="0">
             <Card className='user-card'>
@@ -444,10 +525,10 @@ const TicketAccordion = (props) => {
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
                     <Card.Body>
-                        <Form inline className='user-search'>
+                        {/* <Form inline className='user-search'>
                             <FormControl type="text" placeholder="Search" className="mr-sm-2" />
                             <Button variant="outline-success">Search</Button>
-                        </Form>
+                        </Form> */}
                         <Table striped bordered hover>
                             <thead>
                                 <tr>

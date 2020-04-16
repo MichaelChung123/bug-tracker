@@ -42,5 +42,4 @@ const Search = ({ groupArrays, searchOnChange, value, filterGroupArrays, users }
     );
 }
 
-
 export default Search;

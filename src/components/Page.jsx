@@ -6,7 +6,7 @@ class Page extends React.Component {
         const { number, pageClick, type } = this.props;
         pageClick(number, type);
     }
-
+    
     render() {
         return (
             <Pagination.Item key={this.props.number} onClick={this.handleClick} active={this.props.number === this.props.active}>
