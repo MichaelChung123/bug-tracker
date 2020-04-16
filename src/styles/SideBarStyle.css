@@ -143,3 +143,11 @@ body {
 .action-container i {
     color: white;
 }
+
+.action-container a {
+    color: white;
+}
+
+#root > div > div > div.col-lg-3.col-md-3.col-sm-3.col-3 > div > div:nth-child(5) > div > div.col-lg-10.col-md-10.col-sm-10.col-10 > a {
+    color: white;
+}

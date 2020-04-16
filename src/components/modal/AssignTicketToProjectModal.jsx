@@ -12,7 +12,6 @@ function AssignTicketToProjectModal({ projects, setSelectedProject, sideActions,
 
     return (
         <>
-
             <Modal show={show} onHide={handleClose}>
                 <Form onSubmit={handleSubmit}>
                     <Modal.Header closeButton>

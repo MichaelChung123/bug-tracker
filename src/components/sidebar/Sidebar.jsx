@@ -84,7 +84,7 @@ class SideNav extends React.Component {
                     key: 1
                 },
                 {
-                    path: '/admin/logout',
+                    path: '/',
                     name: 'Log Out',
                     css: 'nav-icon fas fa-door-open',
                     expandable: false,
@@ -175,7 +175,8 @@ const StyledNavItem = styled.div`
     margin-right: 8px;
     a {
         font-size: 16px;
-        color: ${(props) => props.active ? "white" : "#9FFFCB"};
+        // color: ${(props) => props.active ? "white" : "#9FFFCB"};
+        color: white;
         :hover {
             opacity: 0.7;
             text-decoration: none; /* Gets rid of underlining of icons */
@@ -208,7 +209,7 @@ class NavItem extends React.Component {
                             param = this.props.item.key;
                             this.props.onOpen(param)
                         }
-                        }>
+                        } className='cursor-pointer'>
                             <Card>
                                 <Card.Header className={this.props.open ? 'side-bar-card-header-open' : 'side-bar-card-header'}>
                                     <Accordion.Toggle as={Row} variant="link" eventKey="0">
@@ -286,18 +287,30 @@ class NavAction extends React.Component {
         })
     }
 
+    handleClick = () => {
+        const { path, onItemClick } = this.props;
+        onItemClick(path);
+    }
+
     render() {
         return (
             <>
-                <Container className='action-container' onClick={this.handleOpen} style={this.props.color}>
-                    <Row>
+                <Container className='action-container' onClick={this.props.name === 'Log Out' ? null: this.handleOpen} style={this.props.color}>
+                    <Row className='cursor-pointer'>
                         <Col xs={1} sm={1} md={1} lg={1}>
                             <i className={this.props.css} />
                         </Col>
                         <Col xs={10} sm={10} md={10} lg={10}>
-                            <p>
+                        {
+                            this.props.name === 'Log Out' ?
+                            <a href={this.props.path}>
                                 {this.props.name}
-                            </p>
+                            </a>
+                            :
+                            <a>
+                                {this.props.name}
+                            </a>
+                        }
                         </Col>
                     </Row>
                 </Container>

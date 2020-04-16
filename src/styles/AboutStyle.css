@@ -1,0 +1,29 @@
+.about-logo {
+    display: flex;
+    justify-content: center;
+}
+
+.about-logo img {
+    width: 50%;
+}
+
+.about-card-row {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0px;
+}
+
+.about-card .card {
+    padding: 20px;
+    box-shadow: 15px 10px 35px #888, 10px 10px 15px #888;
+}
+
+.about-tech-title {
+    display: flex;
+    justify-content: center;
+}
+
+.tech-entry {
+    display: flex;
+    justify-content: center;
+}

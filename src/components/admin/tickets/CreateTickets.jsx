@@ -283,7 +283,7 @@ class CreateTickets extends Component {
                 </Row>
                 {/* SIDE ACTIONS */}
                 <Row>
-                    <Col xs={3} sm={3} md={3} lg={3}>
+                    <Col xs={3} sm={3} md={3} lg={3} className='cursor-pointer'>
                         {
                             this.state.sideActions.map((action, key) => {
                                 return (
@@ -560,7 +560,7 @@ const TicketDetails = ({ showAlert, checkFields, handleTitleChange, handleDescri
     return (
         <Accordion defaultActiveKey="0">
             <Card>
-                <Card.Header>
+                <Card.Header className='cursor-pointer'>
                     <Accordion.Toggle as={Card.Title} variant="link" eventKey="0">
                         Demo Admin
                     </Accordion.Toggle>

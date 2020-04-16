@@ -24,14 +24,23 @@
     padding-right: 0px;
 }
 
-.project-row {
-
+.project-col a:hover {
+    opacity: 0.75;
 }
 
 .project-col {
     display: flex;
     justify-content: center;
     padding: 52px 0px;
+}
+
+.project-col a {
+    text-decoration: none;
+    color: #6c757d;
+}
+
+.project-card {
+    box-shadow: 10px 5px 30px #888, 5px 5px 10px #888;
 }
 
 .project-col .card {

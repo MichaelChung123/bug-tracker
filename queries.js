@@ -11,7 +11,7 @@ const pool = new Pool({
 })
 
 const getTickets = (req, res) => {
-    pool.query('SELECT * FROM tickets', (error, results) => {
+    pool.query('SELECT * FROM tickets ORDER BY lastupdated ASC', (error, results) => {
         if (error) {
             throw error
         }

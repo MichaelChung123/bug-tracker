@@ -13,6 +13,7 @@ import SideBar from './components/sidebar/Sidebar';
 import TopNav from './components/navbar/TopNav';
 import Dashboard from './components/admin/Dashboard';
 import ScrollToTop from './components/ScrollToTop';
+import About from './components/About';
 
 class App extends Component {
   render() {
@@ -29,6 +30,7 @@ class App extends Component {
                   <TopNav />
                   <Container className='main-content' fluid='true'>
                     <Route path='/admin/dashboard' component={Dashboard} />
+                    <Route path='/admin/about' component={About} />
                     <Route path='/admin/tickets/all' component={Tickets} />
                     <Route path='/admin/tickets/create' component={CreateTickets} />
                     <Route path='/admin/projects/all' component={Projects} />

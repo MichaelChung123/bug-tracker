@@ -8,8 +8,8 @@ class TopNav extends React.Component {
             <Navbar sticky='top' bg="light" expand="lg">
                 <Nav className="mr-auto">
                     <Nav.Link href="/demo/admin/home/index">Home</Nav.Link>
-                    <Nav.Link href="/about">About</Nav.Link>
-                    <NavDropdown
+                    <Nav.Link href="/admin/about">About</Nav.Link>
+                    {/* <NavDropdown
                         title={
                             <Navbar.Brand>
                                 <i className='far fa-bell fa-2x' />
@@ -23,7 +23,7 @@ class TopNav extends React.Component {
                                 0 Notifications
                         </ListGroup.Item>
                         </ListGroup>
-                    </NavDropdown>
+                    </NavDropdown> */}
                 </Nav>
 
             </Navbar >

@@ -116,7 +116,7 @@ class Tickets extends Component {
                     </Col>
                 </Row>
                 <Row className='ticket-list'>
-                    <Row className='full-row'>
+                    {/* <Row className='full-row'>
                         <Form inline className='ticket-search'>
                             <Col sm={7} md={7} lg={7}>
                                 <FormControl type="text" placeholder="Search" className="mr-sm-2" />
@@ -125,7 +125,7 @@ class Tickets extends Component {
                                 <Button variant="outline-success">Search</Button>
                             </Col>
                         </Form>
-                    </Row>
+                    </Row> */}
                     <Table striped bordered hover>
                         <thead>
                             <tr>

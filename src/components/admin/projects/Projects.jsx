@@ -89,20 +89,22 @@ class ProjectList extends React.Component {
     render() {
         return (
             <Col xs={12} sm={6} md={6} lg={4} className='project-col'>
-                <Card style={{ width: '18rem' }}>
-                    <Card.Header>{this.props.title}</Card.Header>
-                    <Card.Body className='projects-cards-content'>
-                        <Card.Subtitle className="mb-2 text-muted item">{this.props.activeTickets} Active Tickets</Card.Subtitle>
-                        <Card.Text>
-                            <p>
-                                {this.props.description.length > 200 ? this.props.description.slice(0, 200) + ' ...' : this.props.description}
-                            </p>
-                        </Card.Text>
-                        <div className='more-info-container'>
-                            <Card.Link href={`/admin/projects/details/${this.props.project_id}`} className='item'>More Info <i className="fas fa-arrow-circle-right"></i></Card.Link>
-                        </div>
-                    </Card.Body>
-                </Card>
+                <a href={`/admin/projects/details/${this.props.project_id}`} className='project-card'>
+                    <Card style={{ width: '18rem' }} className='cursor-pointer'>
+                        <Card.Header>{this.props.title}</Card.Header>
+                        <Card.Body className='projects-cards-content'>
+                            <Card.Subtitle className="mb-2 text-muted item">{this.props.activeTickets} Active Tickets</Card.Subtitle>
+                            <Card.Text>
+                                <p>
+                                    {this.props.description.length > 200 ? this.props.description.slice(0, 200) + ' ...' : this.props.description}
+                                </p>
+                            </Card.Text>
+                            <div className='more-info-container'>
+                                <Card.Link href={`/admin/projects/details/${this.props.project_id}`} className='item'>More Info <i className="fas fa-arrow-circle-right"></i></Card.Link>
+                            </div>
+                        </Card.Body>
+                    </Card>
+                </a>
             </Col>
         );
     }

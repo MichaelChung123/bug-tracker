@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Row, Col, Pagination, Container, Accordion, Card, Button, Table, Form, FormControl } from 'react-bootstrap';
 import Page from '../Page';
 import Search from '../Search';
+import moment from 'moment';
 
 import '../../styles/DashboardStyle.css';
 
@@ -426,7 +427,7 @@ class PtuBlock extends React.Component {
     render() {
         return (
             <Col xs={3} sm={3} md={3} lg={3} onClick={this.props.name === 'Users' ? null : () => this.props.handleRedirect(this.props.path)} className={this.props.name === 'Users' ? '' : 'cursor-pointer'}>
-                <Row className='ptu-box'>
+                <Row className='ptu-box cursor-pointer'>
                     <Col xs='auto' sm='auto' md='auto' lg='auto' style={{ backgroundColor: this.props.color }} className='ptu-icon'>
                         <i className={this.props.iconClass} />
                     </Col>
@@ -445,7 +446,7 @@ const UserAccordion = (props) => {
     return (
         <Accordion defaultActiveKey="0">
             <Card className='user-card'>
-                <Card.Header>
+                <Card.Header className='cursor-pointer'>
                     <Accordion.Toggle as={Card.Title} variant="link" eventKey="0">
                         All Users
                     </Accordion.Toggle>
@@ -518,7 +519,7 @@ const TicketAccordion = (props) => {
     return (
         <Accordion defaultActiveKey="0">
             <Card className='user-card'>
-                <Card.Header>
+                <Card.Header className='cursor-pointer'>
                     <Accordion.Toggle as={Card.Title} variant="link" eventKey="0">
                         All Tickets
                     </Accordion.Toggle>
@@ -544,6 +545,15 @@ const TicketAccordion = (props) => {
                             <tbody>
                                 {
                                     props.currentTickets.map((ticket, key) => {
+                                        let dbUpdated = moment(ticket.lastupdated).format("YYYY-MM-DD") + ' ' + ticket.lastupdatedtime;
+                                        let updated = moment(dbUpdated).format('LLL').replace('AM', 'PM');
+
+                                        let dbCreated = moment(ticket.createddate).format("YYYY-MM-DD") + ' ' + ticket.createdtime;
+                                        let created = moment(dbCreated).format('LLL').replace('AM', 'PM');
+
+                                        console.log('updated: ', updated);
+                                        console.log('created: ', created);
+
                                         return (
                                             <tr key={key} onClick={() => props.handleRedirect(`/admin/tickets/details/${ticket.ticket_id}`)} className='cursor-pointer'>
                                                 <td>
@@ -562,10 +572,10 @@ const TicketAccordion = (props) => {
                                                     {ticket.status}
                                                 </td>
                                                 <td>
-                                                    {ticket.lastupdated}
+                                                    {updated}
                                                 </td>
                                                 <td>
-                                                    {ticket.createddate}
+                                                    {created}
                                                 </td>
                                             </tr>
                                         );
