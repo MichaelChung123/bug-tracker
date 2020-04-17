@@ -4,11 +4,13 @@ const app = express()
 // const port = 8080
 const db = require('./queries')
 const path = require('path');
-let port = process.env.PORT;
+// let port = process.env.PORT;
 
-if (port == null || port == "") {
-  port = 8000;
-}
+// if (port == null || port == "") {
+//   port = 8000;
+// }
+
+const port = process.env.PORT || 5000
 
 app.use(express.static(path.join(__dirname, 'build')));
 
