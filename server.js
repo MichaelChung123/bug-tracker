@@ -11,7 +11,7 @@ const path = require('path');
 //   port = 8000;
 // }
 
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 8080
 
 
 app.use(express.static(path.join(__dirname, 'build')));
