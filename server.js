@@ -1,14 +1,12 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
-// const port = 8080
 const db = require('./queries')
 const path = require('path');
-// if (port == null || port == "") {
-//   port = 8000;
-// }
-
 const port = process.env.PORT || 5000
+// const {
+//     Pool
+// } = require('pg');
 
 app.use(express.static(path.join(__dirname, 'build')));
 
@@ -24,6 +22,34 @@ app.get('/', (request, response) => {
         info: 'Node.js, Express, and Postgres API'
     });
 });
+
+
+// const pool = new Pool({
+//     connectionString: process.env.DATABASE_URL || 'postgresql://postgres:<your admin password>@localhost:5432/bugtrackerdb',
+//     ssl: process.env.DATABASE_URL ? true : false
+// })
+
+// // const pool = new Pool({
+// //   connectionString: process.env.DATABASE_URL,
+// //   ssl: true
+// // });
+
+// app.get('/db', async (req, res) => {
+//     try {
+//         const client = await pool.connect()
+//         const result = await client.query('SELECT * FROM projects');
+//         const results = {
+//             'results': (result) ? result.rows : null
+//         };
+//         res.render('pages/db', results);
+//         client.release();
+//     } catch (err) {
+//         console.error(err);
+//         res.send("Error " + err);
+//     }
+// })
+
+
 
 app.get('/admin/tickets/all', db.getTickets);
 app.get('/admin/dashboard', db.getDashboardContent);
@@ -60,16 +86,3 @@ app.get('/admin/projects/newest', db.getNewestProjectID);
 app.listen(port, () => {
     console.log(`App running on port ${port}.`);
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
