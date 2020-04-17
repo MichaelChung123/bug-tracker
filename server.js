@@ -5,11 +5,14 @@ const app = express()
 const db = require('./queries')
 const path = require('path');
 
-let port = process.env.PORT;
+// let port = process.env.PORT;
 
-if (port == null || port == "") {
-  port = 8000;
-}
+// if (port == null || port == "") {
+//   port = 8000;
+// }
+
+const port = process.env.PORT || 5000
+
 
 app.use(express.static(path.join(__dirname, 'build')));
 
@@ -57,9 +60,10 @@ app.post('/ticket/details/upload/attachment/:id', db.uploadFile);
 
 app.post('/admin/projects/edit/:id', db.editProject);
 app.get('/admin/projects/newest', db.getNewestProjectID);
-app.listen(port, () => {
-    console.log(`App running on port ${port}.`);
-})
+// app.listen(port, () => {
+//     console.log(`App running on port ${port}.`);
+// })
+app.listen(process.env.PORT || 5000)
 
 
 
