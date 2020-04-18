@@ -28,7 +28,7 @@ const pool = new Pool({
 const dbRoute = (req, res) => {
     try {
         const client = pool.connect()
-        const result = client.query('SELECT * FROM test_table');
+        const result = pool.query('SELECT * FROM test_table');
         const results = {
             'results': (result) ? result.rows : null
         };
