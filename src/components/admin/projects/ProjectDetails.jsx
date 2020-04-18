@@ -198,7 +198,7 @@ class ProjectDetails extends Component {
                 <br />
 
                 <Row className='block-row'>
-
+                
                     <AssignUsersModal
                         parentProps={this.props}
                         assignedUsers={this.state.assignedUsers}

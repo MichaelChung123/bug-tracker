@@ -19,6 +19,18 @@
     padding: 15px 0px;
 }
 
+div.block-row.row {
+    margin-left: 3px;
+}
+
+div.main-content-ptu-block.row {
+    margin-left: 3px;
+}
+
+.ptu-icon i {
+    min-width: 33px;
+}
+
 .ptu-box {
     box-shadow: 0 0 1px rgba(0, 0, 0, .125), 0 1px 3px rgba(0, 0, 0, .2);
     border-radius: .25rem;
@@ -27,6 +39,7 @@
     padding: .5rem;
     position: relative;
     margin-left: 15px;
+    max-width: 250px;
 }
 
 .ptu-icon {
@@ -42,9 +55,7 @@
     justify-content: center;
 }
 
-.ptu-content {
-    
-}
+.ptu-content {}
 
 .ptu-info .row {
     max-height: 29px;
