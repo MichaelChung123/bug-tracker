@@ -1,24 +1,22 @@
 // const Pool = require('pg').Pool
-const {
-    Pool
-} = require('pg');
+const {Pool} = require('pg');
 const multer = require('multer');
 const cors = require('cors');
 
-// const pool = new Pool({
-//     user: 'me',
-//     host: 'localhost',
-//     database: 'bugtrackerdb',
-//     password: 'password',
-//     port: 5432,
-// })
-
-console.log('process.env.DATABASE_URL: ', process.env.DATABASE_URL);
-
 const pool = new Pool({
-    connectionString: 'postgres://vrqabxapqiewdj:facd202e90aa75fdf655bb89f9f44792dd151029bd2c128f4bc71bacf2bb7a84@ec2-52-86-73-86.compute-1.amazonaws.com:5432/d8tt8turn8',
-    ssl: true
-});
+    user: 'me',
+    host: 'localhost',
+    database: 'bugtrackerdb',
+    password: 'password',
+    port: 5432,
+})
+
+// console.log('process.env.DATABASE_URL: ', process.env.DATABASE_URL);
+
+// const pool = new Pool({
+//     connectionString: 'postgres://vrqabxapqiewdj:facd202e90aa75fdf655bb89f9f44792dd151029bd2c128f4bc71bacf2bb7a84@ec2-52-86-73-86.compute-1.amazonaws.com:5432/d8tt8turn8',
+//     ssl: true
+// });
 
 // const pool = new Pool({
 //     connectionString: process.env.DATABASE_URL || 'postgres://vrqabxapqiewdj:facd202e90aa75fdf655bb89f9f44792dd151029bd2c128f4bc71bacf2bb7a84@ec2-52-86-73-86.compute-1.amazonaws.com:5432/d8tt8turn8',
@@ -35,7 +33,7 @@ const dbRoute = (req, res) => {
         res.render('pages/db', results);
         client.release();
     } catch (err) {
-        console.error(err);
+        // console.error(err);
         res.send("Error " + err);
     }
 }
