@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Row, Col, Container } from 'react-bootstrap';
 import Login from './components/Login';
@@ -14,9 +13,16 @@ import TopNav from './components/navbar/TopNav';
 import Dashboard from './components/admin/Dashboard';
 import ScrollToTop from './components/ScrollToTop';
 import About from './components/About';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
+  static propTypes = {
+    children: PropTypes.node
+  }
+
   render() {
+    const { children } = this.props
+    console.log('children: ', children);
     return (
       <Router>
         <ScrollToTop>
