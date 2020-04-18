@@ -24,6 +24,7 @@ app.get('/', (request, response) => {
     });
 });
 
+app.get('/db', db.dbRoute);
 
 // const pool = new Pool({
 //     connectionString: process.env.DATABASE_URL || 'postgresql://postgres:<your admin password>@localhost:5432/bugtrackerdb',
