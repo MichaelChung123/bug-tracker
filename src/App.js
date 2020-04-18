@@ -16,13 +16,8 @@ import About from './components/About';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
-  static propTypes = {
-    children: PropTypes.node
-  }
 
   render() {
-    const { children } = this.props
-    console.log('children: ', children);
     return (
       <Router>
         <ScrollToTop>
