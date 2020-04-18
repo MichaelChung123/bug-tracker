@@ -1,21 +1,50 @@
-const Pool = require('pg').Pool
+// const Pool = require('pg').Pool
+const {
+    Pool
+} = require('pg');
 const multer = require('multer');
 const cors = require('cors');
 
+// const pool = new Pool({
+//     user: 'me',
+//     host: 'localhost',
+//     database: 'bugtrackerdb',
+//     password: 'password',
+//     port: 5432,
+// })
+
+console.log('process.env.DATABASE_URL: ', process.env.DATABASE_URL);
+
+// const pool = new Pool({
+//     connectionString: 'postgres://vrqabxapqiewdj:facd202e90aa75fdf655bb89f9f44792dd151029bd2c128f4bc71bacf2bb7a84@ec2-52-86-73-86.compute-1.amazonaws.com:5432/d8tt8turn8',
+//     ssl: true
+// });
+
 const pool = new Pool({
-    user: 'me',
-    host: 'localhost',
-    database: 'bugtrackerdb',
-    password: 'password',
-    port: 5432,
+    connectionString: process.env.DATABASE_URL || 'postgres://vrqabxapqiewdj:facd202e90aa75fdf655bb89f9f44792dd151029bd2c128f4bc71bacf2bb7a84@ec2-52-86-73-86.compute-1.amazonaws.com:5432/d8tt8turn8',
+    ssl: process.env.DATABASE_URL ? true : false
 })
+
+const dbRoute = (req, res) => {
+    try {
+        const client = await pool.connect()
+        const result = await client.query('SELECT * FROM test_table');
+        const results = {
+            'results': (result) ? result.rows : null
+        };
+        res.render('pages/db', results);
+        client.release();
+    } catch (err) {
+        console.error(err);
+        res.send("Error " + err);
+    }
+}
 
 const getTickets = (req, res) => {
     pool.query('SELECT * FROM tickets ORDER BY lastupdated ASC', (error, results) => {
         if (error) {
             throw error
         }
-        console.log(results.rows);
         res.json(results.rows)
     })
 }
@@ -117,7 +146,6 @@ const assignUserToProject = (request, response) => {
             if (error) {
                 throw error
             }
-            console.log('results: ', results)
             response.status(201).send(results.rows);
         })
 }
@@ -434,6 +462,7 @@ const getNewestProjectID = (request, response) => {
 
 
 module.exports = {
+    dbRoute,
     getTickets,
     getDashboardContent,
     createProject,
