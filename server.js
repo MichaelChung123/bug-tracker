@@ -24,6 +24,9 @@ app.get('/', (request, response) => {
     });
 });
 
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+
 app.get('/db', db.dbRoute);
 
 // const pool = new Pool({
