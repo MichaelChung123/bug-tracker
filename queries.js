@@ -1,39 +1,56 @@
-// const Pool = require('pg').Pool
-const {Pool} = require('pg');
+const Pool = require('pg').Pool
 const multer = require('multer');
 const cors = require('cors');
 
-const pool = new Pool({
-    user: 'me',
-    host: 'localhost',
-    database: 'bugtrackerdb',
-    password: 'password',
-    port: 5432,
-})
 
-// console.log('process.env.DATABASE_URL: ', process.env.DATABASE_URL);
 
-// const pool = new Pool({
-//     connectionString: 'postgres://vrqabxapqiewdj:facd202e90aa75fdf655bb89f9f44792dd151029bd2c128f4bc71bacf2bb7a84@ec2-52-86-73-86.compute-1.amazonaws.com:5432/d8tt8turn8',
-//     ssl: true
-// });
+// const { Pool } = require('pg'); 
+// // const secrets = require('../middleware/ENV').default;
+// const env = 'development';
 
-// const pool = new Pool({
-//     connectionString: process.env.DATABASE_URL || 'postgres://vrqabxapqiewdj:facd202e90aa75fdf655bb89f9f44792dd151029bd2c128f4bc71bacf2bb7a84@ec2-52-86-73-86.compute-1.amazonaws.com:5432/d8tt8turn8',
-//     ssl: process.env.DATABASE_URL ? true : false
-// })
+// let connectionString = {
+//     user: 'me',
+//     host: 'localhost',
+//     database: 'bugtrackerdb',
+//     password: 'password',
+//     port: 5432,
+// };
+
+
+
+// HEROKU_POSTGRESQL_OLIVE_URL postgres://unrbsgpiiqfdon:5caf68e5c99cbd6dc88d14dbb389dfd04f05374030ebc614ed3f794fd257c29b@ec2-52-7-39-178.compute-1.amazonaws.com:5432/d1i0r8pgl7f85s
+let connectionString = {
+    connectionString: 'postgres://unrbsgpiiqfdon:5caf68e5c99cbd6dc88d14dbb389dfd04f05374030ebc614ed3f794fd257c29b@ec2-52-7-39-178.compute-1.amazonaws.com:5432/d1i0r8pgl7f85s',
+    ssl: {
+        rejectUnauthorized: false,
+    },
+};
+
+const pool = new Pool(connectionString);
+pool.on('connect', () => console.log('connected to db'));
+
 
 const dbRoute = (req, res) => {
     try {
-        const client = pool.connect()
-        const result = pool.query('SELECT * FROM test_table');
-        const results = {
-            'results': (result) ? result.rows : null
-        };
-        res.render('pages/db', results);
-        client.release();
+        // // const client = pool.connect()
+        // const result = pool.query('SELECT * FROM tickets');
+        // const results = result.rows;
+
+        // console.log(results);
+        // // res.json('pages/db', results);
+        // // res.status(200).json(results)
+        // res.json(results)
+
+        pool.query('SELECT * FROM tickets', (error, results) => {
+            if (error) {
+                throw error
+            }
+            console.log(results.rows);
+            res.status(200).json(results.rows)
+        })
+
     } catch (err) {
-        // console.error(err);
+        console.error(err);
         res.send("Error " + err);
     }
 }

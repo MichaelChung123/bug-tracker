@@ -4,6 +4,16 @@ import '../styles/LoginStyle.css';
 import logo from './de_bug-logo.png';
 
 class Login extends Component {
+
+
+    componentDidMount() {
+        fetch('/db')
+        .then((data) => {
+            console.log('data: ', data)
+        })
+
+    }
+
     render() {
         return (
             <Container fluid='true' className='login-container'>
