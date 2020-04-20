@@ -318,8 +318,10 @@ class Dashboard extends Component {
                 })
 
         }
+        
+        console.log(process.env.REACT_APP_BASEURL);
 
-        fetch('/admin/tickets/all')
+        fetch(process.env.REACT_APP_BASEURL + '/admin/tickets/all')
             .then((response) => {
                 return response.json();
             })

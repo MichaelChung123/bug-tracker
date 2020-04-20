@@ -1,45 +1,33 @@
-// const Pool = require('pg').Pool
-const {Pool} = require('pg');
+const {Client} = require('pg');
 const multer = require('multer');
 const cors = require('cors');
 
-const pool = new Pool({
-    user: 'me',
-    host: 'localhost',
-    database: 'bugtrackerdb',
-    password: 'password',
-    port: 5432,
-})
+// const client = new client({
+//     user: 'me',
+//     host: 'localhost',
+//     database: 'bugtrackerdb',
+//     password: 'password',
+//     port: 5432,
+// })
 
-// console.log('process.env.DATABASE_URL: ', process.env.DATABASE_URL);
+const client = new Client();
 
-// const pool = new Pool({
+client.connect();
+
+
+
+// const client = new client({
 //     connectionString: 'postgres://vrqabxapqiewdj:facd202e90aa75fdf655bb89f9f44792dd151029bd2c128f4bc71bacf2bb7a84@ec2-52-86-73-86.compute-1.amazonaws.com:5432/d8tt8turn8',
 //     ssl: true
 // });
 
-// const pool = new Pool({
+// const client = new client({
 //     connectionString: process.env.DATABASE_URL || 'postgres://vrqabxapqiewdj:facd202e90aa75fdf655bb89f9f44792dd151029bd2c128f4bc71bacf2bb7a84@ec2-52-86-73-86.compute-1.amazonaws.com:5432/d8tt8turn8',
 //     ssl: process.env.DATABASE_URL ? true : false
 // })
 
-const dbRoute = (req, res) => {
-    try {
-        const client = pool.connect()
-        const result = pool.query('SELECT * FROM test_table');
-        const results = {
-            'results': (result) ? result.rows : null
-        };
-        res.render('pages/db', results);
-        client.release();
-    } catch (err) {
-        // console.error(err);
-        res.send("Error " + err);
-    }
-}
-
 const getTickets = (req, res) => {
-    pool.query('SELECT * FROM tickets ORDER BY lastupdated ASC', (error, results) => {
+    client.query('SELECT * FROM tickets ORDER BY lastupdated ASC', (error, results) => {
         if (error) {
             throw error
         }
@@ -48,7 +36,7 @@ const getTickets = (req, res) => {
 }
 
 const getDashboardContent = (req, res) => {
-    pool.query(`
+    client.query(`
     (SELECT COUNT(*) AS count_ptu FROM projects)
     UNION ALL
     (SELECT COUNT(*) AS count_tickets FROM tickets)
@@ -68,7 +56,7 @@ const createProject = (request, response) => {
         description
     } = request.body;
 
-    pool.query(`INSERT INTO projects (title, description) VALUES ('${title}', '${description}')`,
+    client.query(`INSERT INTO projects (title, description) VALUES ('${title}', '${description}')`,
         (error, results) => {
             if (error) {
                 throw error
@@ -81,7 +69,7 @@ const createProject = (request, response) => {
 const getProjectByID = (request, response) => {
     const id = parseInt(request.params.id);
 
-    pool.query(`SELECT * FROM projects WHERE project_id=${id}`, (error, results) => {
+    client.query(`SELECT * FROM projects WHERE project_id=${id}`, (error, results) => {
         if (error) {
             throw error
         }
@@ -93,7 +81,7 @@ const getProjectByID = (request, response) => {
 const getUsersByProjectID = (request, response) => {
     const project_id = parseInt(request.params.id);
 
-    pool.query(
+    client.query(
         `
             SELECT firstname, lastname, role, users.user_id
             FROM user_project
@@ -111,7 +99,7 @@ const getUsersByProjectID = (request, response) => {
 const getTicketsByProjectID = (request, response) => {
     const id = parseInt(request.params.id);
 
-    pool.query(`SELECT * from tickets WHERE project_id=${id}`, (error, results) => {
+    client.query(`SELECT * from tickets WHERE project_id=${id}`, (error, results) => {
         if (error) {
             throw error
         }
@@ -120,7 +108,7 @@ const getTicketsByProjectID = (request, response) => {
 }
 
 const getUsers = (request, response) => {
-    pool.query('SELECT * FROM users ORDER BY role ASC', (error, results) => {
+    client.query('SELECT * FROM users ORDER BY role ASC', (error, results) => {
         if (error) {
             throw error
         }
@@ -134,7 +122,7 @@ const assignUserToProject = (request, response) => {
         project_id
     } = request.body;
 
-    pool.query(`
+    client.query(`
         INSERT INTO user_project (user_id, project_id)
         SELECT  users.user_id AS user_id,
                 projects.project_id AS project_id
@@ -153,7 +141,7 @@ const getUserByID = (request, response) => {
         user_id
     } = request.body;
 
-    pool.query(`SELECT * FROM users WHERE user_id=${user_id}`, (error, results) => {
+    client.query(`SELECT * FROM users WHERE user_id=${user_id}`, (error, results) => {
         if (error) {
             throw error
         }
@@ -167,7 +155,7 @@ const deleteUserFromProject = (request, response) => {
         project_id
     } = request.body;
 
-    pool.query(
+    client.query(
         `
             DELETE FROM user_project 
             WHERE user_id=${user_id} AND project_id=${project_id};
@@ -181,7 +169,7 @@ const deleteUserFromProject = (request, response) => {
 }
 
 const getAllProjects = (request, response) => {
-    pool.query(`SELECT * FROM projects`, (error, results) => {
+    client.query(`SELECT * FROM projects`, (error, results) => {
         if (error) {
             throw error
         }
@@ -190,7 +178,7 @@ const getAllProjects = (request, response) => {
 }
 
 const getActiveTickets = (request, response) => {
-    pool.query(`
+    client.query(`
     SELECT projects.*, 
         (SELECT COUNT(*) 
         FROM tickets 
@@ -219,7 +207,7 @@ const createTicket = (request, response) => {
         project_id
     } = request.body;
 
-    pool.query(`
+    client.query(`
     INSERT INTO tickets (ticket_id, title, creator, priority, type, status, lastupdated, createddate, project_id, description, createdtime, lastupdatedtime) 
     VALUES ( DEFAULT, '${ticketTitle}', '${creator}', '${selectedPriority}', '${selectedType}', 'Open', '${lastUpdated}', '${createdDate}', ${project_id}, '${ticketDescription}', '${createdTime}', '${lastUpdatedTime}')`,
         (error, results) => {
@@ -233,7 +221,7 @@ const createTicket = (request, response) => {
 const getTicketByID = (request, response) => {
     const id = parseInt(request.params.id);
 
-    pool.query(`SELECT * FROM tickets WHERE ticket_id=${id}`, (error, results) => {
+    client.query(`SELECT * FROM tickets WHERE ticket_id=${id}`, (error, results) => {
         if (error) {
             throw error
         }
@@ -242,7 +230,7 @@ const getTicketByID = (request, response) => {
 }
 
 const getNewestTicketID = (request, response) => {
-    pool.query(`
+    client.query(`
     SELECT ticket_id
     FROM tickets 
     WHERE ticket_id = (SELECT MAX(ticket_id) FROM tickets)`,
@@ -265,7 +253,7 @@ const editTicket = (request, response) => {
 
     const id = parseInt(request.params.id);
 
-    pool.query(`
+    client.query(`
         UPDATE tickets
         SET title='${editTitleVal}',
         description='${editDescVal}',
@@ -290,7 +278,7 @@ const updatePriority = (req, res) => {
 
     const id = parseInt(req.params.id);
 
-    pool.query(`
+    client.query(`
         UPDATE tickets
         SET priority='${selectedPriority}',
         lastupdated='${lastUpdated}',
@@ -314,7 +302,7 @@ const updateType = (req, res) => {
 
     const id = parseInt(req.params.id);
 
-    pool.query(`
+    client.query(`
         UPDATE tickets
         SET type='${selectedType}',
         lastupdated='${lastUpdated}',
@@ -332,7 +320,7 @@ const updateType = (req, res) => {
 const getCommentsByID = (request, response) => {
     const id = parseInt(request.params.id);
 
-    pool.query(`SELECT * FROM comments WHERE ticket_id=${id} ORDER BY createdtime ASC`,
+    client.query(`SELECT * FROM comments WHERE ticket_id=${id} ORDER BY createdtime ASC`,
         (error, results) => {
             if (error) {
                 throw error
@@ -351,7 +339,7 @@ const addComment = (request, response) => {
         newTime
     } = request.body;
 
-    pool.query(`
+    client.query(`
         INSERT INTO comments (creator, createddate, createdtime, ticket_id, text, user_id, lastupdatedtime, lastupdated)
         VALUES ('${creator}', '${newDate}', '${newTime}', '${id}', '${text}', 1, '${newTime}', '${newDate}')`,
         (error, results) => {
@@ -366,7 +354,7 @@ const editComment = (request, response) => {
     const comment_id = request.params.comment_id;
     const editedComment = request.body.text;
 
-    pool.query(`
+    client.query(`
         UPDATE comments
         SET text='${editedComment}'
         WHERE comment_id=${comment_id}
@@ -382,7 +370,7 @@ const editComment = (request, response) => {
 const deleteCommentByID = (request, response) => {
     const id = parseInt(request.params.id);
 
-    pool.query(`
+    client.query(`
         DELETE FROM comments
         WHERE comment_id=${id}
     `,
@@ -428,7 +416,7 @@ const editProject = (req, res) => {
         description
     } = req.body;
 
-    pool.query(`
+    client.query(`
         UPDATE projects
         SET title='${title}',
         description='${description}'
@@ -445,7 +433,7 @@ const editProject = (req, res) => {
 const getNewestProjectID = (request, response) => {
     // const id = parseInt(request.params.id);
 
-    pool.query(`
+    client.query(`
         SELECT project_id 
         FROM projects 
         WHERE project_id = (SELECT MAX(project_id) FROM projects)`,
@@ -460,7 +448,7 @@ const getNewestProjectID = (request, response) => {
 
 
 module.exports = {
-    dbRoute,
+    // dbRoute,
     getTickets,
     getDashboardContent,
     createProject,
@@ -488,9 +476,9 @@ module.exports = {
     getNewestProjectID
 }
 
-// const Pool = require('pg').Pool
+// const client = require('pg').client
 
-// const pool = new Pool({
+// const client = new client({
 //     user: 'me',
 //     host: 'localhost',
 //     database: 'api',
@@ -499,7 +487,7 @@ module.exports = {
 // })
 
 // const getUsers = (request, response) => {
-//     pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
+//     client.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
 //         if (error) {
 //             throw error
 //         }
@@ -510,7 +498,7 @@ module.exports = {
 // const getUserById = (request, response) => {
 //     const id = parseInt(request.params.id)
 
-//     pool.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
+//     client.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
 //         if (error) {
 //             throw error
 //         }
@@ -524,7 +512,7 @@ module.exports = {
 //         email
 //     } = request.body
 
-//     pool.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email], (error, results) => {
+//     client.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email], (error, results) => {
 //         if (error) {
 //             throw error
 //         }
@@ -539,7 +527,7 @@ module.exports = {
 //         email
 //     } = request.body
 
-//     pool.query(
+//     client.query(
 //         'UPDATE users SET name = $1, email = $2 WHERE id = $3',
 //         [name, email, id],
 //         (error, results) => {
@@ -554,7 +542,7 @@ module.exports = {
 // const deleteUser = (request, response) => {
 //     const id = parseInt(request.params.id)
 
-//     pool.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
+//     client.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
 //         if (error) {
 //             throw error
 //         }

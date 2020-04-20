@@ -1,20 +1,13 @@
+require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const db = require('./queries')
-const path = require('path');
+const path = require('path')
 const port = process.env.PORT || 8080
+const cors = require('cors')
 
-
-const {
-    Pool
-} = require('pg');
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: true
-});
-
-app.use(express.static(path.join(__dirname, 'build')));
+// app.use(express.static(path.join(__dirname, 'build')));
 
 app.use(bodyParser.json())
 app.use(
@@ -23,26 +16,13 @@ app.use(
     })
 )
 
+app.use(cors())
+
 app.get('/', (request, response) => {
     response.json({
         info: 'Node.js, Express, and Postgres API'
     });
 });
-
-app.get('/db', async (req, res) => {
-    try {
-        const client = await pool.connect()
-        const result = await client.query('SELECT * FROM test_table');
-        const results = {
-            'results': (result) ? result.rows : null
-        };
-        res.render('pages/db', results);
-        client.release();
-    } catch (err) {
-        console.error(err);
-        res.send("Error " + err);
-    }
-})
 
 app.get('/admin/tickets/all', db.getTickets);
 app.get('/admin/dashboard', db.getDashboardContent);
