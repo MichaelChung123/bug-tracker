@@ -1,4 +1,6 @@
-const {Client} = require('pg');
+const {
+    Client
+} = require('pg');
 const multer = require('multer');
 const cors = require('cors');
 
@@ -10,21 +12,13 @@ const cors = require('cors');
 //     port: 5432,
 // })
 
-const client = new Client();
+const client = process.env.PGDATABASE ? new Client() :
+    new Client({
+        connectionString: process.env.HEROKU_POSTGRESQL_OLIVE_URL,
+        ssl: true
+    })
 
 client.connect();
-
-
-
-// const client = new client({
-//     connectionString: 'postgres://vrqabxapqiewdj:facd202e90aa75fdf655bb89f9f44792dd151029bd2c128f4bc71bacf2bb7a84@ec2-52-86-73-86.compute-1.amazonaws.com:5432/d8tt8turn8',
-//     ssl: true
-// });
-
-// const client = new client({
-//     connectionString: process.env.DATABASE_URL || 'postgres://vrqabxapqiewdj:facd202e90aa75fdf655bb89f9f44792dd151029bd2c128f4bc71bacf2bb7a84@ec2-52-86-73-86.compute-1.amazonaws.com:5432/d8tt8turn8',
-//     ssl: process.env.DATABASE_URL ? true : false
-// })
 
 const getTickets = (req, res) => {
     client.query('SELECT * FROM tickets ORDER BY lastupdated ASC', (error, results) => {
