@@ -106,6 +106,11 @@ class SideNav extends React.Component {
         }));
     }
 
+    // Handles the redirect onClick for tickets
+    handleRedirect = (path) => {
+        this.props.history.push(path);
+    }
+
     render() {
         const { items, actions, activePath } = this.state;
         return (
@@ -154,6 +159,7 @@ class SideNav extends React.Component {
                                 color={action.color}
                                 onItemClick={this.onItemClick}
                                 active={action.path === activePath}
+                                handleRedirect = {this.handleRedirect}
                                 key={action.key}
                             />
                         );
@@ -295,22 +301,22 @@ class NavAction extends React.Component {
     render() {
         return (
             <>
-                <Container className='action-container' onClick={this.props.name === 'Log Out' ? null: this.handleOpen} style={this.props.color}>
+                <Container className='action-container' onClick={this.props.name === 'Log Out' ? null : this.handleOpen} style={this.props.color}>
                     <Row className='cursor-pointer'>
                         <Col xs={1} sm={1} md={1} lg={1}>
                             <i className={this.props.css} />
                         </Col>
                         <Col xs={10} sm={10} md={10} lg={10}>
-                        {
-                            this.props.name === 'Log Out' ?
-                            <a href={this.props.path}>
-                                {this.props.name}
-                            </a>
-                            :
-                            <a>
-                                {this.props.name}
-                            </a>
-                        }
+                            {
+                                this.props.name === 'Log Out' ?
+                                    <a href={this.props.path}>
+                                        {this.props.name}
+                                    </a>
+                                    :
+                                    <a>
+                                        {this.props.name}
+                                    </a>
+                            }
                         </Col>
                     </Row>
                 </Container>
@@ -318,6 +324,7 @@ class NavAction extends React.Component {
                 <CreateProjectModal
                     show={this.state.show}
                     handleClose={this.handleClose}
+                    handleRedirect={this.props.handleRedirect}
                 />
             </>
         );

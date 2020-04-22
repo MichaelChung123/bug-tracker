@@ -47,8 +47,7 @@ class Login extends Component {
 
                 <Row>
                     <Col className='extra-login'>
-                        {/* {/* <Button href='/admin/dashboard' className='demo-login'>Login as Demo User</Button> */}
-                        <Link to='/admin/dashboard' className='demo-login'>Login as Demo User</Link>
+                        <Button href='/admin/dashboard' className='demo-login'>Login as Demo User</Button>
                     </Col>
                 </Row>
             </Container>

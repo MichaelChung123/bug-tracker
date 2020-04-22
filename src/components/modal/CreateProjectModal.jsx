@@ -34,8 +34,8 @@ function CreateProjectModal({ show, handleClose, handleRedirect }) {
         })
             .then((data) => {
                 console.log('Success:', data);
+                return redirectNewProject()
             })
-            .then(redirectNewProject())
             .catch((error) => {
                 console.error('Error POST:', error);
             });

@@ -124,7 +124,7 @@ const TicketComments = (props) => {
         <Accordion defaultActiveKey="0">
             <Card>
                 <Card.Header>
-                    <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                    <Accordion.Toggle as={Card.Title} variant="link" eventKey="0">
                         Demo Admin
                     </Accordion.Toggle>
                 </Card.Header>
