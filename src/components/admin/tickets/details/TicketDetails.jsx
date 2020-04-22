@@ -96,7 +96,7 @@ class TicketDetails extends Component {
                 lastUpdatedTime: lastUpdatedTime
             }
 
-            fetch(`/ticket/details/priority/${id}`, {
+            fetch(process.env.REACT_APP_BASEURL + `/ticket/details/priority/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ class TicketDetails extends Component {
                 lastUpdatedTime: lastUpdatedTime
             }
 
-            fetch(`/ticket/details/type/${id}`, {
+            fetch(process.env.REACT_APP_BASEURL + `/ticket/details/type/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -171,7 +171,7 @@ class TicketDetails extends Component {
 
         const id = this.props.appProps.match.params.id;
 
-        fetch(`/ticket/details/upload/attachment/${id}`, {
+        fetch(process.env.REACT_APP_BASEURL + `/ticket/details/upload/attachment/${id}`, {
             method: 'POST',
             body: data
         })
@@ -236,7 +236,7 @@ class TicketDetails extends Component {
         }
 
         // Edit title and description values in db
-        fetch(`/edit/ticket/${id}`, {
+        fetch(process.env.REACT_APP_BASEURL + `/edit/ticket/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -256,7 +256,7 @@ class TicketDetails extends Component {
         const id = this.props.appProps.match.params.id;
 
         // Gets all info about specific ticket from tickets table
-        fetch(`/admin/tickets/details/${id}`)
+        fetch(process.env.REACT_APP_BASEURL + `/admin/tickets/details/${id}`)
             .then((response) => {
                 return response.json();
             })

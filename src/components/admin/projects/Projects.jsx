@@ -36,12 +36,11 @@ class Projects extends Component {
 
     componentDidMount() {
 
-        fetch('/projects/active/tickets')
+        fetch(process.env.REACT_APP_BASEURL + '/projects/active/tickets')
             .then((response) => {
                 return response.json();
             })
             .then((data) => {
-                console.log(data);
                 this.setState({
                     activeProjects: data
                 })

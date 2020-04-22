@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Pagination, Container, Accordion, Card, Button, Table, Form, FormControl, Image } from 'react-bootstrap';
+import {Link} from 'react-router-dom';
 import '../styles/LoginStyle.css';
 import logo from './de_bug-logo.png';
 
@@ -46,7 +47,8 @@ class Login extends Component {
 
                 <Row>
                     <Col className='extra-login'>
-                        <Button href='/admin/dashboard' className='demo-login'>Login as Demo User</Button>
+                        {/* {/* <Button href='/admin/dashboard' className='demo-login'>Login as Demo User</Button> */}
+                        <Link to='/admin/dashboard' className='demo-login'>Login as Demo User</Link>
                     </Col>
                 </Row>
             </Container>

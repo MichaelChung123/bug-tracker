@@ -1,0 +1,22 @@
+How to work and update project:
+
+1. work on local doing npm start and nodemon server.js
+2. after changes are made, git add, commit, push to master, then push to heroku from master
+3. npm run build
+4. drag build folder to the netlify project
+
+if you need to update database, use heroku db cli to update the database.
+you can use knex to set up base files to populate ur db
+
+
+
+
+Nima Meeting
+
+changed the connections from pool -> client
+
+set up connections as env variables and set up the .env file
+
+linked to netlify for the client and using heroku for the database
+
+using the build folder to hold the frontend and backend

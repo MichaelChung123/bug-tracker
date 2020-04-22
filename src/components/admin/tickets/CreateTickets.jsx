@@ -243,7 +243,7 @@ class CreateTickets extends Component {
 
         if (this.checkFields()) {
             // Insert the ticket data to the db
-            fetch(`/tickets/create`, {
+            fetch(process.env.REACT_APP_BASEURL + `/tickets/create`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
@@ -256,7 +256,7 @@ class CreateTickets extends Component {
                 })
                 .then(() => {
                     // Get new ticket's ID and then redirect to it after submitting
-                    fetch('/tickets/newest')
+                    fetch(process.env.REACT_APP_BASEURL + '/tickets/newest')
                         .then((response) => {
                             return response.json();
                         })
@@ -376,7 +376,7 @@ const SideActions = ({ sideActions, setSelectedProject, setSelectedPriority, set
 
     useEffect(() => {
         // Fetch all projects
-        fetch('/projects/all')
+        fetch(process.env.REACT_APP_BASEURL + '/projects/all')
             .then((response) => {
                 return response.json();
             })

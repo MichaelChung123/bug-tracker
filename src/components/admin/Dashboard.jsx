@@ -3,7 +3,6 @@ import { Row, Col, Pagination, Container, Accordion, Card, Button, Table, Form, 
 import Page from '../Page';
 import Search from '../Search';
 import moment from 'moment';
-
 import '../../styles/DashboardStyle.css';
 
 class Dashboard extends Component {
@@ -205,54 +204,8 @@ class Dashboard extends Component {
         return matchedEntries;
     }
 
-    getAllUsers = () => {
-        fetch('/admin/users/all')
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                let count = 0;
-                let usersPerPage = 10;
-                let group = [];
-
-                // Check if the amount of tickets reaches the amount per page
-                if (data.length < usersPerPage) {
-                    this.setState({
-                        currentUsers: data
-                    })
-                } else {
-                    // Grouping entries from the database based off of how many entries 
-                    // per page you want. You then put those arrays into a state array
-                    for (let i = 0; i <= data.length - 1; i++) {
-                        group.push(data[i]);
-                        count++;
-
-                        if (count >= usersPerPage) {
-                            count = 0;
-                            // loading first page's users
-                            if (this.state.users.length < 1) {
-                                this.setState({
-                                    currentUsers: [...group]
-                                });
-                            }
-                            this.setState({
-                                users: [...this.state.users, group]
-                            });
-                            group = [];
-                        } else if (i === data.length - 1) {
-                            this.setState({
-                                users: [...this.state.users, group]
-                            });
-                        }
-                    }
-                }
-
-                this.createPagination(this.state.users, 'userItems');
-            })
-    }
-
     componentDidMount() {
-        fetch('/admin/dashboard')
+        fetch(process.env.REACT_APP_BASEURL + '/admin/dashboard')
             .then((response) => {
                 return response.json();
             })
@@ -269,7 +222,7 @@ class Dashboard extends Component {
         // Fetches all users if the users value has already been assigned. Useful check for when you 
         // search and users has a value already
         if (this.state.users) {
-            fetch('/admin/users/all')
+            fetch(process.env.REACT_APP_BASEURL + '/admin/users/all')
                 .then((response) => {
                     return response.json();
                 })
@@ -318,9 +271,7 @@ class Dashboard extends Component {
                 })
 
         }
-        
-        console.log(process.env.REACT_APP_BASEURL);
-
+                
         fetch(process.env.REACT_APP_BASEURL + '/admin/tickets/all')
             .then((response) => {
                 return response.json();
@@ -552,9 +503,6 @@ const TicketAccordion = (props) => {
 
                                         let dbCreated = moment(ticket.createddate).format("YYYY-MM-DD") + ' ' + ticket.createdtime;
                                         let created = moment(dbCreated).format('LLL').replace('AM', 'PM');
-
-                                        console.log('updated: ', updated);
-                                        console.log('created: ', created);
 
                                         return (
                                             <tr key={key} onClick={() => props.handleRedirect(`/admin/tickets/details/${ticket.ticket_id}`)} className='cursor-pointer'>

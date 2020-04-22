@@ -48,7 +48,7 @@ class ProjectDetails extends Component {
     checkAssignedUsers = () => {
         const id = this.props.appProps.match.params.id;
 
-        fetch(`/admin/projects/details/users/${id}`)
+        fetch(process.env.REACT_APP_BASEURL + `/admin/projects/details/users/${id}`)
             .then((response) => {
                 return response.json();
             })
@@ -125,7 +125,7 @@ class ProjectDetails extends Component {
         }
 
         // Edit title and description values in db
-        fetch(`/admin/projects/edit/${id}`, {
+        fetch(process.env.REACT_APP_BASEURL + `/admin/projects/edit/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ class ProjectDetails extends Component {
     componentDidMount() {
         const id = this.props.appProps.match.params.id;
 
-        fetch(`/admin/projects/details/${id}`)
+        fetch(process.env.REACT_APP_BASEURL + `/admin/projects/details/${id}`)
             .then((response) => {
                 return response.json();
             })
@@ -328,7 +328,7 @@ const TicketAccordion = (props) => {
     useEffect(() => {
         const id = props.parentProps.appProps.match.params.id;
 
-        fetch(`/admin/projects/details/tickets/${id}`)
+        fetch(process.env.REACT_APP_BASEURL + `/admin/projects/details/tickets/${id}`)
             .then((response) => {
                 return response.json();
             })

@@ -103,7 +103,7 @@ const UserAccordions = (props) => {
         if (!props.assignedUsers.some(user => user.user_id === user_id)) {
 
             // Sending what user has been assigned to the current project to the Database
-            fetch(`/admin/projects/details/select/user/${user_id}`, {
+            fetch(process.env.REACT_APP_BASEURL + `/admin/projects/details/select/user/${user_id}`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
@@ -119,7 +119,7 @@ const UserAccordions = (props) => {
                     console.error('Error:', error);
                 });
         } else {
-            fetch(`/admin/projects/details/deselect/user/${user_id}`, {
+            fetch(process.env.REACT_APP_BASEURL + `/admin/projects/details/deselect/user/${user_id}`, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
@@ -139,7 +139,7 @@ const UserAccordions = (props) => {
     }
 
     useEffect(() => {
-        fetch(`/admin/users/all`)
+        fetch(process.env.REACT_APP_BASEURL + `/admin/users/all`)
             .then((response) => {
                 return response.json();
             })

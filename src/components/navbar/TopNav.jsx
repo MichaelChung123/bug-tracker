@@ -7,7 +7,7 @@ class TopNav extends React.Component {
         return (
             <Navbar sticky='top' bg="light" expand="lg">
                 <Nav className="mr-auto">
-                    <Nav.Link href="/demo/admin/home/index">Home</Nav.Link>
+                    <Nav.Link href="/admin/dashboard">Home</Nav.Link>
                     <Nav.Link href="/admin/about">About</Nav.Link>
                     {/* <NavDropdown
                         title={

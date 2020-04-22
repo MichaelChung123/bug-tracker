@@ -120,7 +120,7 @@ class SideNav extends React.Component {
 
                 <Row className='side-bar-user'>
                     <Image src={UserIcon} roundedCircle />
-                    <a href='/admin/home/index'>Demo Admin</a>
+                    <a href='/admin/dashboard'>Demo Admin</a>
                 </Row>
                 <div className='side-bar-accordion'>
                     {

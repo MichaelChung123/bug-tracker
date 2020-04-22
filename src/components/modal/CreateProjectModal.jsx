@@ -25,7 +25,7 @@ function CreateProjectModal({ show, handleClose, handleRedirect }) {
             description: formatedDescription
         }
 
-        fetch('/admin/projects/create', {
+        fetch(process.env.REACT_APP_BASEURL + '/admin/projects/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ function CreateProjectModal({ show, handleClose, handleRedirect }) {
     }
 
     const redirectNewProject = () => {
-        fetch('/admin/projects/newest')
+        fetch(process.env.REACT_APP_BASEURL + '/admin/projects/newest')
             .then((response) => {
                 return response.json();
             })

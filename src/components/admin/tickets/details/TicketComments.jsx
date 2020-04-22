@@ -19,7 +19,7 @@ const TicketComments = (props) => {
 
     const loadTicketComments = () => {
         // get all comments for this ticket id
-        fetch(`/ticket/details/comments/${id}`)
+        fetch(process.env.REACT_APP_BASEURL + `/ticket/details/comments/${id}`)
             .then((response) => {
                 return response.json();
             })
@@ -57,7 +57,7 @@ const TicketComments = (props) => {
 
         setNewComment('');
 
-        fetch(`/ticket/details/comment/add/${id}`, {
+        fetch(process.env.REACT_APP_BASEURL + `/ticket/details/comment/add/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ const TicketComments = (props) => {
             text: newEditComment
         }
 
-        fetch(`/ticket/details/comment/edit/${comment_id}`, {
+        fetch(process.env.REACT_APP_BASEURL + `/ticket/details/comment/edit/${comment_id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ const TicketComments = (props) => {
     }
 
     const handleDeleteComment = (e, id) => {
-        fetch(`/ticket/details/comments/delete/${id}`, {
+        fetch(process.env.REACT_APP_BASEURL + `/ticket/details/comments/delete/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
